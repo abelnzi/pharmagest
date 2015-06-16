@@ -16,16 +16,6 @@
 	<!-- / Module Properties -->
 
 	
-	<!-- Required Modules -->
-	<require_modules>
-					
-		<require_module version="">
-			org.openmrs.module.
-		</require_module>
-			
-	</require_modules>
-	<!-- / Required Modules -->
-	
 	<!-- Module Activator -->
 	<activator>${project.parent.groupId}.${project.parent.artifactId}.pharmagestActivator</activator>
 	
@@ -34,6 +24,11 @@
 	<extension>
 		<point>org.openmrs.admin.list</point>
 		<class>${project.parent.groupId}.${project.parent.artifactId}.extension.html.AdminList</class>
+	</extension>
+	<extension>
+		<point>org.openmrs.gutter.tools</point>
+		<class>${project.parent.groupId}.${project.parent.artifactId}.extension.html.GenerateurIdGutterLink
+		</class>
 	</extension>
 	
 	<!-- Maps hibernate file's, if present -->
