@@ -27,7 +27,7 @@
 	</extension>
 	<extension>
 		<point>org.openmrs.gutter.tools</point>
-		<class>${project.parent.groupId}.${project.parent.artifactId}.extension.html.GenerateurIdGutterLink
+		<class>${project.parent.groupId}.${project.parent.artifactId}.extension.html.PharmaGestGutterLink
 		</class>
 	</extension>
 	
@@ -37,6 +37,12 @@
 		pharmagest.hbm.xml
 				
 	</mappingFiles>
+	
+	<!-- Privileges list -->
+	<privilege>
+		<name>Manage Generateur ID</name>
+		<description>Peut manager le module pharmagest</description>
+	</privilege>
 
 	<!-- Internationalization -->
 	<!-- All message codes should start with ${project.parent.artifactId}. -->
