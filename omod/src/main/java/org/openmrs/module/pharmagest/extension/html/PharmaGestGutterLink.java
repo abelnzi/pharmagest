@@ -40,7 +40,7 @@ public class PharmaGestGutterLink extends LinkExt {
 	 */
 	@Override
 	public String getUrl() {
-		return "module/generateurid/manage.form";
+		return "module/pharmagest/manage.form";
 	}
 
 }

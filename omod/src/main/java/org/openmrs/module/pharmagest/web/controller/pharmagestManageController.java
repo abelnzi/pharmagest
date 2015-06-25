@@ -33,4 +33,8 @@ public class  pharmagestManageController {
 	public void manage(ModelMap model) {
 		model.addAttribute("user", Context.getAuthenticatedUser());
 	}
+	@RequestMapping(value = "/module/pharmagest/dispensation", method = RequestMethod.GET)
+	public void dispensation(ModelMap model) {
+		model.addAttribute("user", Context.getAuthenticatedUser());
+	}
 }

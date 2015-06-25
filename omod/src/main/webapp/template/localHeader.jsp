@@ -13,6 +13,4 @@
 	
 	<!-- Add further links here -->
 </ul>
-<h2>
-	<spring:message code="pharmagest.title" />
-</h2>
+
