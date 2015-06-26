@@ -11,11 +11,11 @@
 			code="pharmagest.dispensation" /></a></li>
 
 	<li>
-		<a href="<c:url value="/module/pharmagest/dispensation.form"/>"><spring:message
-			code="pharmagest.stock" /></a>
+		<a href="<c:url value="/module/pharmagest/stockAchat.form"/>"><spring:message
+			code="pharmagest.stockAchat" /></a>
 	</li>
 	<li>
-		<a href="<c:url value="/module/pharmagest/dispensation.form"/>"><spring:message
+		<a href="<c:url value="/module/pharmagest/inventaire.form"/>"><spring:message
 			code="pharmagest.inventaire" /></a>
 	</li>
 </ul>
