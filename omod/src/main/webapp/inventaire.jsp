@@ -6,23 +6,6 @@
 <h2 >Effectuer l'inventaire</h2>
 </div>
 
-<!-- <div style="border: 1px dashed black; padding: 10px;">
-		<table width="100%" border="0" cellpadding="7" cellspacing="0" >
-          <tbody>
-            <tr>
-              <td width="19%">
-                <label>
-                  <input name="RadioGroup1" type="radio" id="RadioGroup1_0" onClick="block1()" value="bouton radio"  checked >
-                  Patient sous traitement ARV
-                </label></td>
-                <td width="81%">
-                <label>
-                  <input type="radio" name="RadioGroup1" value="bouton radio" id="RadioGroup1_1" onClick="block2()">
-                  Autres dispensation</label></td>
-            </tr>
-          </tbody>
-        </table>
-</div>--><br>
 <br>
 <div>
   <table width="100%" border="0">
@@ -87,7 +70,6 @@
 <div>
 	<b class="boxHeader"></b>
 	<div class="box">
-    <div>
         <table width="100%" border="0" cellpadding="7" cellspacing="0" >
           <tbody>
             <tr>
@@ -206,9 +188,8 @@
             </tr>
           </tbody>
         </table>
-        </div>
-        <div>
-        <table width="100%" border="1" align="left" cellpadding="7" cellspacing="0">
+      
+        <table width="100%" border="1"  cellpadding="7" cellspacing="0">
              <tbody>
                 <tr>
                   <td width="9%">Code article</td>
@@ -251,4 +232,4 @@
 </table>      
 </div> 
 	</div>
-</div>
+

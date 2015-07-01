@@ -187,7 +187,7 @@
               <td width="23%"><table width="100%" border="0" cellspacing="0">
                 <tbody>
                   <tr>
-                    <td><div align="center">DCI Article</div></td>
+                    <td><div align="center">D&eacute;signation</div></td>
                   </tr>
                   <tr>
                     <td><div align="center">
