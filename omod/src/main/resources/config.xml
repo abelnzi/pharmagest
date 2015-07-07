@@ -33,8 +33,26 @@
 	
 	<!-- Maps hibernate file's, if present -->
 	<mappingFiles>
-				
-		pharmagest.hbm.xml
+		ClassePharma.hbm.xml
+		Fournisseur.hbm.xml
+		GestionnairePharma.hbm.xml
+		HistoMouvementStock.hbm.xml
+		Inventaire.hbm.xml
+		LigneDispensation.hbm.xml
+		LigneInventaire.hbm.xml
+		LingeOperation.hbm.xml
+		Medecin.hbm.xml
+		Operation.hbm.xml
+		Ordonnance.hbm.xml
+		PatientComplement.hbm.xml
+		PrixProduit.hbm.xml
+		Produit.hbm.xml
+		Programme.hbm.xml
+		Regime.hbm.xml
+		RegimeTest.hbm.xml
+		Stocker.hbm.xml
+		TypeOperation.hbm.xml
+		
 				
 	</mappingFiles>
 	

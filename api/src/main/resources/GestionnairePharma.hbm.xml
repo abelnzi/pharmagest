@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<!-- Generated 2 juil. 2015 23:11:24 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="org.openmrs.module.pharmagest.GestionnairePharma" table="gestionnaire_pharma" catalog="pharma_bd">
+        <id name="prepId" type="int">
+            <column name="prep_id" precision="8" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="prepNom" type="string">
+            <column name="prep_nom" length="250" />
+        </property>
+        <property name="prepPrenom" type="string">
+            <column name="prep_prenom" length="250" />
+        </property>
+        <property name="prepAdresse" type="string">
+            <column name="prep_adresse" length="250" />
+        </property>
+        <property name="prepTel" type="string">
+            <column name="prep_tel" length="250" />
+        </property>
+        <set name="ordonnances" table="ordonnance" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="prep_id" precision="8" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="org.openmrs.module.pharmagest.Ordonnance" />
+        </set>
+        <set name="operations" table="operation" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="prep_id" precision="8" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="org.openmrs.module.pharmagest.Operation" />
+        </set>
+    </class>
+</hibernate-mapping>

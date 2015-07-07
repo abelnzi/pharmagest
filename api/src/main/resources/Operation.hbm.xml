@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<!-- Generated 2 juil. 2015 23:11:24 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="org.openmrs.module.pharmagest.Operation" table="operation" catalog="pharma_bd">
+        <id name="recptId" type="int">
+            <column name="recpt_id" precision="8" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="programme" class="org.openmrs.module.pharmagest.Programme" fetch="select">
+            <column name="program_id" precision="8" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="fournisseur" class="org.openmrs.module.pharmagest.Fournisseur" fetch="select">
+            <column name="four_id" precision="8" scale="0" />
+        </many-to-one>
+        <many-to-one name="gestionnairePharma" class="org.openmrs.module.pharmagest.GestionnairePharma" fetch="select">
+            <column name="prep_id" precision="8" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="typeOperation" class="org.openmrs.module.pharmagest.TypeOperation" fetch="select">
+            <column name="trecpt_id" precision="8" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="recptNum" type="string">
+            <column name="recpt_num" length="20" />
+        </property>
+        <property name="recptDateRecept" type="date">
+            <column name="recpt_date_recept" length="0" />
+        </property>
+        <property name="recptDateSaisi" type="date">
+            <column name="recpt_date_saisi" length="0" />
+        </property>
+        <property name="recptObserv" type="string">
+            <column name="recpt_observ" length="65535" />
+        </property>
+        <set name="lingeOperations" table="linge_operation" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="recpt_id" precision="8" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="org.openmrs.module.pharmagest.LingeOperation" />
+        </set>
+    </class>
+</hibernate-mapping>

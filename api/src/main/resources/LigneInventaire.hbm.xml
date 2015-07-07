@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<!-- Generated 2 juil. 2015 23:11:24 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="org.openmrs.module.pharmagest.LigneInventaire" table="ligne_inventaire" catalog="pharma_bd">
+        <composite-id name="id" class="org.openmrs.module.pharmagest.LigneInventaireId">
+            <key-property name="invId" type="int">
+                <column name="inv_id" precision="8" scale="0" />
+            </key-property>
+            <key-property name="prodId" type="int">
+                <column name="prod_id" precision="8" scale="0" />
+            </key-property>
+            <key-property name="programId" type="int">
+                <column name="program_id" precision="8" scale="0" />
+            </key-property>
+        </composite-id>
+        <many-to-one name="programme" class="org.openmrs.module.pharmagest.Programme" update="false" insert="false" fetch="select">
+            <column name="program_id" precision="8" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="inventaire" class="org.openmrs.module.pharmagest.Inventaire" update="false" insert="false" fetch="select">
+            <column name="inv_id" precision="8" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="produit" class="org.openmrs.module.pharmagest.Produit" update="false" insert="false" fetch="select">
+            <column name="prod_id" precision="8" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="qtePhysique" type="java.lang.Integer">
+            <column name="qte_physique" precision="8" scale="0" />
+        </property>
+        <property name="qteLogique" type="java.lang.Integer">
+            <column name="qte_logique" precision="8" scale="0" />
+        </property>
+        <property name="observation" type="string">
+            <column name="observation" length="65535" />
+        </property>
+        <property name="ecart" type="java.lang.Integer">
+            <column name="ecart" precision="8" scale="0" />
+        </property>
+    </class>
+</hibernate-mapping>
