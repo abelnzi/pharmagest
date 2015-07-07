@@ -4,7 +4,7 @@
     "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
 <!-- Generated 2 juil. 2015 23:11:24 by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
-    <class name="org.openmrs.module.pharmagest.LingeOperation" table="linge_operation" catalog="pharma_bd">
+    <class name="org.openmrs.module.pharmagest.LingeOperation" table="linge_operation" >
         <composite-id name="id" class="org.openmrs.module.pharmagest.LingeOperationId">
             <key-property name="prodId" type="int">
                 <column name="prod_id" precision="8" scale="0" />

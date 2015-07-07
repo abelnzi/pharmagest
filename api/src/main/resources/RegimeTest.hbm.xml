@@ -2,15 +2,17 @@
 <!DOCTYPE hibernate-mapping PUBLIC
     "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
     "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<!-- Generated 2 juil. 2015 23:11:24 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="org.openmrs.module.pharmagest.RegimeTest" table="regime_test" >
+        <id name="regimId" type="int">
+            <column name="regim_id" precision="8" scale="0" />
+            <generator class="assigned" />
+        </id>
 
-<hibernate-mapping package="org.openmrs.module.pharmagest">
+        <property name="regimLib" type="string">
+            <column name="regim_lib" length="250" />
+        </property>
 
-	<class name="RegimeTest" table="regime_test">
-		<id name="regimId" type="int" column="regim_id" unsaved-value="0">
-			<generator class="native" />
-		</id>
-
-		<property name="regimLib" type="java.lang.String" column="regim_lib" />
-
-	</class>
+    </class>
 </hibernate-mapping>

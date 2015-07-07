@@ -4,7 +4,7 @@
     "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
 <!-- Generated 2 juil. 2015 23:11:24 by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
-    <class name="org.openmrs.module.pharmagest.PatientComplement" table="patient_complement" catalog="pharma_bd">
+    <class name="org.openmrs.module.pharmagest.PatientComplement" table="patient_complement" >
         <id name="patientIdentifierId" type="long">
             <column name="patient_identifier_id" precision="11" scale="0" />
             <generator class="assigned" />

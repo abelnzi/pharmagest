@@ -20,7 +20,7 @@ public class ParametersDispensationServiceImpl extends BaseOpenmrsService implem
 	private ParametersDispensationDao dao;
 
 	@Override
-	public Collection<RegimeTest> getAllRegimes() {
+	public Collection<Regime> getAllRegimes() {
 		// TODO Auto-generated method stub
 		return getDao().getAllRegimes();
 	}

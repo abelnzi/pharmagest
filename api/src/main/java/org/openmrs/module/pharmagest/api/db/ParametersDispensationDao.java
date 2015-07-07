@@ -9,7 +9,7 @@ import org.openmrs.module.pharmagest.RegimeTest;
 
 public interface ParametersDispensationDao {
 
-	public Collection<RegimeTest> getAllRegimes();
+	public Collection<Regime> getAllRegimes();
 
 	public Collection<Medecin> getAllMedecins();
 

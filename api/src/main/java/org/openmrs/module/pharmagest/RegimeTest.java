@@ -2,10 +2,8 @@ package org.openmrs.module.pharmagest;
 
 
 
-import java.util.HashSet;
-import java.util.Set;
-
-import org.openmrs.BaseOpenmrsData;
+import org.openmrs.BaseOpenmrsObject;
+import org.openmrs.BaseOpenmrsMetadata;
 
 /**
  * It is a model class. It should extend either {@link BaseOpenmrsObject} or

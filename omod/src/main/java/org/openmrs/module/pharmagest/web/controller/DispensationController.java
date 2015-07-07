@@ -57,7 +57,7 @@ public class  DispensationController {
 	@RequestMapping(method=RequestMethod.GET)
 	public String initDispenser(ModelMap model) {
 		FormulaireOrdonnance formulaireOrdonnance = new FormulaireOrdonnance();
-		List<RegimeTest> regimes=(List<RegimeTest>) Context.getService(ParametersDispensationService.class).getAllRegimes();
+		List<Regime> regimes=(List<Regime>) Context.getService(ParametersDispensationService.class).getAllRegimes();
         model.addAttribute("formulaireOrdonnance", formulaireOrdonnance);
         model.addAttribute("regimes", regimes);
         return "/module/pharmagest/dispensation";

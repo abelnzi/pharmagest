@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 public interface ParametersDispensationService extends OpenmrsService {
-	public Collection<RegimeTest> getAllRegimes();
+	public Collection<Regime> getAllRegimes();
 
 	public Collection<Medecin> getAllMedecins();
 

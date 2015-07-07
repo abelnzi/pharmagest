@@ -35,8 +35,18 @@ public class HibernateParametersDispensationDAO implements
 	}
 
 	@SuppressWarnings("unchecked")
-	public Collection<RegimeTest> getAllRegimes() {
-		return (Collection<RegimeTest>) getSessionFactory().getCurrentSession().createQuery("from org.openmrs.module.pharmagest.RegimeTest").list();
+	public Collection<Regime> getAllRegimes() {
+		/*return (Collection<RegimeTest>) getSessionFactory().getCurrentSession()
+				.createSQLQuery("select * from regime_test")
+				.addEntity(RegimeTest.class).list();*/
+		/*
+		  return (Collection<RegimeTest>)
+		  getSessionFactory().getCurrentSession()
+		  .createQuery("from org.openmrs.module.pharmagest.RegimeTest")
+		  .list();
+		 */
+		return (Collection<Regime>) getSessionFactory().getCurrentSession()
+				.createCriteria(Regime.class).list();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -48,6 +58,7 @@ public class HibernateParametersDispensationDAO implements
 	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<Produit> getAllProduits() {
+
 		return (Collection<Produit>) getSessionFactory().getCurrentSession()
 				.createCriteria(Produit.class).list();
 	}

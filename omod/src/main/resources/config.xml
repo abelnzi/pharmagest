@@ -51,9 +51,7 @@
 		Regime.hbm.xml
 		RegimeTest.hbm.xml
 		Stocker.hbm.xml
-		TypeOperation.hbm.xml
-		
-				
+		TypeOperation.hbm.xml				
 	</mappingFiles>
 	
 	<!-- Privileges list -->
