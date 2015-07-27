@@ -27,6 +27,7 @@ import org.openmrs.module.pharmagest.api.db.pharmagestDAO;
 /**
  * It is a default implementation of {@link pharmagestDAO}.
  */
+
 public class HibernateDispensationDAO implements OrdonnanceDAO {
 	protected final Log log = LogFactory.getLog(this.getClass());
 
@@ -93,7 +94,7 @@ public class HibernateDispensationDAO implements OrdonnanceDAO {
 	@Override
 	public void saveLigneDispensation(LigneDispensation lignedispensation) {
 		// TODO Auto-generated method stub
-
+		getSessionFactory().getCurrentSession().save(lignedispensation);
 	}
 
 	@Override

@@ -5,7 +5,7 @@
 				code="admin.title.short" /></a></li>
 
 	<li
-		<c:if test='<%= request.getRequestURI().contains("/manage") %>'>class="active"</c:if>>
+		<c:if test='<%= request.getRequestURI().contains("/manage") %>'>class="active"</c:if> >
 		<a
 		href="${pageContext.request.contextPath}/module/pharmagest/manage.form"><spring:message
 				code="pharmagest.manage" /></a>

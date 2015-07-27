@@ -11,6 +11,10 @@ import java.util.Set;
  */
 public class Ordonnance implements java.io.Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int ordId;
 	private Medecin medecin;
 	private Programme programme;

@@ -14,8 +14,11 @@
 package org.openmrs.module.pharmagest.api;
 
 import static org.junit.Assert.*;
+
 import org.junit.Test;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.pharmagest.HistoMouvementStock;
+import org.openmrs.module.pharmagest.Produit;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 
 /**
@@ -27,4 +30,24 @@ public class  pharmagestServiceTest extends BaseModuleContextSensitiveTest {
 	public void shouldSetupContext() {
 		assertNotNull(Context.getService(pharmagestService.class));
 	}
+	/*@Test
+	public void histoMvmTest() {
+		Context
+		.getService(ParametersDispensationService.class)
+		.getTypeOperationById(1);
+		Produit produit=Context.getService(ParametersDispensationService.class).getProduitById(8174);
+		
+		HistoMouvementStock histoMouvementStock = new HistoMouvementStock();
+		//histoMouvementStock.setMvtDate(operation.getRecptDateRecept());
+		// histoMouvementStock.setMvtLot();
+		// histoMouvementStock.setMvtMotif(mvtMotif);
+		histoMouvementStock.setMvtProgramme(1);
+		histoMouvementStock.setMvtQte(10);
+		histoMouvementStock.setMvtQteStock(100);
+		histoMouvementStock.setMvtTypeMvt(Context
+				.getService(ParametersDispensationService.class)
+				.getTypeOperationById(1).getTrecptId());
+		histoMouvementStock.setProduit(produit);
+		assertTrue(Context.getService(GestionStockService.class).saveHistoMvmStock(histoMouvementStock));
+	}*/
 }

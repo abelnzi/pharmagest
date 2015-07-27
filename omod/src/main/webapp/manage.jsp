@@ -11,8 +11,10 @@
 			code="pharmagest.dispensation" /></a></li>
 
 	<li>
-		<a href="<c:url value="/module/pharmagest/stockAchat.form"/>"><spring:message
-			code="pharmagest.stockAchat" /></a>
+		<a href="<c:url value="/module/pharmagest/stockFournisseur.form"/>">Entrée fournisseur</a>
+	</li>
+	<li>
+		<a href="<c:url value="/module/pharmagest/stockEntree.form"/>">Autre mouvement d'entrée de stock</a>
 	</li>
 	<li>
 		<a href="<c:url value="/module/pharmagest/inventaire.form"/>"><spring:message

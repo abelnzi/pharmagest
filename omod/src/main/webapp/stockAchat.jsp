@@ -36,12 +36,12 @@ document.getElementById("sortie").style.display='block';
             <tr>
               <td width="19%">
                 <label>
-                  <input name="RadioGroup1" type="radio" id="RadioGroup1_0" onClick="block1()" value="bouton radio"  checked >
+                  <input name="RadioGroup1" type="radio" id="RadioGroup1_0" onClick="block1()" value="bouton radio"   >
                   Réceptionner une commande</label>
                 </td>
                 <td width="81%">
                 <label>
-                  <input type="radio" name="RadioGroup1" value="bouton radio" id="RadioGroup1_1" onClick="block2()">
+                  <input type="radio" name="RadioGroup1" value="bouton radio" id="RadioGroup1_1" onClick="block2()" checked>
                   Reprendre un produit et transferer vers un site</label>
                
               </td>

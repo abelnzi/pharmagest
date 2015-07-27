@@ -11,6 +11,10 @@ import java.util.Set;
  */
 public class Operation implements java.io.Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int recptId;
 	private Programme programme;
 	private Fournisseur fournisseur;
@@ -20,6 +24,7 @@ public class Operation implements java.io.Serializable {
 	private Date recptDateRecept;
 	private Date recptDateSaisi;
 	private String recptObserv;
+	private String recptRef;
 	private Set<LingeOperation> lingeOperations = new HashSet<LingeOperation>(0);
 
 	public Operation() {
@@ -127,6 +132,20 @@ public class Operation implements java.io.Serializable {
 
 	public void setLingeOperations(Set<LingeOperation> lingeOperations) {
 		this.lingeOperations = lingeOperations;
+	}
+
+	/**
+	 * @return the recptRef
+	 */
+	public String getRecptRef() {
+		return recptRef;
+	}
+
+	/**
+	 * @param recptRef the recptRef to set
+	 */
+	public void setRecptRef(String recptRef) {
+		this.recptRef = recptRef;
 	}
 
 }

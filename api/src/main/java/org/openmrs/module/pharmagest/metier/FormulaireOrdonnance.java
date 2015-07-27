@@ -4,6 +4,7 @@ import java.util.Date;
 
 import org.openmrs.module.pharmagest.GestionnairePharma;
 import org.openmrs.module.pharmagest.LigneDispensation;
+import org.openmrs.module.pharmagest.LigneDispensationId;
 import org.openmrs.module.pharmagest.Medecin;
 import org.openmrs.module.pharmagest.Ordonnance;
 import org.openmrs.module.pharmagest.PatientComplement;
@@ -13,12 +14,21 @@ import org.openmrs.module.pharmagest.Regime;
 
 public class FormulaireOrdonnance {
 
+	/**
+	 * 
+	 */
 	private Ordonnance ordonnance;
 	private LigneDispensation ligneDispensation;
+	private LigneDispensationId ligneDispensationId;
+	private String idParam;
+	private TabDispensation tabdispensation;
+	private Integer nbreJrsTrai;
 
 	public FormulaireOrdonnance() {
-		this.ordonnance=new Ordonnance();
-		this.ligneDispensation=new LigneDispensation();
+		this.ordonnance = new Ordonnance();
+		this.ligneDispensation = new LigneDispensation();
+		this.ligneDispensationId = new LigneDispensationId();
+		this.setTabdispensation(new TabDispensation());
 	}
 
 	/**
@@ -161,6 +171,7 @@ public class FormulaireOrdonnance {
 
 	public void setProduit(Produit produit) {
 		ligneDispensation.setProduit(produit);
+		// ligneDispensationId.setProdId(produit.getProdId());
 	}
 
 	public Integer getServQteDem() {
@@ -186,4 +197,57 @@ public class FormulaireOrdonnance {
 	public void setServPrixUnit(Integer servPrixUnit) {
 		ligneDispensation.setServPrixUnit(servPrixUnit);
 	}
+
+	public String getIdParam() {
+		return idParam;
+	}
+
+	public void setIdParam(String idParam) {
+		this.idParam = idParam;
+	}
+
+	/**
+	 * @return the tabdispensation
+	 */
+	public TabDispensation getTabdispensation() {
+		return tabdispensation;
+	}
+
+	/**
+	 * @param tabdispensation
+	 *            the tabdispensation to set
+	 */
+	public void setTabdispensation(TabDispensation tabdispensation) {
+		this.tabdispensation = tabdispensation;
+	}
+
+	public LigneDispensationId getLigneDispensationId() {
+		return ligneDispensationId;
+	}
+
+	public void setLigneDispensationId(LigneDispensationId ligneDispensationId) {
+		this.ligneDispensationId = ligneDispensationId;
+	}
+
+	public LigneDispensationId addLigneDispensationId() {
+		this.ligneDispensationId.setProdId(this.getProduit().getProdId());
+		this.ligneDispensationId.setOrdId(this.getOrdonnance().getOrdId());
+		this.getLigneDispensation().setId(this.ligneDispensationId);
+		return ligneDispensationId;
+	}
+
+	/**
+	 * @return the nbreJrsTrai
+	 */
+	public Integer getNbreJrsTrai() {
+		return nbreJrsTrai;
+	}
+
+	/**
+	 * @param nbreJrsTrai the nbreJrsTrai to set
+	 */
+	public void setNbreJrsTrai(Integer nbreJrsTrai) {
+		this.nbreJrsTrai = nbreJrsTrai;
+	}
+
 }

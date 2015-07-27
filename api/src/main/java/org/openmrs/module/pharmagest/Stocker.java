@@ -9,6 +9,10 @@ import java.util.Date;
  */
 public class Stocker implements java.io.Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private StockerId id;
 	private Programme programme;
 	private Produit produit;

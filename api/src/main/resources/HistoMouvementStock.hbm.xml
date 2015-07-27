@@ -6,8 +6,8 @@
 <hibernate-mapping>
     <class name="org.openmrs.module.pharmagest.HistoMouvementStock" table="histo_mouvement_stock" >
         <id name="mvtId" type="int">
-            <column name="mvt_id" precision="8" scale="0" />
-            <generator class="assigned" />
+            <column name="mvt_id" precision="11"  />
+            <generator class="increment" />
         </id>
         <many-to-one name="produit" class="org.openmrs.module.pharmagest.Produit" fetch="select">
             <column name="prod_id" precision="8" scale="0" not-null="true" />

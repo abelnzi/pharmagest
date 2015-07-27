@@ -9,6 +9,10 @@ import java.util.Date;
  */
 public class HistoMouvementStock implements java.io.Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int mvtId;
 	private Produit produit;
 	private Integer mvtTypeMvt;

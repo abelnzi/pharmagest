@@ -68,7 +68,7 @@ public class DispensationServiceImpl extends BaseOpenmrsService implements Dispe
 	@Override
 	public void saveLigneDispensation(LigneDispensation lignedispensation) {
 		// TODO Auto-generated method stub
-		
+		getDao().saveLigneDispensation(lignedispensation);
 	}
 
 	@Override

@@ -6,11 +6,11 @@
 <hibernate-mapping>
     <class name="org.openmrs.module.pharmagest.Operation" table="operation" >
         <id name="recptId" type="int">
-            <column name="recpt_id" precision="8" scale="0" />
-            <generator class="assigned" />
+            <column name="recpt_id" precision="11" />
+            <generator class="increment" />
         </id>
         <many-to-one name="programme" class="org.openmrs.module.pharmagest.Programme" fetch="select">
-            <column name="program_id" precision="8" scale="0" not-null="true" />
+            <column name="program_id" precision="11" scale="0" not-null="true" />
         </many-to-one>
         <many-to-one name="fournisseur" class="org.openmrs.module.pharmagest.Fournisseur" fetch="select">
             <column name="four_id" precision="8" scale="0" />
@@ -32,6 +32,9 @@
         </property>
         <property name="recptObserv" type="string">
             <column name="recpt_observ" length="65535" />
+        </property>
+        <property name="recptRef" type="string">
+            <column name="recpt_ref" length="500" />
         </property>
         <set name="lingeOperations" table="linge_operation" inverse="true" lazy="true" fetch="select">
             <key>

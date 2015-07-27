@@ -10,6 +10,10 @@ import java.util.Set;
  */
 public class PatientComplement implements java.io.Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private long patientIdentifierId;
 	private Regime regime;
 	private Set<Ordonnance> ordonnances = new HashSet<Ordonnance>(0);

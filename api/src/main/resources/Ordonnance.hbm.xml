@@ -6,8 +6,8 @@
 <hibernate-mapping>
     <class name="org.openmrs.module.pharmagest.Ordonnance" table="ordonnance" >
         <id name="ordId" type="int">
-            <column name="ord_id" precision="8" scale="0" />
-            <generator class="assigned" />
+            <column name="ord_id" precision="11"  />
+            <generator class="increment" />
         </id>
         <many-to-one name="medecin" class="org.openmrs.module.pharmagest.Medecin" fetch="select">
             <column name="med_id" precision="8" scale="0" />

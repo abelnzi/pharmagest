@@ -7,7 +7,7 @@
     <class name="org.openmrs.module.pharmagest.LigneDispensation" table="ligne_dispensation" >
         <composite-id name="id" class="org.openmrs.module.pharmagest.LigneDispensationId">
             <key-property name="ordId" type="int">
-                <column name="ord_id" precision="8" scale="0" />
+                <column name="ord_id" precision="11"  />
             </key-property>
             <key-property name="prodId" type="int">
                 <column name="prod_id" precision="8" scale="0" />
