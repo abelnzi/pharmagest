@@ -151,15 +151,11 @@ public class StockMvmEntreeController {
 
 		try {
 
-			List<Fournisseur> fournisseurs = (List<Fournisseur>) Context
-					.getService(ParametersDispensationService.class)
-					.getAllFournisseurs();
 			List<Programme> programmes = (List<Programme>) Context.getService(
 					ParametersDispensationService.class).getAllProgrammes();
 			List<Produit> produits = (List<Produit>) Context.getService(
 					ParametersDispensationService.class).getAllProduits();
 
-			model.addAttribute("fournisseurs", fournisseurs);
 			model.addAttribute("programmes", programmes);
 			model.addAttribute("produits", produits);
 
@@ -184,10 +180,6 @@ public class StockMvmEntreeController {
 			if (!result.hasErrors()) {
 				Operation operation = new Operation();
 				operation = formulaireStockFourni.getOperation();
-				TypeOperation typeOperation = Context.getService(
-						ParametersDispensationService.class)
-						.getTypeOperationById(1);
-				operation.setTypeOperation(typeOperation);
 				Context.getService(OperationService.class).saveOperation(
 						operation);
 				// save ligne dispensation
@@ -238,10 +230,7 @@ public class StockMvmEntreeController {
 						histoMouvementStock.setMvtQteStock(stocker
 								.getStockQte());
 						histoMouvementStock
-								.setMvtTypeMvt(Context
-										.getService(
-												ParametersDispensationService.class)
-										.getTypeOperationById(1).getTrecptId());
+								.setMvtTypeMvt(operation.getTypeOperation().getTrecptId());
 						histoMouvementStock.setProduit(ligne.getProduit());
 						Context.getService(GestionStockService.class)
 								.saveHistoMvmStock(histoMouvementStock);
@@ -265,18 +254,23 @@ public class StockMvmEntreeController {
 						histoMouvementStock.setMvtQteStock(stocker2
 								.getStockQte());
 						histoMouvementStock
-								.setMvtTypeMvt(Context
-										.getService(
-												ParametersDispensationService.class)
-										.getTypeOperationById(1).getTrecptId());
+								.setMvtTypeMvt(operation.getTypeOperation().getTrecptId());
 						histoMouvementStock.setProduit(ligne.getProduit());
 						Context.getService(GestionStockService.class)
 								.saveHistoMvmStock(histoMouvementStock);
 					}
 
 				}
+				formulaireStockFourni=new FormulaireStockFourni();
 				model.addAttribute("mess", "success");
 			}
+			List<Programme> programmes = (List<Programme>) Context.getService(
+					ParametersDispensationService.class).getAllProgrammes();
+			List<Produit> produits = (List<Produit>) Context.getService(
+					ParametersDispensationService.class).getAllProduits();
+
+			model.addAttribute("programmes", programmes);
+			model.addAttribute("produits", produits);
 			model.addAttribute("formulaireStockFourni", formulaireStockFourni);
 		} catch (Exception e) {
 			e.getStackTrace();

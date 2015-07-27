@@ -15,14 +15,17 @@
 		<h2>Entr&eacute;es de stock</h2>
 	</div>
 	<br>
+	<c:if test="${mess =='success'}">
+		<div id="openmrs_msg">Enregistrer avec succès</div>
+	</c:if>
 	<br>
 	<div>
 		<table width="100%" border="0">
 			<tbody>
 				<tr>
-					<td><input type="submit" name="submit2" id="submit2"
-						value="Enregistrer"> <input type="reset" name="reset"
-						id="reset" value="Annuler"></td>
+					<td><input type="submit" name="btn_enregistrer"
+						id="btn_enregistrer" value="Enregistrer"> <input
+						type="reset" name="reset" id="reset" value="Annuler"></td>
 				</tr>
 			</tbody>
 		</table>
@@ -44,7 +47,7 @@
 									<form:options items="${programmes}" itemValue="programId"
 										itemLabel="programLib" />
 								</form:select> <form:errors path="programme" cssClass="error" /></td>
-							<td width="19%">Destination</td>
+							<td width="19%">R&eacute;ference</td>
 							<td width="36%"><form:input path="recptRef" /> <form:errors
 									path="recptRef" cssClass="error" /></td>
 						</tr>
@@ -70,6 +73,12 @@
 		</div>
 	</div>
 	<br>
+	<c:if test="${mess =='valid'}">
+		<div id="openmrs_msg">une ligne inser&eacute;e</div>
+	</c:if>
+	<c:if test="${mess =='delete'}">
+		<div id="openmrs_msg">une ligne supprim&eacute;e</div>
+	</c:if>
 	<div>
 		<b class="boxHeader"></b>
 		<div class="box">
@@ -235,7 +244,7 @@
 							<td width="14%"><div align="left">${lo.lgnRecptPrixAchat}</div></td>
 							<td width="5%"><div align="left">
 									<a
-										href="<c:url value="/module/pharmagest/stockFournisseur.form">
+										href="<c:url value="/module/pharmagest/stockEntree.form">
 									  <c:param name="paramId" value="${lo.produit.prodId}"/>                                          
 								    </c:url>">X</a>
 

@@ -74,7 +74,7 @@
 		<div id="openmrs_msg">une ligne inserée</div>
 </c:if>
 <c:if test="${mess =='delete'}">
-		<div id="openmrs_msg">une ligne inserée</div>
+		<div id="openmrs_msg">une ligne supprim&eacute;e</div>
 </c:if>
 <br>
         <div>
