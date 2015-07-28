@@ -12,7 +12,7 @@
 	modelAttribute="formulaireStockFourni"
 	commandName="formulaireStockFourni">
 	<div>
-		<h2>Entr&eacute;es de stock</h2>
+		<h2>Sortie de stock</h2>
 	</div>
 	<br>
 	<c:if test="${mess =='success'}">
@@ -55,8 +55,9 @@
 							<td>Type de mouvement</td>
 							<td><form:select path="typeOperation">
 									<form:option value="0" label="---Choix---" />
-									<form:option value="3" label="retour par un patient" />
-									<form:option value="4" label="retour par un service" />
+									<form:option value="5" label="transfert vers un autre site" />
+									<form:option value="6" label="produits avariés" />
+                                    <form:option value="7" label="produits périmés" />
 								</form:select> <form:errors path="typeOperation" cssClass="error" /></td>
 							<td>Date de transfert des produits</td>
 							<td>                           
@@ -76,6 +77,9 @@
 	<br>
 	<c:if test="${mess =='valid'}">
 		<div id="openmrs_msg">une ligne inser&eacute;e</div>
+	</c:if>
+    <c:if test="${mess =='refuse'}">
+		<div id="openmrs_msg">Stock insuffisant</div>
 	</c:if>
 	<c:if test="${mess =='delete'}">
 		<div id="openmrs_msg">une ligne supprim&eacute;e</div>
@@ -245,7 +249,7 @@
 							<td width="14%"><div align="left">${lo.lgnRecptPrixAchat}</div></td>
 							<td width="5%"><div align="left">
 									<a
-										href="<c:url value="/module/pharmagest/stockEntree.form">
+										href="<c:url value="/module/pharmagest/stockSortie.form">
 									  <c:param name="paramId" value="${lo.produit.prodId}"/>                                          
 								    </c:url>">X</a>
 

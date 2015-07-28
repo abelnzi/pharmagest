@@ -17,8 +17,14 @@
 		<a href="<c:url value="/module/pharmagest/stockEntree.form"/>">Autre mouvement d'entrée de stock</a>
 	</li>
 	<li>
+		<a href="<c:url value="/module/pharmagest/stockSortie.form"/>">Autre mouvement de sortie de stock</a>
+	</li>
+	<li>
 		<a href="<c:url value="/module/pharmagest/inventaire.form"/>"><spring:message
 			code="pharmagest.inventaire" /></a>
+	</li>
+	<li>
+		<a href="<c:url value="/module/pharmagest/histoMvm.form"/>">Historique des mouvements de stock</a>
 	</li>
 </ul>
 </div>

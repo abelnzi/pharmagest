@@ -173,7 +173,11 @@ public class DispensationController {
 							.getProgramId());
 				Stocker stocker = Context.getService(GestionStockService.class)
 						.getStockerById(stockerId);
-				if (stocker != null) {
+				int stockQte = 0;
+				if (stocker != null)
+					stockQte = stocker.getStockQte();
+				if (stockQte >= formulaireOrdonnance.getServQteServi()) {
+				
 					LigneDispensation lgnDisp = new LigneDispensation();
 					lgnDisp.setProduit(formulaireOrdonnance.getProduit());
 					lgnDisp.setOrdonnance(formulaireOrdonnance.getOrdonnance());
@@ -191,7 +195,7 @@ public class DispensationController {
 									.getLigneDispensationsCollection());
 					model.addAttribute("mess", "accept");
 				} else {
-					model.addAttribute("mess", "valid");
+					model.addAttribute("mess", "refuse");
 				}
 				model.addAttribute("var", "1");
 			} else {
@@ -253,6 +257,7 @@ public class DispensationController {
 					HistoMouvementStock histoMouvementStock = new HistoMouvementStock();
 					histoMouvementStock.setMvtDate(formulaireOrdonnance
 							.getOrdonnance().getOrdDateDispen());
+					histoMouvementStock.setMvtDate(ord.getOrdDateDispen());
 					// histoMouvementStock.setMvtLot();
 					// histoMouvementStock.setMvtMotif(mvtMotif);
 					histoMouvementStock.setMvtProgramme(ord.getProgramme()

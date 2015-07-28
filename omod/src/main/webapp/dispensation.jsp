@@ -235,7 +235,7 @@
       <c:if test="${mess =='accept'}">
 		<div id="openmrs_msg">une ligne inserée</div>
 		</c:if>
-        <c:if test="${mess =='valid'}">
+        <c:if test="${mess =='refuse'}">
 		<div id="openmrs_msg">Stock insuffisant</div>
 		</c:if>
 		<div>

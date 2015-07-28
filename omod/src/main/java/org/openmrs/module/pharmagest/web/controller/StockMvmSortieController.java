@@ -41,6 +41,7 @@ import org.openmrs.module.pharmagest.api.OperationService;
 import org.openmrs.module.pharmagest.api.ParametersDispensationService;
 import org.openmrs.module.pharmagest.metier.FormulaireStockFourni;
 import org.openmrs.module.pharmagest.validator.DispensationValidator;
+import org.openmrs.module.pharmagest.validator.StockEntreeValidator;
 import org.openmrs.module.pharmagest.validator.StockValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -60,10 +61,10 @@ import org.springframework.web.bind.annotation.SessionAttributes;
  */
 @Controller
 @SessionAttributes("formulaireStockFourni")
-@RequestMapping(value = "/module/pharmagest/stockFournisseur.form")
-public class StockEntreeController {
+@RequestMapping(value = "/module/pharmagest/stockSortie.form")
+public class StockMvmSortieController {
 	@Autowired
-	StockValidator stockValidator;
+	StockEntreeValidator stockValidator;
 
 	@SuppressWarnings("deprecation")
 	@RequestMapping(method = RequestMethod.GET)
@@ -89,7 +90,7 @@ public class StockEntreeController {
 		model.addAttribute("fournisseurs", fournisseurs);
 		model.addAttribute("programmes", programmes);
 		model.addAttribute("produits", produits);
-		return "/module/pharmagest/stockFournisseur";
+		return "/module/pharmagest/stockSortie";
 	}
 
 	@RequestMapping(method = RequestMethod.POST, params = { "btn_valider" })
@@ -113,24 +114,43 @@ public class StockEntreeController {
 
 			if (!result.hasErrors()) {
 
-				LingeOperation lngOperation = new LingeOperation();
-				lngOperation.setOperation(formulaireStockFourni.getOperation());
-				lngOperation.setProduit(formulaireStockFourni.getProduit());
-				lngOperation.setLgnRecptQte(formulaireStockFourni
-						.getLgnRecptQte());
-				lngOperation.setLgnRecptPrixAchat(formulaireStockFourni
-						.getLgnRecptPrixAchat());
-				lngOperation.setLgnRecptLot(formulaireStockFourni
-						.getLgnRecptLot());
-				lngOperation.setLgnDatePerem(formulaireStockFourni
-						.getLgnDatePerem());
-				lngOperation.setId(formulaireStockFourni.addLigneOperationId());
+				// contrôle du Stock
+				StockerId stockerId = new StockerId();
+				if (formulaireStockFourni.getProduit() != null)
+					stockerId.setProdId(formulaireStockFourni.getProduit()
+							.getProdId());
+				if (formulaireStockFourni.getProgramme() != null)
+					stockerId.setProgramId(formulaireStockFourni.getProgramme()
+							.getProgramId());
+				Stocker stocker = Context.getService(GestionStockService.class)
+						.getStockerById(stockerId);
+				int stockQte = 0;
+				if (stocker != null)
+					stockQte = stocker.getStockQte();
+				if (stockQte >= formulaireStockFourni.getLgnRecptQte()) {
+					LingeOperation lngOperation = new LingeOperation();
+					lngOperation.setOperation(formulaireStockFourni
+							.getOperation());
+					lngOperation.setProduit(formulaireStockFourni.getProduit());
+					lngOperation.setLgnRecptQte(formulaireStockFourni
+							.getLgnRecptQte());
+					lngOperation.setLgnRecptPrixAchat(formulaireStockFourni
+							.getLgnRecptPrixAchat());
+					lngOperation.setLgnRecptLot(formulaireStockFourni
+							.getLgnRecptLot());
+					lngOperation.setLgnDatePerem(formulaireStockFourni
+							.getLgnDatePerem());
+					lngOperation.setId(formulaireStockFourni
+							.addLigneOperationId());
 
-				formulaireStockFourni.getTabOperation().addLigneOperation(
-						lngOperation);
-				model.addAttribute("ligneOperations", formulaireStockFourni
-						.getTabOperation().getLigneOperationsCollection());
-				model.addAttribute("mess", "valid");
+					formulaireStockFourni.getTabOperation().addLigneOperation(
+							lngOperation);
+					model.addAttribute("ligneOperations", formulaireStockFourni
+							.getTabOperation().getLigneOperationsCollection());
+					model.addAttribute("mess", "valid");
+				} else {
+					model.addAttribute("mess", "refuse");
+				}
 			}
 			model.addAttribute("formulaireStockFourni", formulaireStockFourni);
 			model.addAttribute("fournisseurs", fournisseurs);
@@ -150,15 +170,11 @@ public class StockEntreeController {
 
 		try {
 
-			List<Fournisseur> fournisseurs = (List<Fournisseur>) Context
-					.getService(ParametersDispensationService.class)
-					.getAllFournisseurs();
 			List<Programme> programmes = (List<Programme>) Context.getService(
 					ParametersDispensationService.class).getAllProgrammes();
 			List<Produit> produits = (List<Produit>) Context.getService(
 					ParametersDispensationService.class).getAllProduits();
 
-			model.addAttribute("fournisseurs", fournisseurs);
 			model.addAttribute("programmes", programmes);
 			model.addAttribute("produits", produits);
 
@@ -183,10 +199,6 @@ public class StockEntreeController {
 			if (!result.hasErrors()) {
 				Operation operation = new Operation();
 				operation = formulaireStockFourni.getOperation();
-				TypeOperation typeOperation = Context.getService(
-						ParametersDispensationService.class)
-						.getTypeOperationById(1);
-				operation.setTypeOperation(typeOperation);
 				Context.getService(OperationService.class).saveOperation(
 						operation);
 				// save ligne dispensation
@@ -219,7 +231,7 @@ public class StockEntreeController {
 							.getStockerById(stockerId);
 					if (stocker != null) {
 						Integer stockQte = stocker.getStockQte()
-								+ ld.getLgnRecptQte();
+								- ld.getLgnRecptQte();
 						stocker.setStockQte(stockQte);
 						Context.getService(GestionStockService.class)
 								.updateStocker(stocker);
@@ -229,7 +241,6 @@ public class StockEntreeController {
 								.getOperation().getRecptDateRecept());
 						histoMouvementStock.setMvtLot(ligne.getLgnRecptLot());
 						histoMouvementStock.setMvtDate(operation.getRecptDateRecept());
-						// histoMouvementStock.setMvtLot();
 						// histoMouvementStock.setMvtMotif(mvtMotif);
 						histoMouvementStock
 								.setMvtProgramme(formulaireStockFourni
@@ -238,11 +249,8 @@ public class StockEntreeController {
 						histoMouvementStock.setMvtQte(ld.getLgnRecptQte());
 						histoMouvementStock.setMvtQteStock(stocker
 								.getStockQte());
-						histoMouvementStock
-								.setMvtTypeMvt(Context
-										.getService(
-												ParametersDispensationService.class)
-										.getTypeOperationById(1).getTrecptId());
+						histoMouvementStock.setMvtTypeMvt(operation
+								.getTypeOperation().getTrecptId());
 						histoMouvementStock.setProduit(ligne.getProduit());
 						Context.getService(GestionStockService.class)
 								.saveHistoMvmStock(histoMouvementStock);
@@ -265,19 +273,24 @@ public class StockEntreeController {
 						histoMouvementStock.setMvtQte(ld.getLgnRecptQte());
 						histoMouvementStock.setMvtQteStock(stocker2
 								.getStockQte());
-						histoMouvementStock
-								.setMvtTypeMvt(Context
-										.getService(
-												ParametersDispensationService.class)
-										.getTypeOperationById(1).getTrecptId());
+						histoMouvementStock.setMvtTypeMvt(operation
+								.getTypeOperation().getTrecptId());
 						histoMouvementStock.setProduit(ligne.getProduit());
 						Context.getService(GestionStockService.class)
 								.saveHistoMvmStock(histoMouvementStock);
 					}
 
 				}
+				formulaireStockFourni = new FormulaireStockFourni();
 				model.addAttribute("mess", "success");
 			}
+			List<Programme> programmes = (List<Programme>) Context.getService(
+					ParametersDispensationService.class).getAllProgrammes();
+			List<Produit> produits = (List<Produit>) Context.getService(
+					ParametersDispensationService.class).getAllProduits();
+
+			model.addAttribute("programmes", programmes);
+			model.addAttribute("produits", produits);
 			model.addAttribute("formulaireStockFourni", formulaireStockFourni);
 		} catch (Exception e) {
 			e.getStackTrace();
@@ -327,6 +340,17 @@ public class StockEntreeController {
 								ParametersDispensationService.class)
 								.getProgrammeById(Integer.parseInt(text));
 						this.setValue(programme);
+					}
+				});
+		binder.registerCustomEditor(TypeOperation.class,
+				new PropertyEditorSupport() {
+					@Override
+					public void setAsText(String text)
+							throws IllegalArgumentException {
+						TypeOperation typeOperation = Context.getService(
+								ParametersDispensationService.class)
+								.getTypeOperationById(Integer.parseInt(text));
+						this.setValue(typeOperation);
 					}
 				});
 

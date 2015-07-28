@@ -220,7 +220,8 @@ public class StockMvmEntreeController {
 						HistoMouvementStock histoMouvementStock = new HistoMouvementStock();
 						histoMouvementStock.setMvtDate(formulaireStockFourni
 								.getOperation().getRecptDateRecept());
-						// histoMouvementStock.setMvtLot();
+						histoMouvementStock.setMvtLot(ligne.getLgnRecptLot());
+						histoMouvementStock.setMvtDate(operation.getRecptDateRecept());
 						// histoMouvementStock.setMvtMotif(mvtMotif);
 						histoMouvementStock
 								.setMvtProgramme(formulaireStockFourni
