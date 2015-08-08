@@ -4,9 +4,11 @@ import java.util.Collection;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.PatientIdentifier;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.pharmagest.Fournisseur;
 import org.openmrs.module.pharmagest.Medecin;
+import org.openmrs.module.pharmagest.PatientComplement;
 import org.openmrs.module.pharmagest.Produit;
 import org.openmrs.module.pharmagest.Programme;
 import org.openmrs.module.pharmagest.Regime;
@@ -16,8 +18,7 @@ import org.openmrs.module.pharmagest.api.db.ParametersDispensationDao;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-public class ParametersDispensationServiceImpl extends BaseOpenmrsService
-		implements ParametersDispensationService {
+public class ParametersDispensationServiceImpl extends BaseOpenmrsService implements ParametersDispensationService {
 
 	protected final Log log = LogFactory.getLog(this.getClass());
 
@@ -96,14 +97,22 @@ public class ParametersDispensationServiceImpl extends BaseOpenmrsService
 
 	@Override
 	public Collection<TypeOperation> getAllTypeOperation() {
-		
+
 		return getDao().getAllTypeOperation();
 	}
 
 	@Override
 	public TypeOperation getTypeOperationById(Integer typeOperationId) {
-		
+
 		return getDao().getTypeOperationById(typeOperationId);
+	}
+
+	@Override
+	public PatientIdentifier getPatientIdentifierByIdentifier(String identifier) {
+		return getDao().getPatientIdentifierByIdentifier(identifier);
+	}
+	public PatientComplement getPatientComplementByIdentifier(String patientIdentifierId) {
+		return getDao().getPatientComplementByIdentifier(patientIdentifierId);
 	}
 
 }

@@ -22,7 +22,6 @@ public class FormulaireOrdonnance {
 	private LigneDispensationId ligneDispensationId;
 	private String idParam;
 	private TabDispensation tabdispensation;
-	private Integer nbreJrsTrai;
 
 	public FormulaireOrdonnance() {
 		this.ordonnance = new Ordonnance();
@@ -236,18 +235,6 @@ public class FormulaireOrdonnance {
 		return ligneDispensationId;
 	}
 
-	/**
-	 * @return the nbreJrsTrai
-	 */
-	public Integer getNbreJrsTrai() {
-		return nbreJrsTrai;
-	}
-
-	/**
-	 * @param nbreJrsTrai the nbreJrsTrai to set
-	 */
-	public void setNbreJrsTrai(Integer nbreJrsTrai) {
-		this.nbreJrsTrai = nbreJrsTrai;
-	}
+	
 
 }

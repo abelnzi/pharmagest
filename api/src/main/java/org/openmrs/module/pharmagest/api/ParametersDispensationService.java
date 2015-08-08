@@ -3,10 +3,12 @@ package org.openmrs.module.pharmagest.api;
 import java.util.Collection;
 import java.util.Map;
 
+import org.openmrs.PatientIdentifier;
 import org.openmrs.api.OpenmrsService;
 import org.openmrs.module.pharmagest.Fournisseur;
 import org.openmrs.module.pharmagest.LigneDispensationId;
 import org.openmrs.module.pharmagest.Medecin;
+import org.openmrs.module.pharmagest.PatientComplement;
 import org.openmrs.module.pharmagest.Produit;
 import org.openmrs.module.pharmagest.Programme;
 import org.openmrs.module.pharmagest.Regime;
@@ -35,6 +37,12 @@ public interface ParametersDispensationService extends OpenmrsService {
 	public Programme getProgrammeById(Integer programmeId);
 
 	public Fournisseur getFournisseurById(Integer fournisseurId);
+
 	public Collection<TypeOperation> getAllTypeOperation();
+
 	public TypeOperation getTypeOperationById(Integer typeOperationId);
+
+	public PatientIdentifier getPatientIdentifierByIdentifier(String identifier);
+
+	public PatientComplement getPatientComplementByIdentifier(String patientIdentifierId);
 }

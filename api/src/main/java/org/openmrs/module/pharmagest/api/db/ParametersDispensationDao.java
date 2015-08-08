@@ -2,8 +2,10 @@ package org.openmrs.module.pharmagest.api.db;
 
 import java.util.Collection;
 
+import org.openmrs.PatientIdentifier;
 import org.openmrs.module.pharmagest.Fournisseur;
 import org.openmrs.module.pharmagest.Medecin;
+import org.openmrs.module.pharmagest.PatientComplement;
 import org.openmrs.module.pharmagest.Produit;
 import org.openmrs.module.pharmagest.Programme;
 import org.openmrs.module.pharmagest.Regime;
@@ -34,5 +36,9 @@ public interface ParametersDispensationDao {
 	public Fournisseur getFournisseurById(Integer fournisseurId);
 
 	public TypeOperation getTypeOperationById(Integer typeOperationId);
+
+	public PatientIdentifier getPatientIdentifierByIdentifier(String identifier);
+
+	public PatientComplement getPatientComplementByIdentifier(String patientIdentifierId);
 
 }

@@ -2,7 +2,7 @@
 <%@ include file="/WEB-INF/template/header.jsp"%>
 
 <%@ include file="template/localHeader.jsp"%>
-<h2>
+<!--<h2>
 	<spring:message code="pharmagest.title" />
 </h2>
 <div style="border: 1px dashed black; padding: 10px;">
@@ -27,7 +27,7 @@
 		<a href="<c:url value="/module/pharmagest/histoMvm.form"/>">Historique des mouvements de stock</a>
 	</li>
 </ul>
-</div>
+</div>-->
 
 
 <%@ include file="/WEB-INF/template/footer.jsp"%>

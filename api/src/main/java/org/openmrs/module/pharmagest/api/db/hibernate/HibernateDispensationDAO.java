@@ -18,9 +18,12 @@ import java.util.Collection;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.openmrs.PatientIdentifier;
 import org.openmrs.module.pharmagest.LigneDispensation;
 import org.openmrs.module.pharmagest.Ordonnance;
+import org.openmrs.module.pharmagest.PatientComplement;
 import org.openmrs.module.pharmagest.api.db.OrdonnanceDAO;
 import org.openmrs.module.pharmagest.api.db.pharmagestDAO;
 
@@ -63,26 +66,22 @@ public class HibernateDispensationDAO implements OrdonnanceDAO {
 	@Override
 	public Ordonnance getOrdonnanceById(Integer ordonnanceId) {
 		// TODO Auto-generated method stub
-		return (Ordonnance) getSessionFactory().getCurrentSession().get(
-				Ordonnance.class, ordonnanceId);
+		return (Ordonnance) getSessionFactory().getCurrentSession().get(Ordonnance.class, ordonnanceId);
 	}
 
 	@Override
 	public Ordonnance getOrdonnanceByIdentifier(String patientIdentifiant) {
 		// TODO Auto-generated method stub
 
-		return (Ordonnance) getSessionFactory().getCurrentSession()
-				.createCriteria(Ordonnance.class)
-				.add(Restrictions.eq("patientIdentifiant", patientIdentifiant))
-				.uniqueResult();
+		return (Ordonnance) getSessionFactory().getCurrentSession().createCriteria(Ordonnance.class)
+				.add(Restrictions.eq("patientIdentifiant", patientIdentifiant)).uniqueResult();
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<Ordonnance> getAllOrdonnances() {
 		// TODO Auto-generated method stub
-		return (Collection<Ordonnance>) getSessionFactory().getCurrentSession()
-				.createCriteria(Ordonnance.class).list();
+		return (Collection<Ordonnance>) getSessionFactory().getCurrentSession().createCriteria(Ordonnance.class).list();
 	}
 
 	@Override
@@ -98,9 +97,15 @@ public class HibernateDispensationDAO implements OrdonnanceDAO {
 	}
 
 	@Override
-	public void saveLigneDispensations(
-			Collection<LigneDispensation> lignedispensations) {
+	public void saveLigneDispensations(Collection<LigneDispensation> lignedispensations) {
 		// TODO Auto-generated method stub
+
+	}
+
+	public Ordonnance getLastDispensation(PatientComplement patientComplement) {
+		return (Ordonnance) getSessionFactory().getCurrentSession().createCriteria(Ordonnance.class)
+				.add(Restrictions.eq("patientComplement", patientComplement))
+				.setProjection(Projections.max("ordDateDispen")).uniqueResult();
 
 	}
 }

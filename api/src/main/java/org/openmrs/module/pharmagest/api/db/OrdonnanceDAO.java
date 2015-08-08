@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import org.openmrs.module.pharmagest.LigneDispensation;
 import org.openmrs.module.pharmagest.Ordonnance;
+import org.openmrs.module.pharmagest.PatientComplement;
 
 public interface OrdonnanceDAO {
 	
@@ -62,6 +63,7 @@ public interface OrdonnanceDAO {
 	public void saveLigneDispensation (LigneDispensation lignedispensation);
 	
 	public void saveLigneDispensations (Collection<LigneDispensation> lignedispensations);
+	public Ordonnance getLastDispensation(PatientComplement patientComplement) ;
 
 
 }

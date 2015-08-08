@@ -5,6 +5,7 @@ import java.util.Collection;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.pharmagest.LigneDispensation;
 import org.openmrs.module.pharmagest.Ordonnance;
+import org.openmrs.module.pharmagest.PatientComplement;
 import org.openmrs.module.pharmagest.api.DispensationService;
 import org.openmrs.module.pharmagest.api.db.OrdonnanceDAO;
 import org.apache.commons.logging.LogFactory;
@@ -76,6 +77,12 @@ public class DispensationServiceImpl extends BaseOpenmrsService implements Dispe
 			Collection<LigneDispensation> lignedispensations) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public Ordonnance getLastDispensation(PatientComplement patientComplement) {
+		
+		return getDao().getLastDispensation(patientComplement);
 	}
 
 }

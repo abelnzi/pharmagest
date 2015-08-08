@@ -5,6 +5,7 @@ import java.util.Collection;
 import org.openmrs.api.OpenmrsService;
 import org.openmrs.module.pharmagest.LigneDispensation;
 import org.openmrs.module.pharmagest.Ordonnance;
+import org.openmrs.module.pharmagest.PatientComplement;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
@@ -62,6 +63,7 @@ public interface DispensationService extends OpenmrsService {
 
 	public void saveLigneDispensation(LigneDispensation lignedispensation);
 
-	public void saveLigneDispensations(
-			Collection<LigneDispensation> lignedispensations);
+	public void saveLigneDispensations(Collection<LigneDispensation> lignedispensations);
+
+	public Ordonnance getLastDispensation(PatientComplement patientComplement);
 }

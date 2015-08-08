@@ -1,5 +1,7 @@
 package org.openmrs.module.pharmagest.validator;
 
+import java.util.Date;
+
 import org.openmrs.module.pharmagest.Medecin;
 import org.openmrs.module.pharmagest.Produit;
 import org.openmrs.module.pharmagest.Programme;
@@ -25,40 +27,39 @@ public class DispensationValidator implements Validator {
 		Regime regime = formulaire.getRegime();
 		Programme programme = formulaire.getProgramme();
 		Produit produit = formulaire.getProduit();
-		String ordBut=formulaire.getOrdBut();
-		if (medecin == null)
-			errors.rejectValue("medecin", "formulaireOrdonnance.medecin",
-					"choisir le prescripteur");
-		if (regime == null)
-			errors.rejectValue("regime", "formulaireOrdonnance.regime",
-					"choisir le régime du patient");
-		if (programme == null)
-			errors.rejectValue("programme", "formulaireOrdonnance.programme",
-					"choisir le programme du patient");
-		if (produit == null)
-			errors.rejectValue("produit", "formulaireOrdonnance.produit",
-					"choisir le produit");
-		if (ordBut == null)
-			errors.rejectValue("ordBut", "formulaireOrdonnance.ordBut",
-					"choisir le but");
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "nbreJrsTrai",
-				"formulaireOrdonnance.nbreJrsTrai",
-				"indiquer le nombre de jour de traitement");
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "OrdBut",
-				"formulaireOrdonnance.OrdBut", "indiquer le but");
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "ordDatePrescrip",
-				"formulaireOrdonnance.ordDatePrescrip",
-				"indiquer la date de prescription");
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "ordDateDispen",
-				"formulaireOrdonnance.ordDateDispen",
-				"indiquer la date de dispensation");
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "servQteDem",
-				"formulaireOrdonnance.servQteDem",
-				"indiquer la quantité de produit demandée");
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "servQteServi",
-				"formulaireOrdonnance.servQteServi",
-				"indiquer la quantité de produit servie");
+		String ordBut = formulaire.getOrdBut();
+		Integer ordNbreJrsTrai = formulaire.getOrdNbreJrsTrai();
+		Date ordDatePrescrip = formulaire.getOrdDatePrescrip();
+		Date ordDateDispen = formulaire.getOrdDateDispen();
+		Integer servQteDem = formulaire.getServQteDem();
+		Integer servQteServi = formulaire.getServQteServi();
 
+		if (medecin == null)
+			errors.rejectValue("medecin", "formulaireOrdonnance.medecin", "choisir le prescripteur");
+		if (regime == null)
+			errors.rejectValue("regime", "formulaireOrdonnance.regime", "choisir le régime du patient");
+		if (programme == null)
+			errors.rejectValue("programme", "formulaireOrdonnance.programme", "choisir le programme du patient");
+		if (produit == null)
+			errors.rejectValue("produit", "formulaireOrdonnance.produit", "choisir le produit");
+		if (ordBut == null)
+			errors.rejectValue("ordBut", "formulaireOrdonnance.ordBut", "choisir le but");
+
+		if (ordNbreJrsTrai == null)
+			errors.rejectValue("ordNbreJrsTrai", "formulaireOrdonnance.ordNbreJrsTrai",
+					"indiquer le nombre de jour de traitement");
+		if (ordDatePrescrip == null)
+			errors.rejectValue("ordDatePrescrip", "formulaireOrdonnance.ordDatePrescrip",
+					"indiquer la date de prescription");
+		if (ordDateDispen == null)
+			errors.rejectValue("ordDateDispen", "formulaireOrdonnance.ordDateDispen",
+					"indiquer la date de dispensation");
+		if (servQteDem == null)
+			errors.rejectValue("servQteDem", "formulaireOrdonnance.servQteDem",
+					"indiquer la quantité de produit demandée");
+		if (servQteServi == null)
+			errors.rejectValue("servQteServi", "formulaireOrdonnance.servQteServi",
+					"indiquer la quantité de produit servie");
 	}
 
 }

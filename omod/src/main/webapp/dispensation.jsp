@@ -6,6 +6,25 @@
     color: #ff0000;
 }
 </SCRIPT>
+<script type="text/javascript">
+	function daterdv() {
+		var nbj = document.getElementById("ordNbreJrsTrai").value;
+		var d = document.getElementById("ordDateDispen").value;
+		var j = d.substring(0, 2);
+		var m = d.substring(3, 5);
+		var a = d.substring(7, 11);
+		var date = new Date(m + "/" + j + "/" + a);
+		alert(date.toString());
+		alert(nbj);
+		date.setDate(date.getDate()+nbj);
+		alert(date.toString());
+		var annee=date.getFullYear()
+		var mois =date.getMonth() < 9 ? "0" + (date.getMonth() + 1) : (date.getMonth() + 1);
+		var jour=date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+		
+		document.getElementById("ordDateRdv").value = jour+"/"+mois+"/"+annee;
+	}
+</SCRIPT>
 <div>
 	<h2>Effectuer la dispensation</h2>
 </div>
@@ -42,7 +61,7 @@
 					<tbody>
 						<tr>
 							<td width="10%">N° Patient</td>
-							<td width="15%"><input type="number" name="numPatient"
+							<td width="15%"><input type="text" name="numPatient"
 								id="numPatient" /></td>
 							<td width="73%"><input type="submit" name="btn_recherche"
 								id="btn_recherche" value="Rechercher"></td>
@@ -59,7 +78,7 @@
 	<c:if test="${mess =='save'}">
 		<div id="openmrs_msg">Enregistrer avec succès</div>
 	</c:if>
-    <c:if test="${mess =='find'}">
+	<c:if test="${mess =='find'}">
 		<div id="openmrs_msg">Patient trouvé</div>
 	</c:if>
 	<c:if test="${var ==1}">
@@ -97,10 +116,10 @@
 											<tr>
 												<td width="17%">Dernier régime</td>
 												<td width="28%"><input type="text" disabled="disabled"
-													readonly /></td>
+													value="${regime}" readonly /></td>
 												<td width="24%">Date dernier régime</td>
 												<td width="29%"><input type="text" disabled="disabled"
-													readonly /></td>
+													value="${rdv}" readonly /></td>
 											</tr>
 											<tr>
 												<td rowspan="2">Régime actuel</td>
@@ -108,30 +127,32 @@
 														<form:option value="0" label="---Choix---" />
 														<form:options items="${regimes}" itemValue="regimId"
 															itemLabel="regimLib" />
-													</form:select> </td>
-												<td rowspan="2"><form:label path="nbreJrsTrai">Nombre de jours de traitement</form:label></td>
-												<td><form:input path="nbreJrsTrai" /> </td>
+													</form:select></td>
+												<td rowspan="2"><form:label path="ordNbreJrsTrai">Nombre de jours de traitement</form:label></td>
+												<td><form:input path="ordNbreJrsTrai" /></td>
 											</tr>
 											<tr>
-											  <td><form:errors path="regime" cssClass="error"/></td>
-											  <td><form:errors
-														path="nbreJrsTrai" cssClass="error"/></td>
-									      </tr>
+												<td><form:errors path="regime" cssClass="error" /></td>
+												<td><form:errors path="ordNbreJrsTrai" cssClass="error" /></td>
+											</tr>
 											<tr>
 												<td>But</td>
 												<td colspan="3"><table width="100%">
 														<tr>
-															<td width="10%">PEC: <form:radiobutton path="ordBut" value="PEC" />
+															<td width="10%">PEC: <form:radiobutton path="ordBut"
+																	value="PEC" />
 															</td>
 
-															<td width="13%">PTME: <form:radiobutton path="ordBut"
-																	value="PTME" />
+															<td width="13%">PTME: <form:radiobutton
+																	path="ordBut" value="PTME" />
 															</td>
 
-															<td width="11%">AES: <form:radiobutton path="ordBut" value="AES" />
-																
+															<td width="11%">AES: <form:radiobutton path="ordBut"
+																	value="AES" />
+
 															</td>
-															<td width="66%"><form:errors path="ordBut"  cssClass="error" /></td>
+															<td width="66%"><form:errors path="ordBut"
+																	cssClass="error" /></td>
 														</tr>
 													</table></td>
 											</tr>
@@ -161,19 +182,19 @@
 														<form:option value="0" label="---Choix---" />
 														<form:options items="${medecins}" itemValue="medId"
 															itemLabel="medNom" />
-													</form:select> </td>
+													</form:select></td>
 											</tr>
 											<tr>
-											  <td><form:errors path="medecin" cssClass="error" /></td>
-										  </tr>
+												<td><form:errors path="medecin" cssClass="error" /></td>
+											</tr>
 											<tr>
 												<td rowspan="2"><form:label path="ordDatePrescrip">Date de prescription</form:label></td>
-												<td><form:input path="ordDatePrescrip" /> </td>
+												<td><form:input path="ordDatePrescrip" /></td>
 											</tr>
 											<tr>
-											  <td><form:errors
-														path="ordDatePrescrip"  cssClass="error" /></td>
-										  </tr>
+												<td><form:errors path="ordDatePrescrip"
+														cssClass="error" /></td>
+											</tr>
 										</tbody>
 									</table></td>
 								<td width="36%"><table width="100%" border="0"
@@ -187,42 +208,42 @@
 											</tr>
 											<tr>
 												<td rowspan="2"><form:label path="ordDateDispen">Date de dispensation</form:label></td>
-												<td><form:input path="ordDateDispen" /> </td>
+												<td><form:input path="ordDateDispen"
+														onchange="javascript:daterdv();" /></td>
 											</tr>
 											<tr>
-											  <td><form:errors
-														path="ordDateDispen"  cssClass="error" /></td>
-										  </tr>
+												<td><form:errors path="ordDateDispen" cssClass="error" /></td>
+											</tr>
 										</tbody>
 									</table></td>
-								<td width="32%"><table width="92%" border="0" cellpadding="7"
-										cellspacing="0">
+								<td width="32%"><table width="92%" border="0"
+										cellpadding="7" cellspacing="0">
 										<tbody>
 											<tr>
 												<td width="52%" rowspan="2"><div align="center">
 														<form:label path="ordDateRdv">
-														  <div align="left">Date du prochain RDV</div>
+															<div align="left">Date du prochain RDV</div>
 														</form:label>
 													</div></td>
 												<td width="48%"><div align="left">
-												  <form:input path="ordDateRdv" />
-												  
-												  </div></td>
+														<form:input path="ordDateRdv" disabled = "true"/>
+
+													</div></td>
 											</tr>
 											<tr>
-											  <td><form:errors path="ordDateRdv"  cssClass="error" /></td>
-										  </tr>
+												<td><form:errors path="ordDateRdv" cssClass="error" /></td>
+											</tr>
 											<tr>
 												<td height="34" rowspan="2">Programme</td>
 												<td><form:select path="programme">
 														<form:option value="0" label="---Choix---" />
 														<form:options items="${programmes}" itemValue="programId"
 															itemLabel="programLib" />
-											  </form:select> </td>
+													</form:select></td>
 											</tr>
 											<tr>
-											  <td><form:errors path="programme"  cssClass="error" /></td>
-										  </tr>
+												<td><form:errors path="programme" cssClass="error" /></td>
+											</tr>
 										</tbody>
 									</table></td>
 							</tr>
@@ -232,11 +253,11 @@
 			</div>
 		</div>
 		<br>
-      <c:if test="${mess =='accept'}">
-		<div id="openmrs_msg">une ligne inserée</div>
+		<c:if test="${mess =='accept'}">
+			<div id="openmrs_msg">une ligne inserée</div>
 		</c:if>
-        <c:if test="${mess =='refuse'}">
-		<div id="openmrs_msg">Stock insuffisant</div>
+		<c:if test="${mess =='refuse'}">
+			<div id="openmrs_msg">Stock insuffisant</div>
 		</c:if>
 		<div>
 			<b class="boxHeader"></b>
@@ -267,23 +288,23 @@
 											<td><div align="center">D&eacute;signation</div></td>
 										</tr>
 										<tr>
-											<td ><div align="center">
+											<td><div align="center">
 													<form:select path="produit" cssStyle="width:200px">
 														<form:option value="0" label="---Choix---" />
 														<form:options items="${produits}" itemValue="prodId"
 															itemLabel="prodLib" />
 													</form:select>
-													
+
 												</div></td>
 
 										</tr>
 										<tr>
-										  <td ><div align="center">
-										    <form:errors path="produit"  cssClass="error" />
-									      </div></td>
-									  </tr>
+											<td><div align="center">
+													<form:errors path="produit" cssClass="error" />
+												</div></td>
+										</tr>
 									</tbody>
-						  </table></td>
+								</table></td>
 							<td width="14%"><table width="100%" border="0"
 									cellspacing="0">
 									<tbody>
@@ -295,12 +316,14 @@
 										<tr>
 											<td><div align="center">
 													<form:input path="servQteDem" />
-											  
+
 												</div></td>
 										</tr>
 										<tr>
-										  <td><div align="center"><form:errors path="servQteDem"  cssClass="error" /></div></td>
-									  </tr>
+											<td><div align="center">
+													<form:errors path="servQteDem" cssClass="error" />
+												</div></td>
+										</tr>
 									</tbody>
 								</table></td>
 							<td width="14%"><table width="100%" border="0"
@@ -314,12 +337,14 @@
 										<tr>
 											<td><div align="center">
 													<form:input path="servQteServi" />
-											  
+
 												</div></td>
 										</tr>
 										<tr>
-										  <td><div align="center"><form:errors path="servQteServi"  cssClass="error"/></div></td>
-									  </tr>
+											<td><div align="center">
+													<form:errors path="servQteServi" cssClass="error" />
+												</div></td>
+										</tr>
 									</tbody>
 								</table></td>
 							<td width="14%"><table width="100%" border="0"
@@ -418,18 +443,18 @@
 							<td width="8%">Action</td>
 						</tr>
 						<c:forEach var="ld" items="${ligneDispensations}">
-								<tr>
-									<td>${ld.produit.prodId}</td>
-									<td>${ld.produit.prodLib}</td>
-									<td>${ld.servQteDem}</td>
-									<td>${ld.servQteServi}</td>
-									<td>${ld.servPrixUnit}</td>
-									<td>${ld.servQteServi * ld.servPrixUnit}</td>
-									<td><a
-										href="<c:url value="/module/pharmagest/dispensation.form"><c:param name="paramId" value="${ld.produit.prodId}"/></c:url>">X</a>
+							<tr>
+								<td>${ld.produit.prodId}</td>
+								<td>${ld.produit.prodLib}</td>
+								<td>${ld.servQteDem}</td>
+								<td>${ld.servQteServi}</td>
+								<td>${ld.servPrixUnit}</td>
+								<td>${ld.servQteServi * ld.servPrixUnit}</td>
+								<td><a
+									href="<c:url value="/module/pharmagest/dispensation.form"><c:param name="paramId" value="${ld.produit.prodId}"/></c:url>">X</a>
 
-									</td>
-								</tr>
+								</td>
+							</tr>
 						</c:forEach>
 					</tbody>
 				</table>
