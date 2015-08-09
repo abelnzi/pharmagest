@@ -121,10 +121,10 @@ public class HibernateParametersDispensationDAO implements ParametersDispensatio
 
 	}
 
-	public PatientComplement getPatientComplementByIdentifier(String patientIdentifierId) {
+	public PatientComplement getPatientComplementByIdentifier(Integer patientIdentifierId) {
 
 		return (PatientComplement) getSessionFactory().getCurrentSession().createCriteria(PatientComplement.class)
-				.add(Restrictions.eq("patientIdentifierId", patientIdentifierId)).uniqueResult();
+				.add(Restrictions.eq("patientIdentifierId", patientIdentifierId.longValue())).uniqueResult();
 
 	}
 

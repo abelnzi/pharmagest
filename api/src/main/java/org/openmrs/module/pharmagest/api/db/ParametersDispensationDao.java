@@ -39,6 +39,6 @@ public interface ParametersDispensationDao {
 
 	public PatientIdentifier getPatientIdentifierByIdentifier(String identifier);
 
-	public PatientComplement getPatientComplementByIdentifier(String patientIdentifierId);
+	public PatientComplement getPatientComplementByIdentifier(Integer patientIdentifierId);
 
 }

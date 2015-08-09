@@ -78,12 +78,13 @@ public class DispensationController {
 	public void rechercher(@ModelAttribute("formulaireOrdonnance") FormulaireOrdonnance formulaireOrdonnance,
 			BindingResult result, @RequestParam(required = true, value = "numPatient") String numPatient,
 			HttpSession session, ModelMap model) {
-	
-		PatientComplement patientComplement= Context.getService(ParametersDispensationService.class)
-				.getPatientComplementByIdentifier(numPatient);
-		
+
+		PatientIdentifier patientIdentifier = Context.getService(ParametersDispensationService.class)
+				.getPatientIdentifierByIdentifier(numPatient);
+		PatientComplement patientComplement = Context.getService(ParametersDispensationService.class)
+				.getPatientComplementByIdentifier(patientIdentifier.getPatientIdentifierId());
 		if (patientComplement != null) {
-			
+
 			model.addAttribute("patientIdentifier", patientComplement.getPatientIdentifierId());
 			List<Regime> regimes = (List<Regime>) Context.getService(ParametersDispensationService.class)
 					.getAllRegimes();
@@ -101,14 +102,15 @@ public class DispensationController {
 			model.addAttribute("regimes", regimes);
 			model.addAttribute("mess", "find");
 			model.addAttribute("var", "1");
-			
-			//recuperer la dernière dispensation
-			Ordonnance dispensation =Context.getService(DispensationServiceImpl.class).getLastDispensation(patientComplement);
-			if(dispensation!=null){
+
+			// recuperer la dernière dispensation
+			Ordonnance dispensation = Context.getService(DispensationService.class)
+					.getLastDispensation(patientComplement);
+			if (dispensation != null) {
 				model.addAttribute("regime", dispensation.getRegime().getRegimLib());
 				model.addAttribute("rdv", dispensation.getOrdDateRdv());
 			}
-			
+
 		} else {
 			model.addAttribute("mess", "echec");
 		}
