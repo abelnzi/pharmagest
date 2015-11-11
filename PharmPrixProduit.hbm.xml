@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<!-- Generated 16 ao?t 2015 03:07:55 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="org.openmrs.module.pharmagest.PharmPrixProduit" table="pharm_prix_produit" >
+        <id name="prixId" type="java.lang.Integer">
+            <column name="prix_id" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="pharmProduit" class="org.openmrs.module.pharmagest.PharmProduit" fetch="select">
+            <column name="prod_id" not-null="true" />
+        </many-to-one>
+        <property name="prixAchat" type="java.lang.Integer">
+            <column name="prix_achat" precision="8" scale="0" />
+        </property>
+        <property name="prixVente" type="java.lang.Integer">
+            <column name="prix_vente" precision="8" scale="0" />
+        </property>
+        <property name="prixDateEff" type="date">
+            <column name="prix_date_eff" length="0" />
+        </property>
+        <property name="prixFlagActif" type="java.lang.Boolean">
+            <column name="prix_flag_actif" />
+        </property>
+    </class>
+</hibernate-mapping>

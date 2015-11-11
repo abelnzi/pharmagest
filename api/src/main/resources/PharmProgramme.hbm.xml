@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<!-- Generated 16 ao?t 2015 03:07:55 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="org.openmrs.module.pharmagest.PharmProgramme" table="pharm_programme" >
+        <id name="programId" type="java.lang.Integer">
+            <column name="program_id" />
+            <generator class="identity" />
+        </id>
+        <property name="programLib" type="string">
+            <column name="program_lib" length="250" />
+        </property>
+        <set name="pharmOrdonnances" table="pharm_ordonnance" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="program_id" />
+            </key>
+            <one-to-many class="org.openmrs.module.pharmagest.PharmOrdonnance" />
+        </set>
+        <set name="pharmRegimes" table="pharm_regime" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="program_id" />
+            </key>
+            <one-to-many class="org.openmrs.module.pharmagest.PharmRegime" />
+        </set>
+        <set name="pharmStockers" table="pharm_stocker" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="program_id" not-null="true" />
+            </key>
+            <one-to-many class="org.openmrs.module.pharmagest.PharmStocker" />
+        </set>
+        <set name="pharmProduits" table="pharm_regrouper" inverse="false" lazy="true" fetch="select">
+            <key>
+                <column name="program_id" not-null="true" />
+            </key>
+            <many-to-many entity-name="org.openmrs.module.pharmagest.PharmProduit">
+                <column name="prod_id" not-null="true" />
+            </many-to-many>
+        </set>
+        <set name="pharmOperations" table="pharm_operation" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="program_id" />
+            </key>
+            <one-to-many class="org.openmrs.module.pharmagest.PharmOperation" />
+        </set>
+        <set name="pharmLigneInventaires" table="pharm_ligne_inventaire" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="program_id" not-null="true" />
+            </key>
+            <one-to-many class="org.openmrs.module.pharmagest.PharmLigneInventaire" />
+        </set>
+    </class>
+</hibernate-mapping>

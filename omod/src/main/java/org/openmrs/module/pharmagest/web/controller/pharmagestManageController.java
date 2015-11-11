@@ -33,16 +33,17 @@ public class  pharmagestManageController {
 	public void manage(ModelMap model) {
 		model.addAttribute("user", Context.getAuthenticatedUser());
 	}
-	/*@RequestMapping(value = "/module/pharmagest/dispensation", method = RequestMethod.GET)
-	public void dispensation(ModelMap model) {
-		model.addAttribute("user", Context.getAuthenticatedUser());
-	}*/
-	@RequestMapping(value = "/module/pharmagest/stockAchat", method = RequestMethod.GET)
+	
+	@RequestMapping(value = "/module/pharmagest/rapportStock", method = RequestMethod.GET)
 	public void achat(ModelMap model) {
 		model.addAttribute("user", Context.getAuthenticatedUser());
 	}
-	@RequestMapping(value = "/module/pharmagest/inventaire", method = RequestMethod.GET)
-	public void inventaire(ModelMap model) {
+	@RequestMapping(value = "/module/pharmagest/parametrage", method = RequestMethod.GET)
+	public void parametrage(ModelMap model) {
+		model.addAttribute("user", Context.getAuthenticatedUser());
+	}
+	@RequestMapping(value = "/module/pharmagest/dispensationChoix", method = RequestMethod.GET)
+	public void dispensationChoix(ModelMap model) {
 		model.addAttribute("user", Context.getAuthenticatedUser());
 	}
 }

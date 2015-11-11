@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<!-- Generated 2 juil. 2015 23:11:24 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="org.openmrs.module.pharmagest.Programme" table="programme" >
+        <id name="programId" type="int">
+            <column name="program_id" precision="8" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="programLib" type="string">
+            <column name="program_lib" length="250" />
+        </property>
+        <set name="ordonnances" table="ordonnance" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="program_id" precision="8" scale="0" />
+            </key>
+            <one-to-many class="org.openmrs.module.pharmagest.Ordonnance" />
+        </set>
+        <set name="stockers" table="stocker" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="program_id" precision="8" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="org.openmrs.module.pharmagest.Stocker" />
+        </set>
+        <set name="operations" table="operation" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="program_id" precision="8" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="org.openmrs.module.pharmagest.Operation" />
+        </set>
+        <set name="regimes" table="regime" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="program_id" precision="8" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="org.openmrs.module.pharmagest.Regime" />
+        </set>
+        <set name="ligneInventaires" table="ligne_inventaire" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="program_id" precision="8" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="org.openmrs.module.pharmagest.LigneInventaire" />
+        </set>
+        <set name="produits" table="regrouper" inverse="false" lazy="true" fetch="select">
+            <key>
+                <column name="program_id" precision="8" scale="0" not-null="true" />
+            </key>
+            <many-to-many entity-name="org.openmrs.module.pharmagest.Produit">
+                <column name="prod_id" precision="8" scale="0" not-null="true" />
+            </many-to-many>
+        </set>
+    </class>
+</hibernate-mapping>

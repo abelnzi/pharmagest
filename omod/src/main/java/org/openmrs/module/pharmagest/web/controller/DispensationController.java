@@ -17,7 +17,11 @@ import java.beans.PropertyEditorSupport;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -28,14 +32,26 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.PatientIdentifier;
+import org.openmrs.Person;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.pharmagest.GestionnairePharma;
 import org.openmrs.module.pharmagest.HistoMouvementStock;
 import org.openmrs.module.pharmagest.LigneDispensation;
 import org.openmrs.module.pharmagest.LigneDispensationId;
 import org.openmrs.module.pharmagest.Medecin;
 import org.openmrs.module.pharmagest.Ordonnance;
-import org.openmrs.module.pharmagest.PatientComplement;
+import org.openmrs.module.pharmagest.PharmGestionnairePharma;
+import org.openmrs.module.pharmagest.PharmHistoMouvementStock;
+import org.openmrs.module.pharmagest.PharmLigneDispensation;
+import org.openmrs.module.pharmagest.PharmLigneDispensationId;
+import org.openmrs.module.pharmagest.PharmMedecin;
+import org.openmrs.module.pharmagest.PharmOperation;
+import org.openmrs.module.pharmagest.PharmOrdonnance;
+import org.openmrs.module.pharmagest.PharmProduit;
+import org.openmrs.module.pharmagest.PharmProduitAttribut;
+import org.openmrs.module.pharmagest.PharmProgramme;
+import org.openmrs.module.pharmagest.PharmRegime;
+import org.openmrs.module.pharmagest.PharmStocker;
+import org.openmrs.module.pharmagest.PharmStockerId;
 import org.openmrs.module.pharmagest.Produit;
 import org.openmrs.module.pharmagest.Programme;
 import org.openmrs.module.pharmagest.Regime;
@@ -43,11 +59,13 @@ import org.openmrs.module.pharmagest.Stocker;
 import org.openmrs.module.pharmagest.StockerId;
 import org.openmrs.module.pharmagest.api.DispensationService;
 import org.openmrs.module.pharmagest.api.GestionStockService;
+import org.openmrs.module.pharmagest.api.OperationService;
 import org.openmrs.module.pharmagest.api.ParametersDispensationService;
-import org.openmrs.module.pharmagest.api.impl.DispensationServiceImpl;
+import org.openmrs.module.pharmagest.api.ParametresService;
 import org.openmrs.module.pharmagest.metier.FormulaireOrdonnance;
+import org.openmrs.module.pharmagest.metier.FormulairePharmOrdonnance;
+import org.openmrs.module.pharmagest.metier.LigneDispensationMvt;
 import org.openmrs.module.pharmagest.validator.DispensationValidator;
-import org.openmrs.module.pharmagest.validator.OrdonnanceValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -59,6 +77,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 /**
@@ -74,26 +93,35 @@ public class DispensationController {
 	@Autowired
 	DispensationValidator dispensationValidator;
 
+	@SuppressWarnings("unused")
 	@RequestMapping(method = RequestMethod.POST, params = { "btn_recherche" })
-	public void rechercher(@ModelAttribute("formulaireOrdonnance") FormulaireOrdonnance formulaireOrdonnance,
+	public void rechercher(@ModelAttribute("formulaireOrdonnance") FormulairePharmOrdonnance formulaireOrdonnance,
 			BindingResult result, @RequestParam(required = true, value = "numPatient") String numPatient,
 			HttpSession session, ModelMap model) {
 
-		PatientIdentifier patientIdentifier = Context.getService(ParametersDispensationService.class)
+		PatientIdentifier patientIdentifier = Context.getService(ParametresService.class)
 				.getPatientIdentifierByIdentifier(numPatient);
-		PatientComplement patientComplement = Context.getService(ParametersDispensationService.class)
-				.getPatientComplementByIdentifier(patientIdentifier.getPatientIdentifierId());
-		if (patientComplement != null) {
 
-			model.addAttribute("patientIdentifier", patientComplement.getPatientIdentifierId());
-			List<Regime> regimes = (List<Regime>) Context.getService(ParametersDispensationService.class)
-					.getAllRegimes();
-			List<Produit> produits = (List<Produit>) Context.getService(ParametersDispensationService.class)
-					.getAllProduits();
-			List<Medecin> medecins = (List<Medecin>) Context.getService(ParametersDispensationService.class)
-					.getAllMedecins();
-			List<Programme> programmes = (List<Programme>) Context.getService(ParametersDispensationService.class)
+		if (patientIdentifier != null) {
+			// determiner l'age et le sexe
+			@SuppressWarnings("deprecation")
+			Person person = Context.getPersonService().getPerson(patientIdentifier.getPatient());
+			formulaireOrdonnance.setAge(person.getAge());
+			formulaireOrdonnance.setSexe(person.getGender());
+
+			formulaireOrdonnance.setPatientIdentifier(patientIdentifier);
+			model.addAttribute("patientIdentifier", patientIdentifier.getIdentifier());
+
+			List<PharmProgramme> programmes = (List<PharmProgramme>) Context.getService(ParametresService.class)
 					.getAllProgrammes();
+			List<PharmProduit> produits = (List<PharmProduit>) Context.getService(ParametresService.class)
+					.getAllProduits();
+
+			List<PharmRegime> regimes = (List<PharmRegime>) Context.getService(ParametresService.class).getAllRegimes();
+
+			List<PharmMedecin> medecins = (List<PharmMedecin>) Context.getService(ParametresService.class)
+					.getAllMedecins();
+
 			model.addAttribute("programmes", programmes);
 			formulaireOrdonnance.setIdParam(numPatient);
 			model.addAttribute("formulaireOrdonnance", formulaireOrdonnance);
@@ -104,10 +132,10 @@ public class DispensationController {
 			model.addAttribute("var", "1");
 
 			// recuperer la dernière dispensation
-			Ordonnance dispensation = Context.getService(DispensationService.class)
-					.getLastDispensation(patientComplement);
+			PharmOrdonnance dispensation = Context.getService(DispensationService.class)
+					.getLastPharmOrdonnance(patientIdentifier);
 			if (dispensation != null) {
-				model.addAttribute("regime", dispensation.getRegime().getRegimLib());
+				model.addAttribute("regime", dispensation.getPharmRegime().getRegimLib());
 				model.addAttribute("rdv", dispensation.getOrdDateRdv());
 			}
 
@@ -120,20 +148,22 @@ public class DispensationController {
 	@SuppressWarnings("deprecation")
 	@RequestMapping(method = RequestMethod.GET)
 	public String initDispenser(ModelMap model) {
-		FormulaireOrdonnance formulaireOrdonnance = new FormulaireOrdonnance();
+		FormulairePharmOrdonnance formulaireOrdonnance = new FormulairePharmOrdonnance();
 		// gestion du gestionnaire
-		GestionnairePharma gestionnairePharma = new GestionnairePharma();
-		gestionnairePharma.setPrepId(Context.getAuthenticatedUser().getUserId());
-		gestionnairePharma.setPrepNom(Context.getAuthenticatedUser().getFirstName());
-		gestionnairePharma.setPrepPrenom(Context.getAuthenticatedUser().getLastName());
-		formulaireOrdonnance.setGestionnairePharma(gestionnairePharma);
-		List<Regime> regimes = (List<Regime>) Context.getService(ParametersDispensationService.class).getAllRegimes();
-		List<Produit> produits = (List<Produit>) Context.getService(ParametersDispensationService.class)
-				.getAllProduits();
-		List<Medecin> medecins = (List<Medecin>) Context.getService(ParametersDispensationService.class)
-				.getAllMedecins();
-		List<Programme> programmes = (List<Programme>) Context.getService(ParametersDispensationService.class)
+		PharmGestionnairePharma gestionnairePharma = new PharmGestionnairePharma();
+		gestionnairePharma.setGestId(Context.getAuthenticatedUser().getUserId());
+		gestionnairePharma.setGestNom(Context.getAuthenticatedUser().getFirstName());
+		gestionnairePharma.setGestPrenom(Context.getAuthenticatedUser().getLastName());
+		Context.getService(ParametresService.class).saveOrUpdateGestionnaire(gestionnairePharma);
+
+		formulaireOrdonnance.setPharmGestionnairePharma(gestionnairePharma);
+		List<PharmProgramme> programmes = (List<PharmProgramme>) Context.getService(ParametresService.class)
 				.getAllProgrammes();
+		List<PharmProduit> produits = (List<PharmProduit>) Context.getService(ParametresService.class).getAllProduits();
+
+		List<PharmRegime> regimes = (List<PharmRegime>) Context.getService(ParametresService.class).getAllRegimes();
+
+		List<PharmMedecin> medecins = (List<PharmMedecin>) Context.getService(ParametresService.class).getAllMedecins();
 		model.addAttribute("programmes", programmes);
 		model.addAttribute("formulaireOrdonnance", formulaireOrdonnance);
 		model.addAttribute("produits", produits);
@@ -145,58 +175,92 @@ public class DispensationController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, params = { "btn_valider" })
-	public void addLigneDispensation(@ModelAttribute("formulaireOrdonnance") FormulaireOrdonnance formulaireOrdonnance,
+	public void addLigneDispensation(
+			@ModelAttribute("formulaireOrdonnance") FormulairePharmOrdonnance formulaireOrdonnance,
 			BindingResult result, HttpSession session, ModelMap model) {
 		try {
-			// dispensationValidator.validate(formulaireOrdonnance, result);
+			dispensationValidator.validate(formulaireOrdonnance, result);
 
-			List<Regime> regimes = (List<Regime>) Context.getService(ParametersDispensationService.class)
-					.getAllRegimes();
-			List<Produit> produits = (List<Produit>) Context.getService(ParametersDispensationService.class)
-					.getAllProduits();
-			List<Medecin> medecins = (List<Medecin>) Context.getService(ParametersDispensationService.class)
-					.getAllMedecins();
-			List<Programme> programmes = (List<Programme>) Context.getService(ParametersDispensationService.class)
+			List<PharmProgramme> programmes = (List<PharmProgramme>) Context.getService(ParametresService.class)
 					.getAllProgrammes();
+			List<PharmProduit> produits = (List<PharmProduit>) Context.getService(ParametresService.class)
+					.getAllProduits();
+			List<PharmRegime> regimes = (List<PharmRegime>) Context.getService(ParametresService.class).getAllRegimes();
+			List<PharmMedecin> medecins = (List<PharmMedecin>) Context.getService(ParametresService.class)
+					.getAllMedecins();
+
 			model.addAttribute("programmes", programmes);
 
-			model.addAttribute("formulaireOrdonnance", formulaireOrdonnance);
 			model.addAttribute("produits", produits);
 			model.addAttribute("medecins", medecins);
 			model.addAttribute("regimes", regimes);
+
 			if (!result.hasErrors()) {
-
 				// contrôle du Stock
-				StockerId stockerId = new StockerId();
-				if (formulaireOrdonnance.getProduit() != null)
-					stockerId.setProdId(formulaireOrdonnance.getProduit().getProdId());
-				if (formulaireOrdonnance.getProgramme() != null)
-					stockerId.setProgramId(formulaireOrdonnance.getProgramme().getProgramId());
-				Stocker stocker = Context.getService(GestionStockService.class).getStockerById(stockerId);
-				int stockQte = 0;
-				if (stocker != null)
-					stockQte = stocker.getStockQte();
-				if (stockQte >= formulaireOrdonnance.getServQteServi()) {
+				List<PharmStocker> stockerList = (ArrayList<PharmStocker>) Context.getService(GestionStockService.class)
+						.getPharmStockersByPP(formulaireOrdonnance.getPharmProduit(),
+								formulaireOrdonnance.getPharmProgramme());
+				model.addAttribute("info", stockerList.isEmpty());
+				if (!stockerList.isEmpty()) {
+					Collections.sort(stockerList);
 
-					LigneDispensation lgnDisp = new LigneDispensation();
-					lgnDisp.setProduit(formulaireOrdonnance.getProduit());
-					lgnDisp.setOrdonnance(formulaireOrdonnance.getOrdonnance());
-					lgnDisp.setServPrixUnit(formulaireOrdonnance.getServPrixUnit());
-					lgnDisp.setServQteDem(formulaireOrdonnance.getServQteDem());
-					lgnDisp.setServQteServi(formulaireOrdonnance.getServQteServi());
-					lgnDisp.setId(formulaireOrdonnance.addLigneDispensationId());
-					formulaireOrdonnance.getTabdispensation().addLigneDispensation(lgnDisp);
+					Integer qte = formulaireOrdonnance.getLdQteServi();
+					Integer qteTotalServi = 0;
+					boolean condition = true;
+					Iterator it = stockerList.iterator();
+					while (it.hasNext() && condition == true) {
+						PharmStocker stock = (PharmStocker) it.next();
+						if (stock.getStockQte() >= qte) {
 
+							LigneDispensationMvt lgnDisp = new LigneDispensationMvt();
+							lgnDisp.setPharmProduit(formulaireOrdonnance.getPharmProduit());
+							lgnDisp.setLdPrixUnit(formulaireOrdonnance.getLdPrixUnit());
+							lgnDisp.setLdQteDem(formulaireOrdonnance.getLdQteDem());
+							lgnDisp.setLgnRecptLot(stock.getPharmProduitAttribut().getProdLot());
+							lgnDisp.setLgnDatePerem(stock.getPharmProduitAttribut().getProdDatePerem());
+							lgnDisp.setLdQteServi(qte);
+							if (qte != 0)
+								formulaireOrdonnance.getTabDispensationMvt().addLigneDispensation(lgnDisp);
+							qteTotalServi = qteTotalServi + qte;
+							condition = false;
+
+						} else {
+							LigneDispensationMvt lgnDisp = new LigneDispensationMvt();
+							lgnDisp.setPharmProduit(formulaireOrdonnance.getPharmProduit());
+							lgnDisp.setLdPrixUnit(formulaireOrdonnance.getLdPrixUnit());
+							lgnDisp.setLdQteDem(formulaireOrdonnance.getLdQteDem());
+							lgnDisp.setLgnRecptLot(stock.getPharmProduitAttribut().getProdLot());
+							lgnDisp.setLgnDatePerem(stock.getPharmProduitAttribut().getProdDatePerem());
+							lgnDisp.setLdQteServi(stock.getStockQte());
+							formulaireOrdonnance.getTabDispensationMvt().addLigneDispensation(lgnDisp);
+
+							qteTotalServi = qteTotalServi + lgnDisp.getLdQteServi();
+							qte = qte - stock.getStockQte();
+						}
+					}
+
+					if (formulaireOrdonnance.getLdQteDem() <= qteTotalServi) {
+
+						model.addAttribute("mess", "accept");
+
+					} else if (formulaireOrdonnance.getLdQteDem() > qteTotalServi) {
+
+						model.addAttribute("mess", "refuse");
+
+					}
 					model.addAttribute("ligneDispensations",
-							formulaireOrdonnance.getTabdispensation().getLigneDispensationsCollection());
-					model.addAttribute("mess", "accept");
+							formulaireOrdonnance.getTabDispensationMvt().getLigneDispensationsCollection());
+					model.addAttribute("var", "1");
+					model.addAttribute("formulaireOrdonnance", formulaireOrdonnance);
 				} else {
+					model.addAttribute("ligneDispensations",
+							formulaireOrdonnance.getTabDispensationMvt().getLigneDispensationsCollection());
 					model.addAttribute("mess", "refuse");
 				}
-				model.addAttribute("var", "1");
-			} else {
-				model.addAttribute("var", "1");
+
 			}
+			model.addAttribute("formulaireOrdonnance", formulaireOrdonnance);
+			model.addAttribute("var", "1");
 		} catch (Exception e) {
 			e.getStackTrace();
 		}
@@ -204,69 +268,101 @@ public class DispensationController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, params = { "btn_enregistrer" })
-	public void saveDispensation(@ModelAttribute("formulaireOrdonnance") FormulaireOrdonnance formulaireOrdonnance,
+	public void saveDispensation(@ModelAttribute("formulaireOrdonnance") FormulairePharmOrdonnance formulaireOrdonnance,
 			@ModelAttribute("ligneDispensations") HashMap<Integer, LigneDispensation> ligneDispensations,
 			BindingResult result, HttpSession session, ModelMap model) {
-		// dispensationValidator.validate(formulaireOrdonnance, result);
+		dispensationValidator.validate(formulaireOrdonnance, result);
 
 		if (!result.hasErrors()) {
 			// save ordonnance
-			Ordonnance ord = new Ordonnance();
-			ord = formulaireOrdonnance.getOrdonnance();
-			Context.getService(DispensationService.class).saveOrdonnance(ord);
+			PharmOrdonnance ord = new PharmOrdonnance();
+			ord = formulaireOrdonnance.getPharmOrdonnance();
+			ord.setOrdDateSaisi(new Date());
+			// ord.setPharmGestionnairePharma(formulaireOrdonnance.getGestionnairePharma());
+			if (ord.getOrdDateRdv() == null) {
+				Date datRdV = ord.getOrdDateDispen();
+				GregorianCalendar gc = new GregorianCalendar();
+				gc.setTime(datRdV);
+				gc.add(GregorianCalendar.DATE, ord.getOrdNbreJrsTrai());
+				ord.setOrdDateRdv(gc.getTime());
+			}
+			Context.getService(DispensationService.class).savePharmOrdonnance(ord);
+			// save operation
+			PharmOperation operation = new PharmOperation();
+			operation.setPharmTypeOperation(Context.getService(ParametresService.class).getTypeOperationById(2));
+			operation.setOperDateRecept(ord.getOrdDateDispen());
+			operation.setOperDateSaisi(new Date());
+			operation.setPharmGestionnairePharma(ord.getPharmGestionnairePharma());
+			operation.setPharmProgramme(ord.getPharmProgramme());
+			Context.getService(OperationService.class).savePharmOperation(operation);
 			// save ligne dispensation
-
-			Map lignes = formulaireOrdonnance.getTabdispensation().getLigneDispensations();
+			Map lignes = formulaireOrdonnance.getTabDispensationMvt().getLigneDispensations();
 			for (Iterator i = lignes.keySet().iterator(); i.hasNext();) {
 				Object key = i.next();
-				LigneDispensation ligne = (LigneDispensation) lignes.get(key);
-				LigneDispensation ld = new LigneDispensation();
-				LigneDispensationId ldId = new LigneDispensationId();
+				LigneDispensationMvt ligne = (LigneDispensationMvt) lignes.get(key);
+				PharmLigneDispensation ld = new PharmLigneDispensation();
+				PharmLigneDispensationId ldId = new PharmLigneDispensationId();
 				ldId.setOrdId(ord.getOrdId());
-				ldId.setProdId(ligne.getProduit().getProdId());
-				ld.setId(ldId);
-				ld.setOrdonnance(ord);
-				ld.setProduit(ligne.getProduit());
-				ld.setServPrixUnit(ligne.getServPrixUnit());
-				ld.setServQteDem(ligne.getServQteDem());
-				ld.setServQteServi(ligne.getServQteServi());
-				Context.getService(DispensationService.class).saveLigneDispensation(ld);
-				// gestion du Stocker
-				StockerId stockerId = new StockerId();
-				stockerId.setProdId(ligne.getProduit().getProdId());
-				stockerId.setProgramId(formulaireOrdonnance.getOrdonnance().getProgramme().getProgramId());
-				Stocker stocker = Context.getService(GestionStockService.class).getStockerById(stockerId);
-				if (stocker != null) {
-					Integer stockQte = stocker.getStockQte() - ld.getServQteDem();
-					stocker.setId(stockerId);
-					stocker.setStockQte(stockQte);
-					Context.getService(GestionStockService.class).updateStocker(stocker);
+				ldId.setProdId(ligne.getPharmProduit().getProdId());
+				// verifier la ligne
+				PharmLigneDispensation varLd = Context.getService(DispensationService.class)
+						.getPharmLigneDispensation(ldId);
 
-					// insertion dans histoMvm
-					HistoMouvementStock histoMouvementStock = new HistoMouvementStock();
-					histoMouvementStock.setMvtDate(formulaireOrdonnance.getOrdonnance().getOrdDateDispen());
-					histoMouvementStock.setMvtDate(ord.getOrdDateDispen());
-					// histoMouvementStock.setMvtLot();
-					// histoMouvementStock.setMvtMotif(mvtMotif);
-					histoMouvementStock.setMvtProgramme(ord.getProgramme().getProgramId());
-					histoMouvementStock.setMvtQte(ligne.getServQteServi());
-					histoMouvementStock.setMvtQteStock(stocker.getStockQte());
-					histoMouvementStock.setMvtTypeMvt(Context.getService(ParametersDispensationService.class)
-							.getTypeOperationById(2).getTrecptId());
-					histoMouvementStock.setProduit(ligne.getProduit());
-					Context.getService(GestionStockService.class).saveHistoMvmStock(histoMouvementStock);
+				if (varLd != null) {
+					ld = varLd;
+					ld.setPharmOrdonnance(ord);
+					ld.setPharmProduit(ligne.getPharmProduit());
+					ld.setLdPrixUnit(ligne.getLdPrixUnit());
+					ld.setLdQteDem(ligne.getLdQteDem());
+					ld.setLdQteServi(ligne.getLdQteServi() + varLd.getLdQteServi());
+					Context.getService(DispensationService.class).updatePharmLigneDispensation(ld);
+				} else {
+					ld.setId(ldId);
+					ld.setPharmOrdonnance(ord);
+					ld.setPharmProduit(ligne.getPharmProduit());
+					ld.setLdPrixUnit(ligne.getLdPrixUnit());
+					ld.setLdQteDem(ligne.getLdQteDem());
+					ld.setLdQteServi(ligne.getLdQteServi());
+					Context.getService(DispensationService.class).savePharmLigneDispensation(ld);
 				}
+
+				// Gestion ProduitAttribut
+				PharmProduitAttribut pharmProduitAttribut = Context.getService(OperationService.class)
+						.getPharmProduitAttributByElement(ligne.getPharmProduit(), ligne.getLgnRecptLot());
+				// gestion des stock
+				PharmStockerId stockerId = new PharmStockerId();
+				stockerId.setProdAttriId(pharmProduitAttribut.getProdAttriId());
+				stockerId.setProgramId(ord.getPharmProgramme().getProgramId());
+				PharmStocker stocker = Context.getService(GestionStockService.class).getPharmStockerById(stockerId);
+
+				if (stocker != null && (stocker.getStockQte() >= ld.getLdQteServi())) {
+					Integer stockQte = stocker.getStockQte() - ld.getLdQteServi();
+					stocker.setStockQte(stockQte);
+					stocker.setStockDateStock(ord.getOrdDateDispen());
+					Context.getService(GestionStockService.class).updatePharmStocker(stocker);
+					// insertion dans histoMvm
+					PharmHistoMouvementStock histoMouvementStock = new PharmHistoMouvementStock();
+					histoMouvementStock.setMvtDate(ord.getOrdDateDispen());
+					histoMouvementStock.setMvtLot(ligne.getLgnRecptLot());
+
+					histoMouvementStock.setMvtProgramme(ord.getPharmProgramme().getProgramId());
+					histoMouvementStock.setMvtQte(ld.getLdQteServi());
+					histoMouvementStock.setMvtQteStock(stocker.getStockQte());
+					histoMouvementStock.setMvtTypeMvt(operation.getPharmTypeOperation().getToperId());
+					histoMouvementStock.setPharmProduit(ligne.getPharmProduit());
+					Context.getService(GestionStockService.class).savePharmHistoMvmStock(histoMouvementStock);
+				}
+
 			}
 			model.addAttribute("mess", "save");
 		} else {
-			List<Regime> regimes = (List<Regime>) Context.getService(ParametersDispensationService.class)
-					.getAllRegimes();
-			List<Produit> produits = (List<Produit>) Context.getService(ParametersDispensationService.class)
-					.getAllProduits();
-			List<Medecin> medecins = (List<Medecin>) Context.getService(ParametersDispensationService.class)
-					.getAllMedecins();
-			List<Programme> programmes = (List<Programme>) Context.getService(ParametersDispensationService.class)
+			List<PharmProgramme> programmes = (List<PharmProgramme>) Context.getService(ParametresService.class)
 					.getAllProgrammes();
+			List<PharmProduit> produits = (List<PharmProduit>) Context.getService(ParametresService.class)
+					.getAllProduits();
+			List<PharmRegime> regimes = (List<PharmRegime>) Context.getService(ParametresService.class).getAllRegimes();
+			List<PharmMedecin> medecins = (List<PharmMedecin>) Context.getService(ParametresService.class)
+					.getAllMedecins();
 			model.addAttribute("programmes", programmes);
 
 			model.addAttribute("formulaireOrdonnance", formulaireOrdonnance);
@@ -275,32 +371,48 @@ public class DispensationController {
 			model.addAttribute("regimes", regimes);
 
 		}
+		List<PharmProgramme> programmes = (List<PharmProgramme>) Context.getService(ParametresService.class)
+				.getAllProgrammes();
+		List<PharmProduit> produits = (List<PharmProduit>) Context.getService(ParametresService.class)
+				.getAllProduits();
+		List<PharmRegime> regimes = (List<PharmRegime>) Context.getService(ParametresService.class).getAllRegimes();
+		List<PharmMedecin> medecins = (List<PharmMedecin>) Context.getService(ParametresService.class)
+				.getAllMedecins();
+		model.addAttribute("programmes", programmes);
+
+		model.addAttribute("formulaireOrdonnance", formulaireOrdonnance);
+		model.addAttribute("produits", produits);
+		model.addAttribute("medecins", medecins);
+		model.addAttribute("regimes", regimes);
 
 	}
 
 	@RequestMapping(method = RequestMethod.GET, params = { "paramId" })
 	public void deleteLigneDispensation(@RequestParam(value = "paramId") String paramId,
-			@ModelAttribute("formulaireOrdonnance") FormulaireOrdonnance formulaireOrdonnance, BindingResult result,
-			HttpSession session, ModelMap model) {
-		List<Regime> regimes = (List<Regime>) Context.getService(ParametersDispensationService.class).getAllRegimes();
-		List<Produit> produits = (List<Produit>) Context.getService(ParametersDispensationService.class)
-				.getAllProduits();
-		List<Medecin> medecins = (List<Medecin>) Context.getService(ParametersDispensationService.class)
-				.getAllMedecins();
-		List<Programme> programmes = (List<Programme>) Context.getService(ParametersDispensationService.class)
+			@ModelAttribute("formulaireOrdonnance") FormulairePharmOrdonnance formulaireOrdonnance,
+			BindingResult result, HttpSession session, ModelMap model) {
+		
+		List<PharmProgramme> programmes = (List<PharmProgramme>) Context.getService(ParametresService.class)
 				.getAllProgrammes();
+		List<PharmProduit> produits = (List<PharmProduit>) Context.getService(ParametresService.class).getAllProduits();
+		List<PharmRegime> regimes = (List<PharmRegime>) Context.getService(ParametresService.class).getAllRegimes();
+		List<PharmMedecin> medecins = (List<PharmMedecin>) Context.getService(ParametresService.class).getAllMedecins();
 		model.addAttribute("programmes", programmes);
 
 		// model.addAttribute("patientIdentifier",
 		// patientIdentifier.getPatient());
+
+
+		if (!result.hasErrors()) {
+			formulaireOrdonnance.getTabDispensationMvt().removeLigneDispensationById(paramId);
+			model.addAttribute("ligneDispensations",
+					formulaireOrdonnance.getTabDispensationMvt().getLigneDispensationsCollection());
+		}
 		model.addAttribute("formulaireOrdonnance", formulaireOrdonnance);
+		model.addAttribute("var", "1");
 		model.addAttribute("produits", produits);
 		model.addAttribute("medecins", medecins);
 		model.addAttribute("regimes", regimes);
-		formulaireOrdonnance.getTabdispensation().removeLigneDispensationById(paramId);
-		model.addAttribute("ligneDispensations",
-				formulaireOrdonnance.getTabdispensation().getLigneDispensationsCollection());
-		model.addAttribute("var", "1");
 
 	}
 
@@ -308,7 +420,8 @@ public class DispensationController {
 	public void initBinder(WebDataBinder binder) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
-		binder.registerCustomEditor(Produit.class, new PropertyEditorSupport() {
+
+		binder.registerCustomEditor(PharmProduit.class, new PropertyEditorSupport() {
 			@Override
 			public void setAsText(String text) throws IllegalArgumentException {
 				int nbr = 0;
@@ -319,31 +432,31 @@ public class DispensationController {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				Produit produit = Context.getService(ParametersDispensationService.class).getProduitById(nbr);
+				PharmProduit produit = Context.getService(ParametresService.class).getProduitById(nbr);
 				this.setValue(produit);
 			}
 		});
-		binder.registerCustomEditor(Regime.class, new PropertyEditorSupport() {
+
+		binder.registerCustomEditor(PharmRegime.class, new PropertyEditorSupport() {
 			@Override
 			public void setAsText(String text) throws IllegalArgumentException {
-				Regime regime = Context.getService(ParametersDispensationService.class)
-						.getRegimeById(Integer.parseInt(text));
+				PharmRegime regime = Context.getService(ParametresService.class).getRegimeById(Integer.parseInt(text));
 				this.setValue(regime);
 			}
 		});
-		binder.registerCustomEditor(Medecin.class, new PropertyEditorSupport() {
+		binder.registerCustomEditor(PharmMedecin.class, new PropertyEditorSupport() {
 			@Override
 			public void setAsText(String text) throws IllegalArgumentException {
-				Medecin medecin = Context.getService(ParametersDispensationService.class)
+				PharmMedecin medecin = Context.getService(ParametresService.class)
 						.getMedecinById(Integer.parseInt(text));
 				this.setValue(medecin);
 			}
 		});
 
-		binder.registerCustomEditor(Programme.class, new PropertyEditorSupport() {
+		binder.registerCustomEditor(PharmProgramme.class, new PropertyEditorSupport() {
 			@Override
 			public void setAsText(String text) throws IllegalArgumentException {
-				Programme programme = Context.getService(ParametersDispensationService.class)
+				PharmProgramme programme = Context.getService(ParametresService.class)
 						.getProgrammeById(Integer.parseInt(text));
 				this.setValue(programme);
 			}

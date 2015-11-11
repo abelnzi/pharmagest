@@ -6,6 +6,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.pharmagest.HistoMouvementStock;
+import org.openmrs.module.pharmagest.PharmHistoMouvementStock;
+import org.openmrs.module.pharmagest.PharmProduit;
+import org.openmrs.module.pharmagest.PharmProgramme;
+import org.openmrs.module.pharmagest.PharmStocker;
+import org.openmrs.module.pharmagest.PharmStockerId;
 import org.openmrs.module.pharmagest.Produit;
 import org.openmrs.module.pharmagest.Programme;
 import org.openmrs.module.pharmagest.Stocker;
@@ -13,8 +18,7 @@ import org.openmrs.module.pharmagest.StockerId;
 import org.openmrs.module.pharmagest.api.GestionStockService;
 import org.openmrs.module.pharmagest.api.db.GestionStockDAO;
 
-public class GestionStockServiceImpl extends BaseOpenmrsService implements
-		GestionStockService {
+public class GestionStockServiceImpl extends BaseOpenmrsService implements GestionStockService {
 	protected final Log log = LogFactory.getLog(this.getClass());
 
 	private GestionStockDAO dao;
@@ -99,15 +103,13 @@ public class GestionStockServiceImpl extends BaseOpenmrsService implements
 	}
 
 	@Override
-	public Collection<HistoMouvementStock> getHistoMvmStocksByProgramId(
-			Integer programId) {
+	public Collection<HistoMouvementStock> getHistoMvmStocksByProgramId(Integer programId) {
 
 		return getDao().getHistoMvmStocksByProgramId(programId);
 	}
 
 	@Override
-	public Collection<HistoMouvementStock> getHistoMvmStocksByProduit(
-			Produit produit) {
+	public Collection<HistoMouvementStock> getHistoMvmStocksByProduit(Produit produit) {
 
 		return getDao().getHistoMvmStocksByProduit(produit);
 	}
@@ -116,6 +118,97 @@ public class GestionStockServiceImpl extends BaseOpenmrsService implements
 	public HistoMouvementStock getHistoMvmStockById(Integer histoMvmStockId) {
 
 		return getDao().getHistoMvmStockById(histoMvmStockId);
+	}
+
+	@Override
+	public void savePharmStocker(PharmStocker stocker) {
+		getDao().savePharmStocker(stocker);
+
+	}
+
+	@Override
+	public void deletePharmStocker(PharmStocker stocker) {
+		getDao().retirePharmStocker(stocker);
+
+	}
+
+	@Override
+	public PharmStocker getPharmStockerById(PharmStockerId stockerId) {
+
+		return getDao().getPharmStockerById(stockerId);
+	}
+
+	@Override
+	public Collection<PharmStocker> getAllPharmStockers() {
+		// TODO Auto-generated method stub
+		return getDao().getAllPharmStockers();
+	}
+
+	@Override
+	public Collection<PharmStocker> getPharmStockersByProgram(PharmProgramme program) {
+		// TODO Auto-generated method stub
+		return getDao().getPharmStockersByProgram(program);
+	}
+
+	@Override
+	public Collection<PharmStocker> getPharmStockersByProduit(PharmProduit produit) {
+		// TODO Auto-generated method stub
+		return getDao().getPharmStockersByProduit(produit);
+	}
+
+	@Override
+	public void updatePharmStocker(PharmStocker stocker) {
+		// TODO Auto-generated method stub
+		getDao().updatePharmStocker(stocker);
+
+	}
+
+	@Override
+	public boolean savePharmHistoMvmStock(PharmHistoMouvementStock histoMouvementStock) {
+		// TODO Auto-generated method stub
+		return getDao().savePharmHistoMvmStock(histoMouvementStock);
+	}
+
+	@Override
+	public void deletePharmHistoMvmStock(PharmHistoMouvementStock histoMouvementStock) {
+		getDao().retirePharmHistoMvmStock(histoMouvementStock);
+
+	}
+
+	@Override
+	public void updatePharmHistoMvmStock(PharmHistoMouvementStock histoMouvementStock) {
+		getDao().updatePharmHistoMvmStock(histoMouvementStock);
+
+	}
+
+	@Override
+	public Collection<PharmHistoMouvementStock> getAllPharmHistoMvmStocks() {
+		// TODO Auto-generated method stub
+		return getDao().getAllPharmHistoMvmStocks();
+	}
+
+	@Override
+	public Collection<PharmHistoMouvementStock> getPharmHistoMvmStocksByProgramId(Integer programId) {
+		// TODO Auto-generated method stub
+		return getDao().getPharmHistoMvmStocksByProgramId(programId);
+	}
+
+	@Override
+	public Collection<PharmHistoMouvementStock> getPharmHistoMvmStocksByProduit(PharmProduit produit) {
+		// TODO Auto-generated method stub
+		return getDao().getPharmHistoMvmStocksByProduit(produit);
+	}
+
+	@Override
+	public PharmHistoMouvementStock getPharmHistoMvmStockById(Integer histoMvmStockId) {
+		// TODO Auto-generated method stub
+		return getDao().getPharmHistoMvmStockById(histoMvmStockId);
+	}
+
+	@Override
+	public Collection<PharmStocker> getPharmStockersByPP(PharmProduit pharmProduit, PharmProgramme pharmProgramme) {
+	
+		return getDao().getPharmStockersByPP(pharmProduit, pharmProgramme);
 	}
 
 }

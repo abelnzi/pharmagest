@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<!-- Generated 16 ao?t 2015 03:07:55 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="org.openmrs.module.pharmagest.PharmProduitAttribut" table="pharm_produit_attribut" >
+        <id name="prodAttriId" type="java.lang.Integer">
+            <column name="prod_attri_id" />
+            <generator class="increment" />
+        </id>
+        <many-to-one name="pharmProduit" class="org.openmrs.module.pharmagest.PharmProduit" fetch="select">
+            <column name="prod_id" not-null="true" />
+        </many-to-one>
+        <property name="prodDatePerem" type="date">
+            <column name="prod_date_perem" length="0" />
+        </property>
+        <property name="prodLot" type="string">
+            <column name="prod_lot" length="50" />
+        </property>
+        <property name="flagValid" type="java.lang.Boolean">
+            <column name="flag_valid" />
+        </property>
+        <property name="prodAttriDate" type="date">
+            <column name="prod_attri_date" length="0" />
+        </property>
+        <set name="pharmStockers" table="pharm_stocker" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="prod_attri_id" not-null="true" />
+            </key>
+            <one-to-many class="org.openmrs.module.pharmagest.PharmStocker" />
+        </set>
+        <set name="pharmLigneInventaires" table="pharm_ligne_inventaire" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="prod_attri_id" not-null="true" />
+            </key>
+            <one-to-many class="org.openmrs.module.pharmagest.PharmLigneInventaire" />
+        </set>
+        <set name="pharmLigneOperations" table="pharm_ligne_operation" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="prod_attri_id" not-null="true" />
+            </key>
+            <one-to-many class="org.openmrs.module.pharmagest.PharmLigneOperation" />
+        </set>
+    </class>
+</hibernate-mapping>

@@ -25,24 +25,24 @@ import java.util.Map;
 import javax.servlet.http.HttpSession;
 
 import org.openmrs.api.context.Context;
-import org.openmrs.module.pharmagest.Fournisseur;
-import org.openmrs.module.pharmagest.GestionnairePharma;
-import org.openmrs.module.pharmagest.HistoMouvementStock;
-import org.openmrs.module.pharmagest.LingeOperation;
-import org.openmrs.module.pharmagest.LingeOperationId;
-import org.openmrs.module.pharmagest.Operation;
-import org.openmrs.module.pharmagest.Produit;
-import org.openmrs.module.pharmagest.Programme;
-import org.openmrs.module.pharmagest.Stocker;
-import org.openmrs.module.pharmagest.StockerId;
-import org.openmrs.module.pharmagest.TypeOperation;
+import org.openmrs.module.pharmagest.PharmFournisseur;
+import org.openmrs.module.pharmagest.PharmGestionnairePharma;
+import org.openmrs.module.pharmagest.PharmHistoMouvementStock;
+import org.openmrs.module.pharmagest.PharmLigneOperation;
+import org.openmrs.module.pharmagest.PharmLigneOperationId;
+import org.openmrs.module.pharmagest.PharmOperation;
+import org.openmrs.module.pharmagest.PharmProduit;
+import org.openmrs.module.pharmagest.PharmProduitAttribut;
+import org.openmrs.module.pharmagest.PharmProgramme;
+import org.openmrs.module.pharmagest.PharmStocker;
+import org.openmrs.module.pharmagest.PharmStockerId;
+import org.openmrs.module.pharmagest.PharmTypeOperation;
 import org.openmrs.module.pharmagest.api.GestionStockService;
 import org.openmrs.module.pharmagest.api.OperationService;
-import org.openmrs.module.pharmagest.api.ParametersDispensationService;
-import org.openmrs.module.pharmagest.metier.FormulaireStockFourni;
-import org.openmrs.module.pharmagest.validator.DispensationValidator;
+import org.openmrs.module.pharmagest.api.ParametresService;
+import org.openmrs.module.pharmagest.metier.FormulaireStockFournisseur;
+import org.openmrs.module.pharmagest.metier.LigneOperationMvt;
 import org.openmrs.module.pharmagest.validator.StockEntreeValidator;
-import org.openmrs.module.pharmagest.validator.StockValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -69,24 +69,21 @@ public class StockMvmSortieController {
 	@SuppressWarnings("deprecation")
 	@RequestMapping(method = RequestMethod.GET)
 	public String initStockFour(ModelMap model) {
-		FormulaireStockFourni formulaireStockFourni = new FormulaireStockFourni();
+		FormulaireStockFournisseur formulaireStockFourni = new FormulaireStockFournisseur();
 		model.addAttribute("formulaireStockFourni", formulaireStockFourni);
 		// gestion du gestionnaire
-		GestionnairePharma gestionnairePharma = new GestionnairePharma();
-		gestionnairePharma
-				.setPrepId(Context.getAuthenticatedUser().getUserId());
-		gestionnairePharma.setPrepNom(Context.getAuthenticatedUser()
-				.getFirstName());
-		gestionnairePharma.setPrepPrenom(Context.getAuthenticatedUser()
-				.getLastName());
-		formulaireStockFourni.setGestionnairePharma(gestionnairePharma);
-		List<Fournisseur> fournisseurs = (List<Fournisseur>) Context
-				.getService(ParametersDispensationService.class)
+		PharmGestionnairePharma gestionnairePharma = new PharmGestionnairePharma();
+		gestionnairePharma.setGestId(Context.getAuthenticatedUser().getUserId());
+		gestionnairePharma.setGestNom(Context.getAuthenticatedUser().getFirstName());
+		gestionnairePharma.setGestPrenom(Context.getAuthenticatedUser().getLastName());
+		Context.getService(ParametresService.class).saveOrUpdateGestionnaire(gestionnairePharma);
+		formulaireStockFourni.setPharmGestionnairePharma(gestionnairePharma);
+
+		List<PharmFournisseur> fournisseurs = (List<PharmFournisseur>) Context.getService(ParametresService.class)
 				.getAllFournisseurs();
-		List<Programme> programmes = (List<Programme>) Context.getService(
-				ParametersDispensationService.class).getAllProgrammes();
-		List<Produit> produits = (List<Produit>) Context.getService(
-				ParametersDispensationService.class).getAllProduits();
+		List<PharmProgramme> programmes = (List<PharmProgramme>) Context.getService(ParametresService.class)
+				.getAllProgrammes();
+		List<PharmProduit> produits = (List<PharmProduit>) Context.getService(ParametresService.class).getAllProduits();
 		model.addAttribute("fournisseurs", fournisseurs);
 		model.addAttribute("programmes", programmes);
 		model.addAttribute("produits", produits);
@@ -95,93 +92,63 @@ public class StockMvmSortieController {
 
 	@RequestMapping(method = RequestMethod.POST, params = { "btn_valider" })
 	public void addLigneDispensation(
-			@ModelAttribute("formulaireStockFourni") FormulaireStockFourni formulaireStockFourni,
+			@ModelAttribute("formulaireStockFourni") FormulaireStockFournisseur formulaireStockFourni,
 			BindingResult result, HttpSession session, ModelMap model) {
 		try {
-			stockValidator.validate(formulaireStockFourni, result);
-			List<Fournisseur> fournisseurs = (List<Fournisseur>) Context
-					.getService(ParametersDispensationService.class)
+			 stockValidator.validate(formulaireStockFourni, result);
+			List<PharmFournisseur> fournisseurs = (List<PharmFournisseur>) Context.getService(ParametresService.class)
 					.getAllFournisseurs();
-			List<Programme> programmes = (List<Programme>) Context.getService(
-					ParametersDispensationService.class).getAllProgrammes();
-			List<Produit> produits = (List<Produit>) Context.getService(
-					ParametersDispensationService.class).getAllProduits();
-
-			model.addAttribute("formulaireStockFourni", formulaireStockFourni);
-			model.addAttribute("fournisseurs", fournisseurs);
-			model.addAttribute("programmes", programmes);
-			model.addAttribute("produits", produits);
+			List<PharmProgramme> programmes = (List<PharmProgramme>) Context.getService(ParametresService.class)
+					.getAllProgrammes();
+			List<PharmProduit> produits = (List<PharmProduit>) Context.getService(ParametresService.class)
+					.getAllProduits();
 
 			if (!result.hasErrors()) {
 
-				// contrôle du Stock
-				StockerId stockerId = new StockerId();
-				if (formulaireStockFourni.getProduit() != null)
-					stockerId.setProdId(formulaireStockFourni.getProduit()
-							.getProdId());
-				if (formulaireStockFourni.getProgramme() != null)
-					stockerId.setProgramId(formulaireStockFourni.getProgramme()
-							.getProgramId());
-				Stocker stocker = Context.getService(GestionStockService.class)
-						.getStockerById(stockerId);
-				int stockQte = 0;
-				if (stocker != null)
-					stockQte = stocker.getStockQte();
-				if (stockQte >= formulaireStockFourni.getLgnRecptQte()) {
-					LingeOperation lngOperation = new LingeOperation();
-					lngOperation.setOperation(formulaireStockFourni
-							.getOperation());
-					lngOperation.setProduit(formulaireStockFourni.getProduit());
-					lngOperation.setLgnRecptQte(formulaireStockFourni
-							.getLgnRecptQte());
-					lngOperation.setLgnRecptPrixAchat(formulaireStockFourni
-							.getLgnRecptPrixAchat());
-					lngOperation.setLgnRecptLot(formulaireStockFourni
-							.getLgnRecptLot());
-					lngOperation.setLgnDatePerem(formulaireStockFourni
-							.getLgnDatePerem());
-					lngOperation.setId(formulaireStockFourni
-							.addLigneOperationId());
+				LigneOperationMvt lngOperation = new LigneOperationMvt();
+				lngOperation.setOperation(formulaireStockFourni.getPharmOperation());
+				lngOperation.setProduit(formulaireStockFourni.getProduit());
+				lngOperation.setLgnRecptQte(formulaireStockFourni.getLgnRecptQte());
+				lngOperation.setLgnRecptPrixAchat(formulaireStockFourni.getLgnRecptPrixAchat());
+				lngOperation.setLgnRecptLot(formulaireStockFourni.getLgnRecptLot());
+				lngOperation.setLgnDatePerem(formulaireStockFourni.getLgnDatePerem());
 
-					formulaireStockFourni.getTabOperation().addLigneOperation(
-							lngOperation);
-					model.addAttribute("ligneOperations", formulaireStockFourni
-							.getTabOperation().getLigneOperationsCollection());
-					model.addAttribute("mess", "valid");
-				} else {
-					model.addAttribute("mess", "refuse");
-				}
+				formulaireStockFourni.getTabOperationMvt().addLigneOperation(lngOperation);
+				model.addAttribute("ligneOperations",
+						formulaireStockFourni.getTabOperationMvt().getLigneOperationsCollection());
+				model.addAttribute("mess", "valid");
 			}
+
 			model.addAttribute("formulaireStockFourni", formulaireStockFourni);
 			model.addAttribute("fournisseurs", fournisseurs);
 			model.addAttribute("programmes", programmes);
 			model.addAttribute("produits", produits);
 		} catch (Exception e) {
-			e.getMessage();
+			e.printStackTrace();
 		}
 
 	}
 
 	@RequestMapping(method = RequestMethod.GET, params = { "paramId" })
-	public void deleteLigneOperation(
-			@RequestParam(value = "paramId") String paramId,
-			@ModelAttribute("formulaireStockFourni") FormulaireStockFourni formulaireStockFourni,
+	public void deleteLigneOperation(@RequestParam(value = "paramId") String paramId,
+			@ModelAttribute("formulaireStockFourni") FormulaireStockFournisseur formulaireStockFourni,
 			BindingResult result, HttpSession session, ModelMap model) {
 
 		try {
+			List<PharmFournisseur> fournisseurs = (List<PharmFournisseur>) Context.getService(ParametresService.class)
+					.getAllFournisseurs();
+			List<PharmProgramme> programmes = (List<PharmProgramme>) Context.getService(ParametresService.class)
+					.getAllProgrammes();
+			List<PharmProduit> produits = (List<PharmProduit>) Context.getService(ParametresService.class)
+					.getAllProduits();
 
-			List<Programme> programmes = (List<Programme>) Context.getService(
-					ParametersDispensationService.class).getAllProgrammes();
-			List<Produit> produits = (List<Produit>) Context.getService(
-					ParametersDispensationService.class).getAllProduits();
-
+			model.addAttribute("fournisseurs", fournisseurs);
 			model.addAttribute("programmes", programmes);
 			model.addAttribute("produits", produits);
 
-			formulaireStockFourni.getTabOperation().removeLigneOperationById(
-					paramId);
-			model.addAttribute("ligneOperations", formulaireStockFourni
-					.getTabOperation().getLigneOperationsCollection());
+			formulaireStockFourni.getTabOperationMvt().removeLigneOperationById(paramId);
+			model.addAttribute("ligneOperations",
+					formulaireStockFourni.getTabOperationMvt().getLigneOperationsCollection());
 			model.addAttribute("formulaireStockFourni", formulaireStockFourni);
 			model.addAttribute("mess", "delete");
 		} catch (Exception e) {
@@ -191,104 +158,85 @@ public class StockMvmSortieController {
 
 	@RequestMapping(method = RequestMethod.POST, params = { "btn_enregistrer" })
 	public void saveDispensation(
-			@ModelAttribute("formulaireStockFourni") FormulaireStockFourni formulaireStockFourni,
+			@ModelAttribute("formulaireStockFourni") FormulaireStockFournisseur formulaireStockFourni,
 			BindingResult result, HttpSession session, ModelMap model) {
 		try {
-			stockValidator.validate(formulaireStockFourni, result);
+			 stockValidator.validate(formulaireStockFourni, result);
 			// save operation
 			if (!result.hasErrors()) {
-				Operation operation = new Operation();
-				operation = formulaireStockFourni.getOperation();
-				Context.getService(OperationService.class).saveOperation(
-						operation);
+				PharmOperation operation = new PharmOperation();
+				operation = formulaireStockFourni.getPharmOperation();
+				Context.getService(OperationService.class).savePharmOperation(operation);
+
 				// save ligne dispensation
 
-				Map lignes = formulaireStockFourni.getTabOperation()
-						.getLigneOperations();
+				Map lignes = formulaireStockFourni.getTabOperationMvt().getLigneOperations();
 				for (Iterator i = lignes.keySet().iterator(); i.hasNext();) {
 					Object key = i.next();
-					LingeOperation ligne = (LingeOperation) lignes.get(key);
-					LingeOperation ld = new LingeOperation();
-					LingeOperationId ldId = new LingeOperationId();
-					ldId.setRecptId(operation.getRecptId());
-					ldId.setProdId(ligne.getProduit().getProdId());
-					ld.setId(ldId);
-					ld.setOperation(operation);
-					ld.setLgnDatePerem(ligne.getLgnDatePerem());
-					ld.setLgnRecptLot(ligne.getLgnRecptLot());
-					ld.setLgnRecptPrixAchat(ligne.getLgnRecptPrixAchat());
-					ld.setLgnRecptQte(ligne.getLgnRecptQte());
-					Context.getService(OperationService.class)
-							.saveLigneOperation(ld);
+					LigneOperationMvt ligne = (LigneOperationMvt) lignes.get(key);
 
-					// gestion du Stocker
-					StockerId stockerId = new StockerId();
-					stockerId.setProdId(ligne.getProduit().getProdId());
-					stockerId.setProgramId(operation.getProgramme()
-							.getProgramId());
-					Stocker stocker = Context.getService(
-							GestionStockService.class)
-							.getStockerById(stockerId);
-					if (stocker != null) {
-						Integer stockQte = stocker.getStockQte()
-								- ld.getLgnRecptQte();
-						stocker.setStockQte(stockQte);
-						Context.getService(GestionStockService.class)
-								.updateStocker(stocker);
-						// insertion dans histoMvm
-						HistoMouvementStock histoMouvementStock = new HistoMouvementStock();
-						histoMouvementStock.setMvtDate(formulaireStockFourni
-								.getOperation().getRecptDateRecept());
-						histoMouvementStock.setMvtLot(ligne.getLgnRecptLot());
-						histoMouvementStock.setMvtDate(operation.getRecptDateRecept());
-						// histoMouvementStock.setMvtMotif(mvtMotif);
-						histoMouvementStock
-								.setMvtProgramme(formulaireStockFourni
-										.getOperation().getProgramme()
-										.getProgramId());
-						histoMouvementStock.setMvtQte(ld.getLgnRecptQte());
-						histoMouvementStock.setMvtQteStock(stocker
-								.getStockQte());
-						histoMouvementStock.setMvtTypeMvt(operation
-								.getTypeOperation().getTrecptId());
-						histoMouvementStock.setProduit(ligne.getProduit());
-						Context.getService(GestionStockService.class)
-								.saveHistoMvmStock(histoMouvementStock);
+					// Gestion ProduitAttribut
+					PharmProduitAttribut pharmProduitAttribut = new PharmProduitAttribut();
+					PharmProduitAttribut varProd = Context.getService(OperationService.class)
+							.getPharmProduitAttributByElement(ligne.getProduit(), ligne.getLgnRecptLot());
+					if (varProd != null) {
+						pharmProduitAttribut = varProd;
+
+						// save PharmligneOperation
+						PharmLigneOperation ld = new PharmLigneOperation();
+						PharmLigneOperationId ldId = new PharmLigneOperationId();
+						ldId.setOperId(operation.getOperId());
+						ldId.setProdAttriId(pharmProduitAttribut.getProdAttriId());
+						ld.setId(ldId);
+						ld.setPharmOperation(operation);
+						ld.setPharmProduitAttribut(pharmProduitAttribut);
+						ld.setLgnOperDatePerem(ligne.getLgnDatePerem());
+						ld.setLgnOperLot(ligne.getLgnRecptLot());
+						ld.setLgnOperPrixAchat(ligne.getLgnRecptPrixAchat());
+						ld.setLgnOperQte(ligne.getLgnRecptQte());
+						Context.getService(OperationService.class).savePharmLigneOperation(ld);
+
+						// gestion du Stocker
+						PharmStockerId stockerId = new PharmStockerId();
+						stockerId.setProdAttriId(pharmProduitAttribut.getProdAttriId());
+						stockerId.setProgramId(operation.getPharmProgramme().getProgramId());
+						PharmStocker stocker = Context.getService(GestionStockService.class)
+								.getPharmStockerById(stockerId);
+						if (stocker != null && (stocker.getStockQte() >= ld.getLgnOperQte())) {
+							Integer stockQte = stocker.getStockQte() - ld.getLgnOperQte();
+							stocker.setStockQte(stockQte);
+							stocker.setStockDateStock(operation.getOperDateRecept());
+							Context.getService(GestionStockService.class).updatePharmStocker(stocker);
+							// insertion dans histoMvm
+							PharmHistoMouvementStock histoMouvementStock = new PharmHistoMouvementStock();
+							histoMouvementStock.setMvtDate(operation.getOperDateRecept());
+							histoMouvementStock.setMvtLot(ligne.getLgnRecptLot());
+
+							histoMouvementStock.setMvtProgramme(operation.getPharmProgramme().getProgramId());
+							histoMouvementStock.setMvtQte(ld.getLgnOperQte());
+							histoMouvementStock.setMvtQteStock(stocker.getStockQte());
+							histoMouvementStock.setMvtTypeMvt(operation.getPharmTypeOperation().getToperId());
+							histoMouvementStock.setPharmProduit(ligne.getProduit());
+							Context.getService(GestionStockService.class).savePharmHistoMvmStock(histoMouvementStock);
+						} else {
+							model.addAttribute("mess", "insufisant");
+						}
 					} else {
-						Stocker stocker2 = new Stocker();
-						stocker2.setId(stockerId);
-						stocker2.setStockQte(ld.getLgnRecptQte());
-						Context.getService(GestionStockService.class)
-								.saveStocker(stocker2);
-						// insertion dans histoMvm
-						HistoMouvementStock histoMouvementStock = new HistoMouvementStock();
-						histoMouvementStock.setMvtDate(formulaireStockFourni
-								.getOperation().getRecptDateRecept());
-						// histoMouvementStock.setMvtLot();
-						// histoMouvementStock.setMvtMotif(mvtMotif);
-						histoMouvementStock
-								.setMvtProgramme(formulaireStockFourni
-										.getOperation().getProgramme()
-										.getProgramId());
-						histoMouvementStock.setMvtQte(ld.getLgnRecptQte());
-						histoMouvementStock.setMvtQteStock(stocker2
-								.getStockQte());
-						histoMouvementStock.setMvtTypeMvt(operation
-								.getTypeOperation().getTrecptId());
-						histoMouvementStock.setProduit(ligne.getProduit());
-						Context.getService(GestionStockService.class)
-								.saveHistoMvmStock(histoMouvementStock);
+						model.addAttribute("mess", "indisponible");
 					}
 
 				}
-				formulaireStockFourni = new FormulaireStockFourni();
+				formulaireStockFourni = new FormulaireStockFournisseur();
 				model.addAttribute("mess", "success");
 			}
-			List<Programme> programmes = (List<Programme>) Context.getService(
-					ParametersDispensationService.class).getAllProgrammes();
-			List<Produit> produits = (List<Produit>) Context.getService(
-					ParametersDispensationService.class).getAllProduits();
+			List<PharmFournisseur> fournisseurs = (List<PharmFournisseur>) Context.getService(ParametresService.class)
+					.getAllFournisseurs();
+			List<PharmProgramme> programmes = (List<PharmProgramme>) Context.getService(ParametresService.class)
+					.getAllProgrammes();
+			List<PharmProduit> produits = (List<PharmProduit>) Context.getService(ParametresService.class)
+					.getAllProduits();
 
+			model.addAttribute("fournisseurs", fournisseurs);
 			model.addAttribute("programmes", programmes);
 			model.addAttribute("produits", produits);
 			model.addAttribute("formulaireStockFourni", formulaireStockFourni);
@@ -301,9 +249,8 @@ public class StockMvmSortieController {
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-		binder.registerCustomEditor(Date.class, new CustomDateEditor(
-				dateFormat, true));
-		binder.registerCustomEditor(Produit.class, new PropertyEditorSupport() {
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
+		binder.registerCustomEditor(PharmProduit.class, new PropertyEditorSupport() {
 			@Override
 			public void setAsText(String text) throws IllegalArgumentException {
 				int nbr = 0;
@@ -314,45 +261,35 @@ public class StockMvmSortieController {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				Produit produit = Context.getService(
-						ParametersDispensationService.class)
-						.getProduitById(nbr);
+				PharmProduit produit = Context.getService(ParametresService.class).getProduitById(nbr);
 				this.setValue(produit);
 			}
 		});
-		binder.registerCustomEditor(Fournisseur.class,
-				new PropertyEditorSupport() {
-					@Override
-					public void setAsText(String text)
-							throws IllegalArgumentException {
-						Fournisseur fournisseur = Context.getService(
-								ParametersDispensationService.class)
-								.getFournisseurById(Integer.parseInt(text));
-						this.setValue(fournisseur);
-					}
-				});
-		binder.registerCustomEditor(Programme.class,
-				new PropertyEditorSupport() {
-					@Override
-					public void setAsText(String text)
-							throws IllegalArgumentException {
-						Programme programme = Context.getService(
-								ParametersDispensationService.class)
-								.getProgrammeById(Integer.parseInt(text));
-						this.setValue(programme);
-					}
-				});
-		binder.registerCustomEditor(TypeOperation.class,
-				new PropertyEditorSupport() {
-					@Override
-					public void setAsText(String text)
-							throws IllegalArgumentException {
-						TypeOperation typeOperation = Context.getService(
-								ParametersDispensationService.class)
-								.getTypeOperationById(Integer.parseInt(text));
-						this.setValue(typeOperation);
-					}
-				});
+		binder.registerCustomEditor(PharmFournisseur.class, new PropertyEditorSupport() {
+			@Override
+			public void setAsText(String text) throws IllegalArgumentException {
+				PharmFournisseur fournisseur = Context.getService(ParametresService.class)
+						.getFournisseurById(Integer.parseInt(text));
+				this.setValue(fournisseur);
+			}
+		});
+		binder.registerCustomEditor(PharmProgramme.class, new PropertyEditorSupport() {
+			@Override
+			public void setAsText(String text) throws IllegalArgumentException {
+				PharmProgramme programme = Context.getService(ParametresService.class)
+						.getProgrammeById(Integer.parseInt(text));
+				this.setValue(programme);
+			}
+		});
+
+		binder.registerCustomEditor(PharmTypeOperation.class, new PropertyEditorSupport() {
+			@Override
+			public void setAsText(String text) throws IllegalArgumentException {
+				PharmTypeOperation typeOperation = Context.getService(ParametresService.class)
+						.getTypeOperationById(Integer.parseInt(text));
+				this.setValue(typeOperation);
+			}
+		});
 
 	}
 

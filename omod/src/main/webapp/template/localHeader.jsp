@@ -3,11 +3,9 @@
 	<spring:message code="pharmagest.title" />
 </h2>
 <ul id="menu">
-	<li class="first"><a
-		href="${pageContext.request.contextPath}/admin"><spring:message
-				code="admin.title.short" /></a></li>
+	
 
-	<li class="first active"><a href="<c:url value="/module/pharmagest/dispensation.form"/>"><spring:message
+	<li class="first"><a href="<c:url value="/module/pharmagest/dispensationChoix.form"/>"><spring:message
 			code="pharmagest.dispensation" /></a></li>
 
 	<li>
@@ -24,7 +22,10 @@
 			code="pharmagest.inventaire" /></a>
 	</li>
 	<li>
-		<a href="<c:url value="/module/pharmagest/histoMvm.form"/>">Historique des mouvements de stock</a>
+		<a href="<c:url value="/module/pharmagest/rapportStock.form"/>">Rapportage sur le Stock</a>
+	</li>
+    <li>
+		<a href="<c:url value="/module/pharmagest/parametrage.form"/>">Param&eacute;trage</a>
 	</li>
 	
 	<!-- Add further links here -->

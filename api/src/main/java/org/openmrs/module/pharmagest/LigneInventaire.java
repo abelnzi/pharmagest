@@ -7,6 +7,10 @@ package org.openmrs.module.pharmagest;
  */
 public class LigneInventaire implements java.io.Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private LigneInventaireId id;
 	private Programme programme;
 	private Inventaire inventaire;

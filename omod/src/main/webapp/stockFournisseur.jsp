@@ -1,6 +1,39 @@
 <%@ include file="/WEB-INF/template/include.jsp"%>
 <%@ include file="/WEB-INF/template/header.jsp"%>
-<%@ include file="template/localHeader.jsp"%>
+<h2>
+	<spring:message code="pharmagest.title" />
+</h2>
+<ul id="menu">
+	<li class="first"><a
+		href="${pageContext.request.contextPath}/admin"><spring:message
+				code="admin.title.short" /></a></li>
+
+	<li ><a href="<c:url value="/module/pharmagest/dispensationChoix.form"/>"><spring:message
+			code="pharmagest.dispensation" /></a></li>
+
+	<li  class="active">
+		<a href="<c:url value="/module/pharmagest/stockFournisseur.form"/>">Entr&eacute;e fournisseur</a>
+	</li>
+	<li>
+		<a href="<c:url value="/module/pharmagest/stockEntree.form"/>">Autre mouvement d'entr&eacute;e de stock</a>
+	</li>
+	<li>
+		<a href="<c:url value="/module/pharmagest/stockSortie.form"/>">Autre mouvement de sortie de stock</a>
+	</li>
+	<li >
+		<a href="<c:url value="/module/pharmagest/inventaire.form"/>"><spring:message
+			code="pharmagest.inventaire" /></a>
+	</li>
+	<li>
+		<a href="<c:url value="/module/pharmagest/rapportStock.form"/>">Rapportage sur le Stock</a>
+	</li>
+    <li>
+		<a href="<c:url value="/module/pharmagest/parametrage.form"/>">Param&eacute;trage</a>
+	</li>
+	
+	<!-- Add further links here -->
+</ul>
+
 <script type="text/css">
 	.error {
     color: #ff0000;
@@ -40,28 +73,28 @@
         <table width="100%" border="0" cellspacing="0" cellpadding="7">
   <tbody>
     <tr>
-      <td width="13%">Fournisseur</td>
-      <td width="36%"><form:select path="fournisseur">
+      <td width="13%">Fournisseur<span style="color:#F11A0C">*</span></td>
+      <td width="36%"><form:select path="pharmFournisseur">
 														<form:option value="0" label="---Choix---" />
 														<form:options items="${fournisseurs}" itemValue="fourId"
 															itemLabel="fourDesign1" />
-													</form:select> <form:errors path="fournisseur" cssClass="error" /></td>
+													</form:select> <form:errors path="pharmFournisseur" cssClass="error" /></td>
       <td width="1%">&nbsp;</td>
       <td width="16%">Programme</td>
-      <td width="34%"><form:select path="programme">
+      <td width="34%"><form:select path="pharmProgramme">
 														<form:option value="0" label="---Choix---" />
 														<form:options items="${programmes}" itemValue="programId"
 															itemLabel="programLib" />
-													</form:select> <form:errors path="programme" cssClass="error" /></td>
+													</form:select> <form:errors path="pharmProgramme" cssClass="error" /></td>
     </tr>
     <tr>
       <td>N&deg; de livraison</td>
-      <td><form:input path="recptNum" /> <form:errors
-														path="recptNum" cssClass="error" /></td>
+      <td><form:input path="operNum" /> <form:errors
+														path="operNum" cssClass="error" /></td>
       <td>&nbsp;</td>
-      <td>Date de la livraison</td>
-      <td><form:input path="recptDateRecept" /> <form:errors
-														path="recptDateRecept" cssClass="error"/></td>
+      <td>Date de la livraison<span style="color:#F11A0C">*</span></td>
+      <td><form:input path="operDateRecept" /> <form:errors
+														path="operDateRecept" cssClass="error"/><br><i style="font-weight: normal; font-size: 0.8em;">(Format: jj/mm/aaaa)</i></td>
     </tr>
   </tbody>
 </table>
@@ -92,7 +125,7 @@
                     <tr>
                       <td><div align="center">
                         <input type="text" disabled="disabled"
-															value="${formulaireStockFourni.produit.prodId}" size="15" readonly />
+															value="${formulaireStockFourni.produit.prodCode}" size="15" readonly />
                       </div></td>
                     </tr>
                     <tr>
@@ -104,7 +137,7 @@
               <td width="27%"><table width="100%" border="0" cellspacing="0">
                 <tbody>
                   <tr>
-                    <td><div align="center">D&eacute;signation</div></td>
+                    <td><div align="center">D&eacute;signation<span style="color:#F11A0C">*</span></div></td>
                   </tr>
                   <tr>
                     <td><div align="center">
@@ -125,7 +158,7 @@
               <td width="15%"><table width="100%" border="0" cellspacing="0">
                 <tbody>
                   <tr>
-                    <td><div align="center">Num&eacute;ro du lot</div></td>
+                    <td><div align="center">Num&eacute;ro du lot<span style="color:#F11A0C">*</span></div></td>
                   </tr>
                   <tr>
                     <td><div align="center">
@@ -141,7 +174,7 @@
               <td width="13%"><table width="100%" border="0" cellspacing="0">
                 <tbody>
                   <tr>
-                    <td><div align="center">P&eacute;remption</div></td>
+                    <td><div align="center">P&eacute;remption<span style="color:#F11A0C">*</span></div></td>
                   </tr>
                   <tr>
                     <td><div align="center">
@@ -157,7 +190,7 @@
               <td width="14%"><table width="100%" border="0" cellspacing="0">
                 <tbody>
                   <tr>
-                    <td><div align="center">Quantit&eacute;</div></td>
+                    <td><div align="center">Quantit&eacute;<span style="color:#F11A0C">*</span></div></td>
                   </tr>
                   <tr>
                     <td><div align="center">
@@ -196,7 +229,7 @@
                   <tr>
                     <td><div align="center">
                       <input type="submit" name="btn_valider"
-												id="btn_valider" value="Valider">
+												id="btn_valider" value="Ajouter">
                     </div></td>
                   </tr>
                 </tbody>
@@ -204,7 +237,6 @@
             </tr>
           </tbody>
         </table>
-      
         <table width="100%" border="1"  cellpadding="7" cellspacing="0">
              <tbody>
                 <tr>
@@ -218,7 +250,7 @@
                 </tr>
                 <c:forEach var="lo" items="${ligneOperations}">
 								<tr>
-									<td width="12%"><div align="left">${lo.produit.prodId}</div></td>
+									<td width="12%"><div align="left">${lo.produit.prodCode}</div></td>
 									<td width="27%"><div align="left">${lo.produit.prodLib}</div></td>
 									<td width="15%"><div align="left">${lo.lgnRecptLot}</div></td>
 									<td width="13%"><div align="left">${lo.lgnDatePerem}</div></td>
@@ -226,7 +258,7 @@
 									<td width="14%"><div align="left">${lo.lgnRecptPrixAchat}</div></td>
 									<td width="5%"><div align="left"><a
 										href="<c:url value="/module/pharmagest/stockFournisseur.form">
-									  <c:param name="paramId" value="${lo.produit.prodId}"/>                                          
+									  <c:param name="paramId" value="${lo.produit.prodId}${lo.lgnRecptLot}"/>                                          
 								    </c:url>">X</a>
 									  
 								    </div></td>

@@ -4,23 +4,420 @@
 <sqldiff version="1.0">
 	<help>
 		USE:
-			The diffs are ordered by data model version number.
-			The script can be run in a top down fashion and is
-			expected to not fail or overwrite old data
-		
+		The diffs are ordered by data model version number.
+		The script
+		can be run in a top down fashion and is
+		expected to not fail or
+		overwrite old data
+
 		EXPECT:
-			- "use business-database-name;" was called prior to
-			   calling this script
+		- "use business-database-name;" was called
+		prior to
+		calling this script
 	</help>
 
-<!-- 
 	<diff>
-		<version>1.0-SNAPSHOT</version>
-		<author>ABEL</author>
+		<version>1.0.2</version>
+		<author>Abel N'ZI</author>
 		<date></date>
 		<description></description>
-		<sql></sql>
+		<sql>
+			
+
+			drop table if exists pharm_ligne_dispensation;
+
+			drop table if exists pharm_ligne_inventaire;
+
+
+			drop table if exists pharm_ligne_operation;
+			drop table if exists pharm_faire_partir;
+			drop table if exists pharm_regrouper;
+			drop table if exists pharm_stocker;
+
+			drop table if exists pharm_ordonnance;
+
+
+			drop table if exists pharm_medecin;
+
+			drop table if exists pharm_operation;
+
+
+
+			drop table if exists pharm_gestionnaire_pharma;
+
+			drop table if exists pharm_prix_produit;
+			drop table if exists pharm_histo_mouvement_stock;
+			drop table if exists pharm_produit_attribut;
+			drop table if exists pharm_produit;
+			drop table if exists pharm_classe_pharma;
+
+
+			drop table if exists pharm_regime;
+			drop table if exists pharm_programme;
+			drop table if exists pharm_type_operation;
+			drop table if exists pharm_fournisseur;
+			drop table if exists pharm_inventaire;
+
+			
+			create table pharm_classe_pharma
+			(
+			class_pharm_id int not null AUTO_INCREMENT,
+			class_pharm__nom varchar(250),
+			primary key (class_pharm_id)
+			);
+
+		
+			create table pharm_faire_partir
+			(
+			prod_id int not null,
+			regim_id int not null,
+			primary key (prod_id, regim_id)
+			);
+
+			
+			create table pharm_fournisseur
+			(
+			four_id int not null AUTO_INCREMENT,
+			four_design1 varchar(500),
+			four_design2 varchar(500),
+			four_adresse varchar(50),
+			four_tel1 varchar(20),
+			four_tel2 varchar(20),
+			primary key (four_id)
+			);
+
+			
+			create table pharm_gestionnaire_pharma
+			(
+			gest_id int not null AUTO_INCREMENT,
+			gest_nom varchar(250),
+			gest_prenom varchar(250),
+			gest_adresse varchar(250),
+			gest_tel varchar(250),
+			primary key (gest_id)
+			);
+
+			
+			create table pharm_histo_mouvement_stock
+			(
+			mvt_id int not null AUTO_INCREMENT,
+			prod_id int not null,
+			mvt_type_mvt numeric(8,0),
+			mvt_qte numeric(8,0),
+			mvt_programme numeric(8,0),
+			mvt_lot varchar(50),
+			mvt_motif text,
+			mvt_date date,
+			mvt_qte_stock numeric(8,0),
+			primary key (mvt_id)
+			);
+
+			create table pharm_inventaire
+			(
+			inv_id int not null AUTO_INCREMENT,
+			inv_date_crea date,
+			inv_deb date,
+			inv_fin date,
+			primary key (inv_id)
+			);
+
+			
+			create table pharm_ligne_dispensation
+			(
+			ord_id int not null,
+			prod_id int not null,
+			ld_qte_dem numeric(8,0),
+			ld_qte_servi numeric(8,0),
+			ld_prix_unit numeric(8,0),
+			primary key (ord_id, prod_id)
+			);
+
+		
+			create table pharm_ligne_inventaire
+			(
+			inv_id int not null,
+			prod_attri_id int not null,
+			program_id int not null,
+			qte_physique numeric(8,0),
+			qte_logique numeric(8,0),
+			observation text,
+			ecart numeric(8,0),
+			primary key (inv_id, prod_attri_id, program_id)
+			);
+
+			create table pharm_ligne_operation
+			(
+			prod_attri_id int not null,
+			oper_id int not null,
+			lgn_oper_qte numeric(8,0),
+			lgn_oper_prix_achat numeric(8,0),
+			lgn_oper_date_perem date,
+			lgn_oper_lot varchar(20),
+			primary key (prod_attri_id, oper_id)
+			);
+
+			
+			create table pharm_medecin
+			(
+			med_id int not null AUTO_INCREMENT,
+			med_code varchar(250),
+			med_nom varchar(250),
+			med_prenom varchar(250),
+			med_adresse varchar(250),
+			med_tel varchar(250),
+			primary key (med_id)
+			);
+
+			create table pharm_operation
+			(
+			oper_id int not null AUTO_INCREMENT,
+			four_id int,
+			toper_id int not null,
+			gest_id int not null,
+			program_id int,
+			oper_num varchar(20),
+			oper_date_recept date,
+			oper_date_saisi date,
+			oper_observ text,
+			oper_ref varchar(500),
+			primary key (oper_id)
+			);
+
+			
+			create table pharm_ordonnance
+			(
+			ord_id int not null AUTO_INCREMENT,
+			program_id int,
+			gest_id int not null,
+			patient_identifier_id int(11),
+			regim_id int,
+			med_id int,
+			ord_date_prescrip date,
+			ord_but varchar(100),
+			ord_date_dispen date,
+			ord_date_saisi date,
+			ord_mnt_total numeric(8,0),
+			ord_nbre_jrs_trai numeric(8,0),
+			ord_num varchar(20),
+			ord_date_rdv date,
+			primary key (ord_id)
+			);
+
+			
+			create table pharm_prix_produit
+			(
+			prix_id int not null AUTO_INCREMENT,
+			prod_id int not null,
+			prix_achat numeric(8,0),
+			prix_vente numeric(8,0),
+			prix_date_eff date,
+			prix_flag_actif bool,
+			primary key (prix_id)
+			);
+
+			
+			create table pharm_produit
+			(
+			prod_id int not null AUTO_INCREMENT,
+			class_pharm_id int,
+			prod_lib varchar(250),
+			prod_date_exp date,
+			prod_code varchar(100),
+			primary key (prod_id)
+			);
+
+			
+			create table pharm_produit_attribut
+			(
+			prod_attri_id int not null AUTO_INCREMENT,
+			prod_id int not null,
+			prod_date_perem date,
+			prod_lot varchar(50),
+			flag_valid bool,
+			prod_attri_date date,
+			primary key (prod_attri_id)
+			);
+
+			
+			create table pharm_programme
+			(
+			program_id int not null AUTO_INCREMENT,
+			program_lib varchar(250),
+			primary key (program_id)
+			);
+
+			
+			create table pharm_regime
+			(
+			regim_id int not null AUTO_INCREMENT,
+			program_id int,
+			regim_lib varchar(250),
+			primary key (regim_id)
+			);
+
+			
+			create table pharm_regrouper
+			(
+			program_id int not null,
+			prod_id int not null,
+			primary key (program_id, prod_id)
+			);
+
+		
+			create table pharm_stocker
+			(
+			prod_attri_id int not null,
+			program_id int not null,
+			stock_qte numeric(8,0),
+			stock_qte_min numeric(8,0),
+			stock_qte_max numeric(8,0),
+			stock_date_stock date,
+			stock_date_peremp date,
+			stock_lot varchar(20),
+			primary key (prod_attri_id, program_id)
+			);
+
+			create table pharm_type_operation
+			(
+			toper_id int not null AUTO_INCREMENT,
+			toper_lib varchar(255),
+			toper_flag_sens bool,
+			primary key (toper_id)
+			);
+
+			alter table pharm_faire_partir add constraint fk2_pharm_faire_partir
+			foreign key (prod_id)
+			references pharm_produit (prod_id) on delete restrict on update restrict;
+
+			alter table pharm_faire_partir add constraint fk2_pharm_faire_partir2
+			foreign key (regim_id)
+			references pharm_regime (regim_id) on delete restrict on update restrict;
+
+			alter table pharm_histo_mouvement_stock add constraint fk2_engendrer
+			foreign key (prod_id)
+			references pharm_produit (prod_id) on delete restrict on update restrict;
+
+			alter table pharm_ligne_dispensation add constraint
+			fk2_pharm_ligne_dispensation foreign key (ord_id)
+			references pharm_ordonnance (ord_id) on delete restrict on update restrict;
+
+			alter table pharm_ligne_dispensation add constraint
+			fk2_pharm_ligne_dispensation2 foreign key (prod_id)
+			references pharm_produit (prod_id) on delete restrict on update restrict;
+
+			alter table pharm_ligne_inventaire add constraint
+			fk2_pharm_ligne_inventaire foreign key (inv_id)
+			references pharm_inventaire (inv_id) on delete restrict on update restrict;
+
+			alter table pharm_ligne_inventaire add constraint
+			fk2_pharm_ligne_inventaire2 foreign key (prod_attri_id)
+			references pharm_produit_attribut (prod_attri_id) on delete restrict on update
+			restrict;
+
+			alter table pharm_ligne_inventaire add constraint
+			fk2_pharm_ligne_inventaire3 foreign key (program_id)
+			references pharm_programme (program_id) on delete restrict on update restrict;
+
+			alter table pharm_ligne_operation add constraint
+			fk2_pharm_ligne_operation foreign key (prod_attri_id)
+			references pharm_produit_attribut (prod_attri_id) on delete restrict on update
+			restrict;
+
+			alter table pharm_ligne_operation add constraint
+			fk2_pharm_ligne_operation2 foreign key (oper_id)
+			references pharm_operation (oper_id) on delete restrict on update restrict;
+
+			alter table pharm_operation add constraint fk2_association_16 foreign
+			key (gest_id)
+			references pharm_gestionnaire_pharma (gest_id) on delete restrict on update
+			restrict;
+
+			alter table pharm_operation add constraint fk2_association_17 foreign key
+			(toper_id)
+			references pharm_type_operation (toper_id) on delete restrict on update
+			restrict;
+
+			alter table pharm_operation add constraint fk2_fournir foreign key
+			(four_id)
+			references pharm_fournisseur (four_id) on delete restrict on update restrict;
+
+			alter table pharm_operation add constraint fk2_lier foreign key
+			(program_id)
+			references pharm_programme (program_id) on delete restrict on update restrict;
+
+			alter table pharm_ordonnance add constraint fk2_associer foreign key
+			(program_id)
+			references pharm_programme (program_id) on delete restrict on update restrict;
+
+			alter table pharm_ordonnance add constraint fk2_concerner foreign key
+			(regim_id)
+			references pharm_regime (regim_id) on delete restrict on update restrict;
+
+			alter table pharm_ordonnance add constraint fk2_dispenser foreign key
+			(gest_id)
+			references pharm_gestionnaire_pharma (gest_id) on delete restrict on update
+			restrict;
+
+			alter table pharm_ordonnance add constraint fk2_faire_objet foreign key
+			(patient_identifier_id)
+			references patient_identifier (patient_identifier_id) on delete restrict on
+			update restrict;
+
+			alter table pharm_ordonnance add constraint fk2_prescrire foreign key
+			(med_id)
+			references pharm_medecin (med_id) on delete restrict on update restrict;
+
+			alter table pharm_prix_produit add constraint fk2_pharm_ligne_prix foreign
+			key (prod_id)
+			references pharm_produit (prod_id) on delete restrict on update restrict;
+
+			alter table pharm_produit add constraint fk2_appartenir foreign key
+			(class_pharm_id)
+			references pharm_classe_pharma (class_pharm_id) on delete restrict on update
+			restrict;
+
+			alter table pharm_produit_attribut add constraint fk2_association_21
+			foreign key (prod_id)
+			references pharm_produit (prod_id) on delete restrict on update restrict;
+
+			alter table pharm_regime add constraint fk2_composer foreign key
+			(program_id)
+			references pharm_programme (program_id) on delete restrict on update restrict;
+
+			alter table pharm_regrouper add constraint fk2_pharm_regrouper
+			foreign key (program_id)
+			references pharm_programme (program_id) on delete restrict on update restrict;
+
+			alter table pharm_regrouper add constraint fk2_pharm_regrouper2
+			foreign key (prod_id)
+			references pharm_produit (prod_id) on delete restrict on update restrict;
+
+			alter table pharm_stocker add constraint fk2_pharm_stocker foreign key
+			(prod_attri_id)
+			references pharm_produit_attribut (prod_attri_id) on delete restrict on update
+			restrict;
+
+			alter table pharm_stocker add constraint fk2_pharm_stocker2 foreign key
+			(program_id)
+			references pharm_programme (program_id) on delete restrict on update restrict;
+			
+			INSERT INTO `pharm_type_operation` VALUES (1,'stock fournisseur',1),(2,'dispensation',0),(3,'retour par un patient',1),(4,'retour par un service',1),(5,'transfert vers un autre site',0),(6,'produits avariés',0),(7,'produits périmés',0),(8,'inventaire',0);
+
+INSERT INTO `pharm_fournisseur` VALUES (1,'NATIONAL','CÔTE D\'IVOIRE',NULL,NULL,NULL),(2,'Fonds Mondial','FONDS MONDIAL',NULL,NULL,NULL),(3,'OMS','OMS',NULL,NULL,NULL),(4,'PEPFAR','PEPFAR',NULL,NULL,NULL),(5,'PSP','PHARMACIE SANTE PUBLIQUE','BP V 5 ABIDJAN','21357173',NULL);
+INSERT INTO `pharm_programme` (`program_id`,`program_lib`) VALUES  (1,'CONSO'), (2,'GTC'), (3,'ME_REC'), (4,'PNLP'), (5,'PNLSARVIO'), (6,'PNLSLAB'), (7,'PNLSTRC'), (8,'PNLT'), (9,'PNSME');
+
+
+
+INSERT INTO `pharm_gestionnaire_pharma` VALUES (1,NULL,NULL,NULL,NULL);
+
+INSERT INTO `pharm_medecin` VALUES (1,NULL,'KOFFI ADJOUA SAINTE-MARIE',NULL,NULL,NULL),(2,NULL,'DR KONAN ALEXIS',NULL,NULL,NULL);
+
+INSERT `pharm_regime` VALUES (1,NULL,'ABC 3TC EFV'),(2,NULL,'ABC 3TC IDV/r'),(3,NULL,'ABC 3TC LPV/r'),(4,NULL,'ABC 3TC NVP'),(5,NULL,'ABC 3TC SQV/r'),(6,NULL,'ABC DDI EFV'),(7,NULL,'ABC DDI IDV/r'),(8,NULL,'ABC DDI LPV/r'),(9,NULL,'ABC DDI SQV/r'),(10,NULL,'AZT 3TC DDI'),(11,NULL,'AZT 3TC IDV'),(12,NULL,'AZT 3TC IDV/r'),(13,NULL,'AZT 3TC NFV'),(14,NULL,'AZT 3TC NVP'),(15,NULL,'AZT 3TC SQV'),(16,NULL,'AZT 3TC SQV/r'),(17,NULL,'AZT 3TC TDF'),(18,NULL,'AZT ABC DDI'),(19,NULL,'AZT DDI EFV'),(20,NULL,'AZT DDI IDV/r'),(21,NULL,'AZT DDI LPV/r'),(22,NULL,'AZT DDI SQV/r'),(23,NULL,'AZT TDF FTC'),(24,NULL,'DDI 3TC EFV'),(25,NULL,'DDI 3TC IDV/r'),(26,NULL,'DDI 3TC LPV/r'),(27,NULL,'DDI 3TC NVP'),(28,NULL,'DDI 3TC SQV/r'),(29,NULL,'TDF 3TC EFV'),(30,NULL,'TDF 3TC IDV/r'),(31,NULL,'TDF 3TC LPV/r'),(32,NULL,'TDF 3TC NVP'),(33,NULL,'TDF 3TC SQV/r'),(34,NULL,'TDF DDI IDV/r'),(35,NULL,'TDF DDI LPV/r'),(36,NULL,'TDF FTC ABC'),(37,NULL,'TDF FTC LPV/r'),(38,NULL,'TDF FTC NVP'),(39,NULL,'RLT'),(40,NULL,'RLT'),(41,NULL,'AZT 3TC ABC'),(42,NULL,'AZT 3TC ABC'),(43,NULL,'AZT 3TC EFV'),(44,NULL,'AZT 3TC EFV'),(45,NULL,'TDF 3TC RLT LPV/r'),(46,NULL,'TDF 3TC RLT LPV/r'),(47,NULL,'TDF RLT ATZ/r'),(48,NULL,'TDF RLT ATZ/r'),(49,NULL,'TDF 3TC EFV DRV RLT/r'),(50,NULL,'TDF 3TC EFV DRV RLT/r'),(51,NULL,'TDF DRV RLT/r'),(52,NULL,'TDF DRV RLT/r'),(53,NULL,'TDF 3TC DRV RLT/r'),(54,NULL,'TDF 3TC DRV RLT/r'),(55,NULL,'TDF 3TC DRV/r'),(56,NULL,'TDF 3TC DRV/r'),(57,NULL,'DRV RLT/r EFV'),(58,NULL,'DRV RLT/r EFV'),(59,NULL,'AZT 3TC DRV/r'),(60,NULL,'AZT 3TC DRV/r'),(61,NULL,'AZT 3TC DRV RLT/r'),(62,NULL,'AZT 3TC DRV RLT/r'),(63,NULL,'ABC 3TC DRV/r'),(64,NULL,'ABC 3TC DRV/r'),(65,NULL,'ABC 3TC DRV RLT/r'),(66,NULL,'ABC 3TC DRV RLT/r'),(67,NULL,'TDF ABC 3TC ATZ/r'),(68,NULL,'TDF ABC 3TC ATZ/r'),(69,NULL,'TDF 3TC EFV LPV/r'),(70,NULL,'TDF 3TC EFV LPV/r'),(71,NULL,'TDF 3TC EFV ATZ/r'),(72,NULL,'TDF 3TC EFV ATZ/r'),(73,NULL,'LPV/r SQV/r'),(74,NULL,'LPV/r SQV/r'),(75,NULL,'AZT 3TC LPV/r'),(76,NULL,'AZT 3TC LPV/r'),(77,NULL,'D4T 3TC ABC'),(78,NULL,'D4T 3TC ABC'),(79,NULL,'D4T 3TC EFV'),(80,NULL,'D4T 3TC EFV'),(81,NULL,'D4T 3TC IDV/r'),(82,NULL,'D4T 3TC IDV/r'),(83,NULL,'D4T 3TC IDV'),(84,NULL,'D4T 3TC IDV'),(85,NULL,'D4T 3TC LPV/r'),(86,NULL,'D4T 3TC LPV/r'),(87,NULL,'D4T 3TC NFV'),(88,NULL,'D4T 3TC NFV'),(89,NULL,'D4T 3TC NVP'),(90,NULL,'D4T 3TC NVP'),(91,NULL,'D4T 3TC SQV/r'),(92,NULL,'D4T 3TC SQV/r'),(93,NULL,'D4T 3TC SQV'),(94,NULL,'D4T 3TC SQV'),(95,NULL,'D4T 3TC DDI'),(96,NULL,'D4T 3TC DDI'),(97,NULL,'D4T DDI EFV'),(98,NULL,'D4T DDI EFV'),(99,NULL,'D4T DDI IDV/r'),(100,NULL,'D4T DDI IDV/r'),(101,NULL,'D4T DDI LPV/r'),(102,NULL,'D4T DDI LPV/r'),(103,NULL,'TDF FTC EFV'),(104,NULL,'TDF FTC EFV'),(105,NULL,'AZT ABC LPV/r'),(106,NULL,'AZT ABC LPV/r'),(107,NULL,'LPV/r 3TC EFV'),(108,NULL,'LPV/r 3TC EFV'),(109,NULL,'AZT 3TC RLT'),(110,NULL,'AZT 3TC RLT'),(111,NULL,'AZT 3TC LPV/r/r'),(112,NULL,'AZT 3TC LPV/r/r'),(113,NULL,'AZT 3TC NVP TDF'),(114,NULL,'AZT 3TC NVP TDF'),(115,NULL,'AZT 3TC ATZ/r'),(116,NULL,'AZT 3TC ATZ/r'),(117,NULL,'AZT 3TC TDF ATZ/r'),(118,NULL,'AZT 3TC TDF ATZ/r'),(119,NULL,'AZT 3TC TDF SQV/r'),(120,NULL,'AZT 3TC TDF SQV/r'),(121,NULL,'ATZ/RTV EFV'),(122,NULL,'ATZ/RTV EFV'),(123,NULL,'ATZ/r LPV/r'),(124,NULL,'ATZ/r LPV/r'),(125,NULL,'EFV LPV/r'),(126,NULL,'EFV LPV/r'),(127,NULL,'LPV/r'),(128,NULL,'LPV/r'),(129,NULL,'AZT 3TC NVP LPV/r'),(130,NULL,'AZT 3TC NVP LPV/r'),(131,NULL,'AZT 3TC TDF LPV/r'),(132,NULL,'AZT 3TC TDF LPV/r'),(133,NULL,'AZT 3TC TDF LPV/r/r'),(134,NULL,'AZT 3TC TDF LPV/r/r'),(135,NULL,'AZT 3TC ABC LPV/r'),(136,NULL,'AZT 3TC ABC LPV/r'),(137,NULL,'TDF LPV/r EFV'),(138,NULL,'TDF LPV/r EFV'),(139,NULL,'TDF 3TC LPV/r/r'),(140,NULL,'TDF 3TC LPV/r/r'),(141,NULL,'TDF LPV/RTV EFV'),(142,NULL,'TDF LPV/RTV EFV'),(143,NULL,'TDF 3TC EFV AZT 3TC'),(144,NULL,'TDF 3TC EFV AZT 3TC'),(145,NULL,'ABC 3TC ATZ/r'),(146,NULL,'ABC 3TC ATZ/r'),(147,NULL,'TDF 3TC ATZ/r'),(148,NULL,'TDF 3TC ATZ/r'),(149,NULL,'AZT FTC LPV/r'),(150,NULL,'TDF ABC LPV/r');
+ 
+
+
+
+		</sql>
 	</diff>
- -->
-	
+
 </sqldiff>

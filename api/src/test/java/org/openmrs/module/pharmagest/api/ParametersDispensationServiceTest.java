@@ -13,15 +13,13 @@
  */
 package org.openmrs.module.pharmagest.api;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.Collection;
-import java.util.List;
 
 import org.junit.Test;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.pharmagest.Regime;
-import org.openmrs.module.pharmagest.RegimeTest;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 
 /**

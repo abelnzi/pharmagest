@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<!-- Generated 16 ao?t 2015 03:07:55 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="org.openmrs.module.pharmagest.PharmTypeOperation" table="pharm_type_operation" >
+        <id name="toperId" type="java.lang.Integer">
+            <column name="toper_id" />
+            <generator class="identity" />
+        </id>
+        <property name="toperLib" type="string">
+            <column name="toper_lib" />
+        </property>
+        <property name="toperFlagSens" type="java.lang.Boolean">
+            <column name="toper_flag_sens" />
+        </property>
+        <set name="pharmOperations" table="pharm_operation" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="toper_id" not-null="true" />
+            </key>
+            <one-to-many class="org.openmrs.module.pharmagest.PharmOperation" />
+        </set>
+    </class>
+</hibernate-mapping>

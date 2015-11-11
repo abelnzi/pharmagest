@@ -14,16 +14,21 @@
 package org.openmrs.module.pharmagest.api.db.hibernate;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.openmrs.PatientIdentifier;
 import org.openmrs.module.pharmagest.LigneDispensation;
 import org.openmrs.module.pharmagest.Ordonnance;
 import org.openmrs.module.pharmagest.PatientComplement;
+import org.openmrs.module.pharmagest.PharmLigneDispensation;
+import org.openmrs.module.pharmagest.PharmLigneDispensationId;
+import org.openmrs.module.pharmagest.PharmOrdonnance;
 import org.openmrs.module.pharmagest.api.db.OrdonnanceDAO;
 import org.openmrs.module.pharmagest.api.db.pharmagestDAO;
 
@@ -106,6 +111,77 @@ public class HibernateDispensationDAO implements OrdonnanceDAO {
 		return (Ordonnance) getSessionFactory().getCurrentSession().createCriteria(Ordonnance.class)
 				.add(Restrictions.eq("patientComplement", patientComplement))
 				.setProjection(Projections.max("ordDateDispen")).uniqueResult();
+
+	}
+
+	@Override
+	public void savePharmOrdonnance(PharmOrdonnance pharmOrdonnance) {
+		getSessionFactory().getCurrentSession().save(pharmOrdonnance);
+
+	}
+
+	@Override
+	public void retirePharmOrdonnance(PharmOrdonnance pharmOrdonnance) {
+		getSessionFactory().getCurrentSession().delete(pharmOrdonnance);
+
+	}
+
+	@Override
+	public PharmOrdonnance getPharmOrdonnanceById(Integer ordonnanceId) {
+		return (PharmOrdonnance) getSessionFactory().getCurrentSession().get(PharmOrdonnance.class, ordonnanceId);
+	}
+
+	@Override
+	public PharmOrdonnance getPharmOrdonnanceByIdentifier(String patientIdentifiant) {
+		return (PharmOrdonnance) getSessionFactory().getCurrentSession().createCriteria(PharmOrdonnance.class)
+				.add(Restrictions.eq("patientIdentifiant", patientIdentifiant)).uniqueResult();
+	}
+
+	@Override
+	public Collection<PharmOrdonnance> getAllPharmOrdonnances() {
+		return (Collection<PharmOrdonnance>) getSessionFactory().getCurrentSession()
+				.createCriteria(PharmOrdonnance.class).list();
+	}
+
+	@Override
+	public void updatePharmOrdonnance(PharmOrdonnance pharmOrdonnance) {
+		getSessionFactory().getCurrentSession().update(pharmOrdonnance);
+
+	}
+
+	@Override
+	public void savePharmLigneDispensation(PharmLigneDispensation pharmLignedispensation) {
+		getSessionFactory().getCurrentSession().save(pharmLignedispensation);
+
+	}
+
+	@Override
+	public void savePharmLigneDispensations(Collection<PharmLigneDispensation> pharmLignedispensations) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public PharmOrdonnance getLastPharmOrdonnance(PatientIdentifier patientIdentifier) {
+		List pharmOrd = getSessionFactory().getCurrentSession().createCriteria(PharmOrdonnance.class)
+				.addOrder(Order.desc("ordDateSaisi")).add(Restrictions.eq("patientIdentifier", patientIdentifier))
+				.list();
+		if (!pharmOrd.isEmpty()) {
+			return (PharmOrdonnance) pharmOrd.get(0);
+		} else {
+			return null;
+		}
+	}
+
+	@Override
+	public PharmLigneDispensation getPharmLigneDispensation(PharmLigneDispensationId pharmLigneDispensationId) {
+		return (PharmLigneDispensation) getSessionFactory().getCurrentSession().get(PharmLigneDispensation.class,
+				pharmLigneDispensationId);
+	}
+
+	@Override
+	public void updatePharmLigneDispensation(PharmLigneDispensation pharmLigneDispensation) {
+		getSessionFactory().getCurrentSession().update(pharmLigneDispensation);
 
 	}
 }

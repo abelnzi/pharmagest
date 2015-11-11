@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<!-- Generated 2 juil. 2015 23:11:24 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="org.openmrs.module.pharmagest.PrixProduit" table="prix_produit" >
+        <id name="prixId" type="int">
+            <column name="prix_id" precision="8" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="prixAchat" type="java.lang.Integer">
+            <column name="prix_achat" precision="8" scale="0" />
+        </property>
+        <property name="prixVente" type="java.lang.Integer">
+            <column name="prix_vente" precision="8" scale="0" />
+        </property>
+        <property name="prixDateEff" type="date">
+            <column name="prix_date_eff" length="0" />
+        </property>
+        <property name="prixFlagActif" type="java.lang.Boolean">
+            <column name="prix_flag_actif" />
+        </property>
+        <set name="produits" table="ligne_prix" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="prix_id" precision="8" scale="0" not-null="true" />
+            </key>
+            <many-to-many entity-name="org.openmrs.module.pharmagest.Produit">
+                <column name="prod_id" precision="8" scale="0" not-null="true" />
+            </many-to-many>
+        </set>
+    </class>
+</hibernate-mapping>

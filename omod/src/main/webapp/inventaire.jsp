@@ -1,17 +1,54 @@
 <%@ include file="/WEB-INF/template/include.jsp"%>
 <%@ include file="/WEB-INF/template/header.jsp"%>
+<spring:htmlEscape defaultHtmlEscape="true" />
+<h2>
+	<spring:message code="pharmagest.title" />
+</h2>
+<ul id="menu">
+	
 
-<%@ include file="template/localHeader.jsp"%>
+	<li class="first"><a href="<c:url value="/module/pharmagest/dispensationChoix.form"/>"><spring:message
+			code="pharmagest.dispensation" /></a></li>
+
+	<li>
+		<a href="<c:url value="/module/pharmagest/stockFournisseur.form"/>">Entr&eacute;e fournisseur</a>
+	</li>
+	<li>
+		<a href="<c:url value="/module/pharmagest/stockEntree.form"/>">Autre mouvement d'entr&eacute;e de stock</a>
+	</li>
+	<li>
+		<a href="<c:url value="/module/pharmagest/stockSortie.form"/>">Autre mouvement de sortie de stock</a>
+	</li>
+	<li class="active">
+		<a href="<c:url value="/module/pharmagest/inventaire.form"/>"><spring:message
+			code="pharmagest.inventaire" /></a>
+	</li>
+	<li>
+		<a href="<c:url value="/module/pharmagest/rapportStock.form"/>">Rapportage sur le Stock</a>
+	</li>
+	<li>
+		<a href="<c:url value="/module/pharmagest/parametrage.form"/>">Param&eacute;trage</a>
+	</li>
+	
+	<!-- Add further links here -->
+</ul>
+
 <div>
-<h2 >Effectuer l'inventaire</h2>
+<h3 >Effectuer l'inventaire</h3>
 </div>
-
+<form:form method="post"
+	action="${pageContext.request.contextPath}/module/pharmagest/inventaire.form"
+	modelAttribute="formulaireInventaire"
+	commandName="formulaireInventaire">
 <br>
+<c:if test="${mess =='save'}">
+		<div id="openmrs_msg">Enregistrer avec succ&egrave;s</div>
+</c:if>
 <div>
   <table width="100%" border="0">
   <tbody>
     <tr>
-      <td><input type="submit" name="submit2" id="submit2" value="Enregistrer">
+      <td><input type="submit" name="btn_enregistrer" id="btn_enregistrer" value="Enregistrer">
         <input type="reset" name="reset" id="reset" value="Annuler"></td>
       </tr>
   </tbody>
@@ -23,57 +60,40 @@
 	<b class="boxHeader"></b>
 	<div class="box">
 		<div class="searchWidgetContainer" id="findPatients" align="center">
-        <table width="100%" border="0" cellpadding="7" cellspacing="0" >
-          <tbody>
-            <tr>
-              <td width="47%"><table width="100%" border="0" cellpadding="7" cellspacing="0">
-                <tbody>
-                  <tr>
-                    <td width="25%">Type d'inventaire</td>
-                    <td width="75%"><table width="200">
-                      <tr>
-                        <td><label>
-                          <input name="RadioGroup1" type="radio" id="RadioGroup1_0" value="ARV" checked="checked">
-                          ARV</label></td>
-                      </tr>
-                      <tr>
-                        <td><label>
-                          <input type="radio" name="RadioGroup1" value="IOS" id="RadioGroup1_1">
-                          IOS</label></td>
-                      </tr>
-                    </table></td>
-                  </tr>
-                </tbody>
-              </table></td>
-              <td width="53%"><table width="100%" cellpadding="7" cellspacing="0">
-                <tbody>
-                  <tr>
-                    <td width="26%">Date de l'inventaitre</td>
-                    <td width="74%"><input type="date" name="date4" id="date4"></td>
-                  </tr>
-                  <tr>
-                    <td>Nom du site</td>
-                    <td><select name="select3" id="select3">
-                    </select></td>
-                  </tr>
-                </tbody>
-              </table></td>
-            </tr>
-          </tbody>
-        </table>
-        </div>
+		  <table width="100%" border="0" cellspacing="0" cellpadding="7">
+		    <tbody>
+		      <tr>
+		        <td width="13%">Date de l'inventaire<span style="color:#F11A0C">*</span></td>
+		        <td width="36%"><form:input path="invDeb" /> <form:errors path="invDeb" cssClass="error" /><br><i style="font-weight: normal; font-size: 0.8em;">(Format: jj/mm/aaaa)</i></td>
+		        <td width="1%">&nbsp;</td>
+		        <td width="16%">Programme</td>
+		        <td width="34%"><form:select path="pharmProgramme">
+		          <form:option value="0" label="---Choix---" />
+		          <form:options items="${programmes}" itemValue="programId"
+															itemLabel="programLib" />
+		          </form:select>
+		          <form:errors path="pharmProgramme" cssClass="error" /></td>
+	          </tr>
+	        </tbody>
+	      </table>
+		</div>
 	</div>
 </div>
 <br>
+<c:if test="${mess =='valid'}">
+		<div id="openmrs_msg">Une ligne inser&eacute;e</div>
+</c:if>
+<c:if test="${mess =='delete'}">
+		<div id="openmrs_msg">Une ligne retir&eacute;e</div>
+</c:if>
 <br>
-
 <div>
 	<b class="boxHeader"></b>
 	<div class="box">
-        <table width="100%" border="0" cellpadding="7" cellspacing="0" >
+      <table width="100%" border="0" cellpadding="7" cellspacing="0" >
           <tbody>
             <tr>
-              <td width="8%"><div align="center">
+              <td width="9%"><div align="center">
                 <table width="100%" border="0" cellspacing="0">
                   <tbody>
                     <tr>
@@ -81,98 +101,124 @@
                     </tr>
                     <tr>
                       <td><div align="center">
-                        <input type="text" disabled="disabled" size="10" readonly />
+                        <input type="text" disabled="disabled"
+															value="${formulaireInventaire.produit.prodCode}" size="15" readonly />
                       </div></td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;</td>
                     </tr>
                   </tbody>
                 </table>
               </div></td>
-              <td width="19%"><table width="100%" border="0" cellspacing="0">
+              <td width="21%"><table width="100%" border="0" cellspacing="0">
                 <tbody>
                   <tr>
-                    <td><div align="center">D&eacute;signation</div></td>
+                    <td><div align="center">D&eacute;signation<span style="color:#F11A0C">*</span></div></td>
                   </tr>
                   <tr>
                     <td><div align="center">
-                      <select name="select5" id="select5">
-                      </select>
+                     <form:select path="produit" cssStyle="width:200px">
+														<form:option value="0" label="---Choix---" />
+														<form:options items="${produits}" itemValue="prodId"
+															itemLabel="prodLib" />
+						</form:select>
+													
                     </div></td>
+                  </tr>
+                  <tr>
+                    <td><div align="center"><form:errors path="produit" cssClass="error" />
+                    </div></td>
+                  </tr>
+                </tbody>
+              </table></td>
+              <td width="6%"><table width="98%" border="0" cellspacing="0">
+                <tbody>
+                  <tr>
+                    <td><div align="center">Num&eacute;ro du lot<span style="color:#F11A0C">*</span></div></td>
+                  </tr>
+                  <tr>
+                    <td><div align="center">
+                      <form:input path="lgnLot" size="10" />
+											
+                    </div></td>
+                  </tr>
+                  <tr>
+                    <td><div align="center"><form:errors path="lgnLot" cssClass="error" /></div></td>
                   </tr>
                 </tbody>
               </table></td>
               <td width="11%"><table width="100%" border="0" cellspacing="0">
                 <tbody>
                   <tr>
-                    <td><div align="center">Num&eacute;ro du lot</div></td>
+                    <td><div align="center">P&eacute;remption<span style="color:#F11A0C">*</span></div></td>
                   </tr>
                   <tr>
                     <td><div align="center">
-                      <input name="textfield3" type="text" id="textfield3" size="10">
+                       <form:input path="lgnDatePerem" size="10"/>
+											 
                     </div></td>
+                  </tr>
+                  <tr>
+                    <td><div align="center"><form:errors path="lgnDatePerem" cssClass="error" /></div></td>
                   </tr>
                 </tbody>
               </table></td>
-              <td width="14%"><table width="100%" border="0" cellspacing="0">
+              <td width="11%"><table width="100%" border="0" cellspacing="0">
                 <tbody>
                   <tr>
-                    <td><div align="center">P&eacute;remption</div></td>
+                    <td><div align="center">Quantit&eacute; virtuelle<span style="color:#F11A0C">*</span></div></td>
                   </tr>
                   <tr>
                     <td><div align="center">
-                      <input type="date" name="date" id="date" >
+                       <form:input path="qteLogique" size="10" />
                     </div></td>
+                  </tr>
+                  <tr>
+                    <td><div align="center"><form:errors path="qteLogique" cssClass="error" /></div></td>
                   </tr>
                 </tbody>
               </table></td>
-              <td width="12%"><table width="100%" border="0" cellspacing="0">
+              <td width="9%"><table width="100%" border="0" cellspacing="0">
                 <tbody>
                   <tr>
-                    <td><div align="center">Stock th&eacute;orique</div></td>
+                    <td><div align="center">Quantit&eacute; physique<span style="color:#F11A0C">*</span></div></td>
                   </tr>
                   <tr>
                     <td><div align="center">
-                      <input name="textfield5" type="text" id="textfield5" size="10">
+                      <form:input path="qtePhysique" size="10" />
                     </div></td>
-                  </tr>
-                </tbody>
-              </table></td>
-              <td width="10%"><table width="100%" border="0" cellspacing="0">
-                <tbody>
-                  <tr>
-                    <td><div align="center">Stock physique</div></td>
                   </tr>
                   <tr>
                     <td><div align="center">
-                      <input name="textfield6" type="text" id="textfield6" size="10">
+                      <form:errors path="qtePhysique" cssClass="error" />
                     </div></td>
+                  </tr>
+                  <tr>
+                    <td></td>
                   </tr>
                 </tbody>
               </table></td>
-              <td width="7%"><table width="100%" border="0" cellspacing="0">
-                <tbody>
-                  <tr>
-                    <td><div align="center">Ecart</div></td>
-                  </tr>
-                  <tr>
-                    <td><div align="center">
-                      <input name="textfield2" type="text" id="textfield2" size="10">
-                    </div></td>
-                  </tr>
-                </tbody>
-              </table></td>
-              <td width="13%"><table width="100%" border="0" cellspacing="0">
+              <td width="11%">&nbsp;</td>
+              <td width="11%"><table width="100%" border="0" cellspacing="0">
                 <tbody>
                   <tr>
                     <td><div align="center">Observation</div></td>
                   </tr>
                   <tr>
                     <td><div align="center">
-                      <input type="text" name="textfield" id="textfield">
+                       <form:input path="observation" />
                     </div></td>
+                  </tr>
+                  <tr>
+                    <td><div align="center"><form:errors path="observation" cssClass="error" /></div></td>
+                  </tr>
+                  <tr>
+                    <td></td>
                   </tr>
                 </tbody>
               </table></td>
-              <td width="6%">
+              <td width="11%">
               <table width="100%" border="0" cellspacing="0">
                 <tbody>
                   <tr>
@@ -180,7 +226,8 @@
                   </tr>
                   <tr>
                     <td><div align="center">
-                      <input type="submit" value="Valider">
+                      <input type="submit" name="btn_valider"
+												id="btn_valider" value="Ajouter">
                     </div></td>
                   </tr>
                 </tbody>
@@ -188,48 +235,39 @@
             </tr>
           </tbody>
         </table>
-      
         <table width="100%" border="1"  cellpadding="7" cellspacing="0">
              <tbody>
                 <tr>
-                  <td width="9%">Code article</td>
-                  <td width="17%">D&eacute;signation</td>
-                  <td width="12%">Num&eacute;ro du lot</td>
-                  <td width="13%">P&eacute;remption</td>
-                  <td width="12%">Stock th&eacute;orique</td>
-                  <td width="11%">Stock physique</td>
-                  <td width="7%">Ecart</td>
-                  <td width="13%">Observation</td>
-                  <td width="6%">&nbsp;</td>
+                  <td width="8%">Code article</td>
+                  <td width="20%">D&eacute;signation</td>
+                  <td width="8%">Num&eacute;ro du lot</td>
+                  <td width="10%">P&eacute;remption</td>
+                  <td width="8%">Quantit&eacute; Vituelle</td>
+                  <td width="8%">Quantit&eacute; physique</td>
+                  <td width="8%">Ecart</td>
+                  <td width="15%">Observation</td>
+                  <td width="10%">Action</td>
                 </tr>
-                <tr>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td><div align="center">
-                    <input type="submit" name="submit3" id="submit3" value="X" size="5">
-                  </div></td>
-                </tr>
-                <tr>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td><div align="center">
-                    <input type="submit" name="submit4" id="submit4" value="X" size="5">
-                  </div></td>
-                </tr>
+                <c:forEach var="li" items="${ligneInventaires}">
+								<tr>
+									<td width="12%"><div align="left">${li.produit.prodCode}</div></td>
+									<td width="16%"><div align="left">${li.produit.prodLib}</div></td>
+									<td width="8%"><div align="left">${li.lgnLot}</div></td>
+									<td width="11%"><div align="left">${li.lgnDatePerem}</div></td>
+									<td width="10%"><div align="left">${li.qteLogique}</div></td>
+									<td width="11%">${li.qtePhysique}</td>
+									<td width="9%">${li.qteLogique-li.qtePhysique}</td>
+									<td width="12%"><div align="left">${li.observation}</div></td>
+									<td width="11%"><div align="left"><a
+										href="<c:url value="/module/pharmagest/inventaire.form">
+									  <c:param name="paramId" value="${li.produit.prodId}${li.lgnLot}"/>                                          
+								    </c:url>">Supprimer</a>
+									  
+								    </div></td>
+								</tr>
+			   </c:forEach>
       </tbody>
 </table>      
 </div> 
-	</div>
-
+</div>
+</form:form>

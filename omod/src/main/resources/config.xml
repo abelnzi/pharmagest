@@ -49,14 +49,35 @@
 		Produit.hbm.xml
 		Programme.hbm.xml
 		Regime.hbm.xml
-		RegimeTest.hbm.xml
 		Stocker.hbm.xml
-		TypeOperation.hbm.xml				
+		TypeOperation.hbm.xml			
+		
+		
+		PharmClassePharma.hbm.xml
+		PharmFournisseur.hbm.xml
+		PharmGestionnairePharma.hbm.xml
+		PharmHistoMouvementStock.hbm.xml
+		PharmInventaire.hbm.xml
+		PharmLigneDispensation.hbm.xml
+		PharmLigneInventaire.hbm.xml
+		PharmLigneOperation.hbm.xml
+		PharmMedecin.hbm.xml
+		PharmOperation.hbm.xml
+		PharmOrdonnance.hbm.xml
+		
+		PharmPrixProduit.hbm.xml
+		PharmProduit.hbm.xml
+		PharmProduitAttribut.hbm.xml
+		PharmProgramme.hbm.xml
+		PharmRegime.hbm.xml
+
+		PharmStocker.hbm.xml
+		PharmTypeOperation.hbm.xml	
 	</mappingFiles>
 	
 	<!-- Privileges list -->
 	<privilege>
-		<name>Manage Generateur ID</name>
+		<name>pharmacie</name>
 		<description>Peut manager le module pharmagest</description>
 	</privilege>
 

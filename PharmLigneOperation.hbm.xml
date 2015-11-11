@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<!-- Generated 16 ao?t 2015 03:07:55 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="org.openmrs.module.pharmagest.PharmLigneOperation" table="pharm_ligne_operation" >
+        <composite-id name="id" class="org.openmrs.module.pharmagest.PharmLigneOperationId">
+            <key-property name="prodAttriId" type="int">
+                <column name="prod_attri_id" />
+            </key-property>
+            <key-property name="operId" type="int">
+                <column name="oper_id" />
+            </key-property>
+        </composite-id>
+        <many-to-one name="pharmProduitAttribut" class="org.openmrs.module.pharmagest.PharmProduitAttribut" update="false" insert="false" fetch="select">
+            <column name="prod_attri_id" not-null="true" />
+        </many-to-one>
+        <many-to-one name="pharmOperation" class="org.openmrs.module.pharmagest.PharmOperation" update="false" insert="false" fetch="select">
+            <column name="oper_id" not-null="true" />
+        </many-to-one>
+        <property name="lgnOperQte" type="java.lang.Integer">
+            <column name="lgn_oper_qte" precision="8" scale="0" />
+        </property>
+        <property name="lgnOperPrixAchat" type="java.lang.Integer">
+            <column name="lgn_oper_prix_achat" precision="8" scale="0" />
+        </property>
+        <property name="lgnOperDatePerem" type="date">
+            <column name="lgn_oper_date_perem" length="0" />
+        </property>
+        <property name="lgnOperLot" type="string">
+            <column name="lgn_oper_lot" length="20" />
+        </property>
+    </class>
+</hibernate-mapping>

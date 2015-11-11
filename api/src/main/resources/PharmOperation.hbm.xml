@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<!-- Generated 16 ao?t 2015 03:07:55 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="org.openmrs.module.pharmagest.PharmOperation" table="pharm_operation" >
+        <id name="operId" type="java.lang.Integer">
+            <column name="oper_id" />
+            <generator class="increment" />
+        </id>
+        <many-to-one name="pharmGestionnairePharma" class="org.openmrs.module.pharmagest.PharmGestionnairePharma" fetch="select">
+            <column name="gest_id" not-null="true" />
+        </many-to-one>
+        <many-to-one name="pharmTypeOperation" class="org.openmrs.module.pharmagest.PharmTypeOperation" fetch="select">
+            <column name="toper_id" not-null="true" />
+        </many-to-one>
+        <many-to-one name="pharmProgramme" class="org.openmrs.module.pharmagest.PharmProgramme" fetch="select">
+            <column name="program_id" />
+        </many-to-one>
+        <many-to-one name="pharmFournisseur" class="org.openmrs.module.pharmagest.PharmFournisseur" fetch="select">
+            <column name="four_id" />
+        </many-to-one>
+        <property name="operNum" type="string">
+            <column name="oper_num" length="20" />
+        </property>
+        <property name="operDateRecept" type="date">
+            <column name="oper_date_recept" length="0" />
+        </property>
+        <property name="operDateSaisi" type="date">
+            <column name="oper_date_saisi" length="0" />
+        </property>
+        <property name="operObserv" type="string">
+            <column name="oper_observ" length="65535" />
+        </property>
+        <property name="operRef" type="string">
+            <column name="oper_ref" length="500" />
+        </property>
+        <set name="pharmLigneOperations" table="pharm_ligne_operation" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="oper_id" not-null="true" />
+            </key>
+            <one-to-many class="org.openmrs.module.pharmagest.PharmLigneOperation" />
+        </set>
+    </class>
+</hibernate-mapping>

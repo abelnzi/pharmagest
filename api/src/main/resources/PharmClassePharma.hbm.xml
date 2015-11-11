@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<!-- Generated 16 ao?t 2015 03:07:55 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="org.openmrs.module.pharmagest.PharmClassePharma" table="pharm_classe_pharma" >
+        <id name="classPharmId" type="java.lang.Integer">
+            <column name="class_pharm_id" />
+            <generator class="identity" />
+        </id>
+        <property name="classPharmNom" type="string">
+            <column name="class_pharm__nom" length="250" />
+        </property>
+        <set name="pharmProduits" table="pharm_produit" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="class_pharm_id" />
+            </key>
+            <one-to-many class="org.openmrs.module.pharmagest.PharmProduit" />
+        </set>
+    </class>
+</hibernate-mapping>

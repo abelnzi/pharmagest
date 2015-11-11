@@ -1,18 +1,15 @@
 package org.openmrs.module.pharmagest.api;
 
 import java.util.Collection;
-import java.util.Map;
 
 import org.openmrs.PatientIdentifier;
 import org.openmrs.api.OpenmrsService;
 import org.openmrs.module.pharmagest.Fournisseur;
-import org.openmrs.module.pharmagest.LigneDispensationId;
 import org.openmrs.module.pharmagest.Medecin;
 import org.openmrs.module.pharmagest.PatientComplement;
 import org.openmrs.module.pharmagest.Produit;
 import org.openmrs.module.pharmagest.Programme;
 import org.openmrs.module.pharmagest.Regime;
-import org.openmrs.module.pharmagest.RegimeTest;
 import org.openmrs.module.pharmagest.TypeOperation;
 import org.springframework.transaction.annotation.Transactional;
 
