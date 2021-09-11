@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9
+                  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
+	<!-- See http://www.liquibase.org/manual/home#available_database_refactorings 
+		for a list of supported elements and attributes -->
+
+
+	<changeSet id="histo-bl-integration-20-07-2018" author="N'ZI ABEL">
+		<preConditions onFail="MARK_RAN">
+		
+				<sqlCheck expectedResult="0">select count(*) from
+					pharm_ordonnance where ord_numero_patient IS NOT NULL;
+				</sqlCheck>
+			
+		</preConditions>
+
+		<sql>
+
+			UPDATE pharm_ordonnance SET ord_numero_patient=ord_num WHERE
+			ord_num IS NOT NULL;
+			UPDATE pharm_ordonnance SET ord_num=null WHERE
+			ord_num IS NOT NULL;
+		</sql>
+	</changeSet>
+
+	<changeSet id="reception-gestModif-10-07-2018" author="N'ZI ABEL">
+		<preConditions onFail="MARK_RAN">
+			<not>
+				<columnExists tableName="pharm_reception" columnName="gest_modif" />
+			</not>
+		</preConditions>
+		<sql>
+			ALTER TABLE pharm_reception ADD COLUMN gest_modif int(11), ADD
+			CONSTRAINT fk_gestionnaire_modif FOREIGN KEY (gest_modif) REFERENCES
+			pharm_gestionnaire_pharma(gest_id);
+		</sql>
+	</changeSet>
+	
+	<changeSet id="inventaire-prix-06-05-2019" author="N'ZI ABEL">
+		<preConditions onFail="MARK_RAN">
+			<not>
+				<columnExists tableName="pharm_ligne_inventaire" columnName="prix_inv" />
+			</not>
+		</preConditions>
+		<sql>
+			ALTER TABLE pharm_ligne_inventaire
+			ADD COLUMN prix_inv int(11);
+			ALTER TABLE pharm_inventaire
+			ADD COLUMN inv_date_modif date,
+			ADD COLUMN
+			gest_id_saisi int(11),
+			ADD CONSTRAINT fk_gestionnaire_saisi FOREIGN
+			KEY ( gest_id_saisi )
+			REFERENCES pharm_gestionnaire_pharma( gest_id );
+			ALTER TABLE pharm_inventaire
+			ADD COLUMN gest_id_modif int(11),
+			ADD CONSTRAINT fk_reception_gest_modif FOREIGN KEY ( gest_id_modif )
+			REFERENCES pharm_gestionnaire_pharma( gest_id ) ;
+		</sql>
+</changeSet>
+	
+	<changeSet id="regime-produit-01-07-2019" author="N'ZI ABEL">
+		<preConditions onFail="CONTINUE">
+			<and>
+					<sqlCheck expectedResult="0">SELECT count(*) FROM pharm_regime p WHERE regim_id=37;</sqlCheck>
+					<sqlCheck expectedResult="1">SELECT count(*) FROM pharm_produit WHERE prod_code ='AR33328';</sqlCheck>
+			</and>
+		</preConditions>
+
+		<sql>
+
+			INSERT INTO `pharm_regime` (`regim_id`,`program_id`,`regim_lib`) VALUES (37,NULL,'TDF/3TC/DTG');
+			insert into pharm_faire_partir (prod_id,regim_id) values
+			((SELECT prod_id FROM pharm_produit WHERE prod_code ='AR33327'),37),
+			((SELECT prod_id FROM pharm_produit WHERE prod_code ='AR33328'),37);
+
+			insert into pharm_faire_partir (prod_id,regim_id) values
+			(127,37),
+			(143,37),
+			(147,37),
+			(232,37);
+
+			insert into pharm_faire_partir (prod_id,regim_id) values
+			((SELECT prod_id FROM pharm_produit WHERE prod_code ='AR33329'),2),
+			((SELECT prod_id FROM pharm_produit WHERE prod_code ='AR33329'),8),
+			((SELECT prod_id FROM pharm_produit WHERE prod_code ='AR33329'),11),
+			((SELECT prod_id FROM pharm_produit WHERE prod_code ='AR33329'),12),
+			((SELECT prod_id FROM pharm_produit WHERE prod_code ='AR33329'),20);
+
+			insert into pharm_faire_partir (prod_id,regim_id) values
+			((SELECT prod_id FROM pharm_produit WHERE prod_code ='AR33166'),2),
+			((SELECT prod_id FROM pharm_produit WHERE prod_code ='AR33166'),8),
+			((SELECT prod_id FROM pharm_produit WHERE prod_code ='AR33166'),11),
+			((SELECT prod_id FROM pharm_produit WHERE prod_code ='AR33166'),12),
+			((SELECT prod_id FROM pharm_produit WHERE prod_code ='AR33166'),20);
+
+			insert into pharm_faire_partir (prod_id,regim_id) values
+			(122,37),
+			(152,37),
+			(577,37),
+			(584,37),
+			(585,37),
+			(808,37);
+		</sql>
+</changeSet>
+
+<changeSet id="produit-lopirito-06-05-2019" author="N'ZI ABEL">
+		<preConditions onFail="CONTINUE">		
+			<and>
+				<sqlCheck expectedResult="1">SELECT COUNT(*) FROM pharm_produit p WHERE prod_code='AR33252';</sqlCheck>
+				<sqlCheck expectedResult="0">SELECT COUNT(*) FROM pharm_faire_partir p WHERE 
+						p.prod_id=(SELECT t.prod_id FROM pharm_produit t WHERE t.prod_code ='AR33252') AND regim_id=3;
+				</sqlCheck>
+			</and>
+		</preConditions>
+
+		<sql>
+			insert into pharm_faire_partir (prod_id,regim_id) values ((SELECT prod_id FROM pharm_produit WHERE prod_code ='AR33252'),3),
+			((SELECT prod_id FROM pharm_produit WHERE prod_code ='AR33252'),9),
+			((SELECT prod_id FROM pharm_produit WHERE prod_code ='AR33252'),13),
+			((SELECT prod_id FROM pharm_produit WHERE prod_code ='AR33252'),14),
+			((SELECT prod_id FROM pharm_produit WHERE prod_code ='AR33252'),17),
+			((SELECT prod_id FROM pharm_produit WHERE prod_code ='AR33252'),22),
+			((SELECT prod_id FROM pharm_produit WHERE prod_code ='AR33252'),26),
+			((SELECT prod_id FROM pharm_produit WHERE prod_code ='AR33252'),27);
+		</sql>
+</changeSet>
+
+<changeSet id="produit-preservatif-03-05-2019" author="N'ZI ABEL">
+		<preConditions onFail="CONTINUE">		
+				<sqlCheck expectedResult="0">SELECT COUNT(*) FROM pharm_faire_partir p WHERE prod_id=64 AND regim_id=1;</sqlCheck>
+		</preConditions>
+
+		<sql>
+			INSERT INTO pharm_faire_partir (prod_id, regim_id)
+			  SELECT p.prod_id,regim_id FROM pharm_regime r, pharm_produit p
+			  WHERE
+				p.prod_code IN ('AR46020','AR46000','AR46010');
+		</sql>
+</changeSet>
+
+<changeSet id="doli-preservatif-02-07-2019" author="N'ZI ABEL">
+		<preConditions onFail="CONTINUE">		
+				<sqlCheck expectedResult="0">SELECT COUNT(*) FROM pharm_faire_partir p WHERE prod_id=64 AND regim_id=37;</sqlCheck>
+		</preConditions>
+
+		<sql>
+			INSERT INTO pharm_faire_partir (prod_id, regim_id)
+			  (SELECT p.prod_id,regim_id FROM pharm_regime r, pharm_produit p
+			  WHERE r.regim_id=37 AND
+				p.prod_code IN ('AR46020','AR46000','AR46010'));
+		</sql>
+</changeSet>
+
+
+<changeSet id="update-produit-regime-03-05-2019" author="N'ZI ABEL">
+		<preConditions onFail="CONTINUE">		
+				<sqlCheck expectedResult="1">SELECT COUNT(*) FROM pharm_regime WHERE regim_lib='DTG/3TC/TDF';</sqlCheck>
+		</preConditions>
+
+		<sql>
+			UPDATE pharm_produit SET prod_lib='DOLUTEGRAVIR 50 mg comp. bte/30' WHERE prod_code='AR33327';
+			UPDATE pharm_regime SET regim_lib='TDF/3TC/DTG' WHERE regim_id=37;
+		</sql>
+</changeSet>
+
+<changeSet id="delete-cotri-01-07-2019" author="N'ZI ABEL">
+		<preConditions onFail="CONTINUE">	
+					<sqlCheck expectedResult="1">SELECT count(*) FROM pharm_faire_partir WHERE prod_id =152 AND regim_id=37;</sqlCheck>	
+		</preConditions>
+
+		<sql>
+			DELETE FROM pharm_faire_partir WHERE  prod_id =152 AND regim_id=37;
+		</sql>
+</changeSet>
+
+
+<changeSet id="dolu_regim-01-12-2020" author="N'ZI ABEL">
+		<preConditions onFail="CONTINUE">		
+			<and>
+				<sqlCheck expectedResult="0">SELECT COUNT(*) FROM pharm_regime WHERE regim_id=38 ;</sqlCheck>
+				<sqlCheck expectedResult="1">SELECT count(*) FROM pharm_produit WHERE prod_code ='AR33327';</sqlCheck>	
+				<sqlCheck expectedResult="1">SELECT count(*) FROM pharm_produit WHERE prod_code ='AR33090';</sqlCheck>	
+			</and>
+		</preConditions>
+
+		<sql>
+			INSERT INTO `pharm_regime` (`regim_id`,`program_id`,`regim_lib`) VALUES (38,NULL,'AZT/3TC/DTG');
+			INSERT INTO `pharm_regime` (`regim_id`,`program_id`,`regim_lib`) VALUES (39,NULL,'ABC/3TC/DTG');
+			INSERT INTO `pharm_regime` (`regim_id`,`program_id`,`regim_lib`) VALUES (40,NULL,'TDF/FTC/DTG');
+			INSERT INTO `pharm_regime` (`regim_id`,`program_id`,`regim_lib`) VALUES (41,NULL,'DDI/3TC/DTG');
+
+			insert into pharm_faire_partir (prod_id,regim_id) values(64,38);
+			insert into pharm_faire_partir (prod_id,regim_id) values(65,38);
+			insert into pharm_faire_partir (prod_id,regim_id) values(122,38);
+			insert into pharm_faire_partir (prod_id,regim_id) values(127,38);
+			insert into pharm_faire_partir (prod_id,regim_id) values(133,38);
+			insert into pharm_faire_partir (prod_id,regim_id) values(134,38);
+			insert into pharm_faire_partir (prod_id,regim_id) values(135,38);
+			insert into pharm_faire_partir (prod_id,regim_id) values(142,38);
+			insert into pharm_faire_partir (prod_id,regim_id) values(232,38);
+			insert into pharm_faire_partir (prod_id,regim_id) values(577,38);
+			insert into pharm_faire_partir (prod_id,regim_id) values(740,38);
+			insert into pharm_faire_partir (prod_id,regim_id) values(808,38);
+			insert into pharm_faire_partir (prod_id,regim_id) values
+						((SELECT prod_id FROM pharm_produit WHERE prod_code ='AR33327'),38);
+
+			insert into pharm_faire_partir (prod_id,regim_id) values(64,39);
+			insert into pharm_faire_partir (prod_id,regim_id) values(65,39);
+			insert into pharm_faire_partir (prod_id,regim_id) values(122,39);
+			insert into pharm_faire_partir (prod_id,regim_id) values(127,39);
+			insert into pharm_faire_partir (prod_id,regim_id) values(133,39);
+			insert into pharm_faire_partir (prod_id,regim_id) values(134,39);
+			insert into pharm_faire_partir (prod_id,regim_id) values(136,39);
+			insert into pharm_faire_partir (prod_id,regim_id) values(137,39);
+			insert into pharm_faire_partir (prod_id,regim_id) values(138,39);
+			insert into pharm_faire_partir (prod_id,regim_id) values(232,39);
+			insert into pharm_faire_partir (prod_id,regim_id) values(577,39);
+			insert into pharm_faire_partir (prod_id,regim_id) values(740,39);
+			insert into pharm_faire_partir (prod_id,regim_id) values(808,39);
+			insert into pharm_faire_partir (prod_id,regim_id) values
+						((SELECT prod_id FROM pharm_produit WHERE prod_code ='AR33327'),39);
+
+			insert into pharm_faire_partir (prod_id,regim_id) values(64,40);
+			insert into pharm_faire_partir (prod_id,regim_id) values(65,40);
+			insert into pharm_faire_partir (prod_id,regim_id) values(122,40);
+			insert into pharm_faire_partir (prod_id,regim_id) values(134,40);
+			insert into pharm_faire_partir (prod_id,regim_id) values(577,40);
+			insert into pharm_faire_partir (prod_id,regim_id) values(740,40);
+			insert into pharm_faire_partir (prod_id,regim_id) values(808,40);
+			insert into pharm_faire_partir (prod_id,regim_id) values
+						((SELECT prod_id FROM pharm_produit WHERE prod_code ='AR33327'),40);
+
+			insert into pharm_faire_partir (prod_id,regim_id) values(64,41);
+			insert into pharm_faire_partir (prod_id,regim_id) values(65,41);
+			insert into pharm_faire_partir (prod_id,regim_id) values(122,41);
+			insert into pharm_faire_partir (prod_id,regim_id) values(127,41);
+			insert into pharm_faire_partir (prod_id,regim_id) values(133,41);
+			insert into pharm_faire_partir (prod_id,regim_id) values(134,41);
+			insert into pharm_faire_partir (prod_id,regim_id) values(232,41);
+			insert into pharm_faire_partir (prod_id,regim_id) values(577,41);
+			insert into pharm_faire_partir (prod_id,regim_id) values(740,41);
+			insert into pharm_faire_partir (prod_id,regim_id) values(808,41);
+			insert into pharm_faire_partir (prod_id,regim_id) values
+						((SELECT prod_id FROM pharm_produit WHERE prod_code ='AR33327'),41);
+
+			insert into pharm_faire_partir (prod_id,regim_id) values(132,38);
+			insert into pharm_faire_partir (prod_id,regim_id) values(141,38);
+			insert into pharm_faire_partir (prod_id,regim_id) values(146,38);
+
+
+
+			insert into pharm_faire_partir (prod_id,regim_id) values(132,39);
+
+			insert into pharm_faire_partir (prod_id,regim_id) values
+						((SELECT prod_id FROM pharm_produit WHERE prod_code ='AR33090'),10);
+		</sql>
+</changeSet>
+
+<!-- <changeSet id="add_dolu_12-12-2019" author="N'ZI ABEL">
+		<preConditions onFail="CONTINUE">		
+				<sqlCheck expectedResult="0">SELECT COUNT(*) FROM pharm_faire_partir WHERE prod_id=(SELECT prod_id FROM pharm_produit WHERE prod_code ='AR33324') AND regim_id=37;</sqlCheck>
+		</preConditions>
+
+		<sql>
+			insert into pharm_faire_partir (prod_id,regim_id) values
+			((SELECT prod_id FROM pharm_produit WHERE prod_code ='AR33324'),37);
+		</sql>
+</changeSet> -->
+
+<changeSet id="add_dolu_22-07-2020" author="N'ZI ABEL">
+		<preConditions onFail="CONTINUE">
+			<and>		
+				<sqlCheck expectedResult="0">SELECT COUNT(*) FROM pharm_faire_partir WHERE prod_id=(SELECT prod_id FROM pharm_produit WHERE prod_code ='AR33324') AND regim_id=37;</sqlCheck>
+				<sqlCheck expectedResult="1">SELECT COUNT(*) FROM pharm_produit WHERE prod_code ='AR33324';</sqlCheck>
+			</and>
+		</preConditions>
+
+		<sql>
+			insert into pharm_faire_partir (prod_id,regim_id) values
+			((SELECT prod_id FROM pharm_produit WHERE prod_code ='AR33324'),37);
+			
+			INSERT INTO pharm_faire_partir (prod_id, regim_id)
+			  SELECT p.prod_id,regim_id FROM pharm_regime r, pharm_produit p
+			  WHERE
+			r.regim_lib LIKE '%TDF/FTC%' AND
+					p.prod_code ='AR33321';
+
+			INSERT INTO pharm_faire_partir (prod_id, regim_id)
+						  SELECT p.prod_id,regim_id FROM pharm_regime r, pharm_produit p
+						  WHERE
+					r.regim_lib LIKE '%DDI%' AND
+							p.prod_code IN ('AR33026','AR33110','AR33000','AR33010');
+
+			INSERT INTO pharm_faire_partir (prod_id, regim_id)
+						  SELECT p.prod_id,regim_id FROM pharm_regime r, pharm_produit p
+						  WHERE
+					r.regim_id IN (27,28,29,30,31) AND
+							p.prod_code ='AR33025';
+		</sql>
+</changeSet>
+
+<changeSet id="alter_ord_hospi_13-07-2020" author="N'ZI ABEL">
+		<preConditions onFail="CONTINUE">
+			<columnExists tableName="pharm_ordonnance" columnName="ord_hospi" />
+		</preConditions>
+
+		<sql>
+			ALTER TABLE pharm_ordonnance MODIFY ord_hospi VARCHAR(10) ;
+		</sql>
+</changeSet>
+
+<changeSet id="regime-produit-AR33330-26-11-2020" author="N'ZI ABEL">
+		<preConditions onFail="CONTINUE">
+			<and>
+					<sqlCheck expectedResult="1">SELECT count(*) FROM pharm_regime p WHERE regim_id=37;</sqlCheck>
+					<sqlCheck expectedResult="1">SELECT count(*) FROM pharm_produit WHERE prod_code ='AR33330';</sqlCheck>
+			</and>
+		</preConditions>
+
+		<sql>
+
+			
+			insert into pharm_faire_partir (prod_id,regim_id) values
+			((SELECT prod_id FROM pharm_produit WHERE prod_code ='AR33330'),37);
+
+			
+		</sql>
+</changeSet>
+
+<changeSet id="produit-AR028140-03-12-2020" author="N'ZI ABEL">
+		<preConditions onFail="CONTINUE">		
+			<and>
+				<sqlCheck expectedResult="0">SELECT COUNT(*) FROM pharm_faire_partir WHERE prod_id=(SELECT prod_id FROM pharm_produit WHERE prod_code ='AR028140') AND regim_id=37;</sqlCheck>
+				<sqlCheck expectedResult="1">SELECT count(*) FROM pharm_produit WHERE prod_code ='AR028140';</sqlCheck>	
+				<sqlCheck expectedResult="1">SELECT count(*) FROM pharm_produit WHERE prod_code ='AR028145';</sqlCheck>	
+			</and>
+		</preConditions>
+
+		<sql>
+			INSERT INTO pharm_faire_partir (prod_id, regim_id)
+			  SELECT p.prod_id,regim_id FROM pharm_regime r, pharm_produit p
+			  WHERE
+				p.prod_code IN ('AR028140','AR028145');
+		</sql>
+</changeSet>
+
+
+
+</databaseChangeLog>
