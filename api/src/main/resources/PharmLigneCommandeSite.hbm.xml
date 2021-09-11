@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 22 janv. 2016 09:05:48 by Hibernate Tools 3.5.0.Final -->
+<hibernate-mapping>
+    <class name="org.openmrs.module.pharmagest.PharmLigneCommandeSite" table="pharm_ligne_commande_site" >
+        <composite-id name="id" class="org.openmrs.module.pharmagest.PharmLigneCommandeSiteId">
+            <key-property name="prodId" type="int">
+                <column name="prod_id" />
+            </key-property>
+            <key-property name="comSiteId" type="int">
+                <column name="com_site_id" />
+            </key-property>
+        </composite-id>
+        <many-to-one name="pharmCommandeSite" class="org.openmrs.module.pharmagest.PharmCommandeSite" update="false" insert="false" fetch="select">
+            <column name="com_site_id" precision="8" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="pharmProduit" class="org.openmrs.module.pharmagest.PharmProduit" update="false" insert="false" fetch="select">
+            <column name="prod_id" not-null="true" />
+        </many-to-one>
+        <property name="lgnComQteIni" type="java.lang.Integer">
+            <column name="lgn_com_qte_ini" precision="8" scale="0" />
+        </property>
+        <property name="lgnComQteRecu" type="java.lang.Integer">
+            <column name="lgn_com_qte_recu" precision="8" scale="0" />
+        </property>
+        <property name="lgnComQteUtil" type="java.lang.Integer">
+            <column name="lgn_com_qte_util" precision="8" scale="0" />
+        </property>
+        <property name="lgnComPertes" type="java.lang.Integer">
+            <column name="lgn_com_pertes" precision="8" scale="0" />
+        </property>
+        <property name="lgnComStockDispo" type="java.lang.Integer">
+            <column name="lgn_com_stock_dispo" precision="8" scale="0" />
+        </property>
+        <property name="lgnComNbreJrsRup" type="java.lang.Integer">
+            <column name="lgn_com_nbre_jrs_rup" precision="8" scale="0" />
+        </property>
+        <property name="lgnQteDistriM1" type="java.lang.Integer">
+            <column name="lgn_qte_distri_m1" precision="8" scale="0" />
+        </property>
+        <property name="lgnQteDistriM2" type="java.lang.Integer">
+            <column name="lgn_qte_distri_m2" precision="8" scale="0" />
+        </property>
+        <property name="lgnQtePro" type="java.lang.Integer">
+            <column name="lgn_qte_pro" precision="8" scale="0" />
+        </property>
+    </class>
+</hibernate-mapping>

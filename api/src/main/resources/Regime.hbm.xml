@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<!-- Generated 2 juil. 2015 23:11:24 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="org.openmrs.module.pharmagest.Regime" table="regime" >
+        <id name="regimId" type="int">
+            <column name="regim_id" precision="8" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="programme" class="org.openmrs.module.pharmagest.Programme" fetch="select">
+            <column name="program_id" precision="8" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="regimLib" type="string">
+            <column name="regim_lib" length="250" />
+        </property>
+        <set name="produits" table="faire_partir" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="regim_id" precision="8" scale="0" not-null="true" />
+            </key>
+            <many-to-many entity-name="org.openmrs.module.pharmagest.Produit">
+                <column name="prod_id" precision="8" scale="0" not-null="true" />
+            </many-to-many>
+        </set>
+        <set name="patientComplements" table="patient_complement" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="regim_id" precision="8" scale="0" />
+            </key>
+            <one-to-many class="org.openmrs.module.pharmagest.PatientComplement" />
+        </set>
+        <set name="ordonnances" table="ordonnance" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="regim_id" precision="8" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="org.openmrs.module.pharmagest.Ordonnance" />
+        </set>
+    </class>
+</hibernate-mapping>

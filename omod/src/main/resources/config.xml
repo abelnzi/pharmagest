@@ -7,7 +7,7 @@
 	<name>${project.parent.name}</name>
 	<version>${project.parent.version}</version>
 	<package>${project.parent.groupId}.${project.parent.artifactId}</package>
-	<author>ABEL</author>
+	<author>ABEL N'ZI</author>
 	<description>
 		${project.parent.description}
 	</description>
@@ -27,16 +27,174 @@
 	</extension>
 	<extension>
 		<point>org.openmrs.gutter.tools</point>
-		<class>${project.parent.groupId}.${project.parent.artifactId}.extension.html.GenerateurIdGutterLink
+		<class>${project.parent.groupId}.${project.parent.artifactId}.extension.html.PharmaGestGutterLink
 		</class>
 	</extension>
 	
 	<!-- Maps hibernate file's, if present -->
 	<mappingFiles>
-				
-		pharmagest.hbm.xml
-				
+		ClassePharma.hbm.xml
+		Fournisseur.hbm.xml
+		GestionnairePharma.hbm.xml
+		HistoMouvementStock.hbm.xml
+		Inventaire.hbm.xml
+		LigneDispensation.hbm.xml
+		LigneInventaire.hbm.xml
+		LingeOperation.hbm.xml
+		Medecin.hbm.xml
+		Operation.hbm.xml
+		Ordonnance.hbm.xml
+		PatientComplement.hbm.xml
+		PrixProduit.hbm.xml
+		Produit.hbm.xml
+		Programme.hbm.xml
+		Regime.hbm.xml
+		Stocker.hbm.xml
+		TypeOperation.hbm.xml			
+		
+		
+		PharmClassePharma.hbm.xml
+		PharmFournisseur.hbm.xml
+		PharmGestionnairePharma.hbm.xml
+		PharmHistoMouvementStock.hbm.xml
+		PharmInventaire.hbm.xml
+		PharmLigneDispensation.hbm.xml
+		PharmLigneInventaire.hbm.xml
+		PharmLigneOperation.hbm.xml
+		PharmMedecin.hbm.xml
+		PharmOperation.hbm.xml
+		PharmOrdonnance.hbm.xml
+		
+		PharmPrixProduit.hbm.xml
+		PharmProduit.hbm.xml
+		PharmProduitAttribut.hbm.xml
+		PharmProgramme.hbm.xml
+		PharmRegime.hbm.xml
+
+		PharmStocker.hbm.xml
+		PharmTypeOperation.hbm.xml
+		PharmSite.hbm.xml
+		PharmCommandeSite.hbm.xml
+		PharmLigneCommandeSite.hbm.xml
+		PharmLigneRc.hbm.xml
+		PharmRapportCommande.hbm.xml
+		
+		
+		PharmLigneReception.hbm.xml
+		PharmReception.hbm.xml
+		PharmProduitCompl.hbm.xml
+		PharmClient.hbm.xml
+		PharmLigneAssurance.hbm.xml
+		PharmAssurance.hbm.xml		
 	</mappingFiles>
+	
+	<!-- Privileges list -->
+	<privilege>
+		<name>pharmacie</name>
+		<description>Peut manager le module pharmagest</description>
+	</privilege>
+	<privilege>
+		<name>pharmacie ESPC</name>
+		<description>est un ESPC ou PPS</description>
+	</privilege>
+	<privilege>
+		<name>pharmacie DISTRICT</name>
+		<description>est un district ou un HG</description>
+	</privilege>
+	<privilege>
+		<name>pharmacie reception</name>
+		<description>Peut receptionner des produits du fournisseur principal</description>
+	</privilege>
+	<privilege>
+		<name>pharmacie reception saisie</name>
+		<description>Peut receptionner des produits du fournisseur principal</description>
+	</privilege>
+	<privilege>
+		<name>pharmacie reception modif</name>
+		<description>Peut receptionner des produits du fournisseur principal</description>
+	</privilege>
+	<privilege>
+		<name>pharmacie reception valide</name>
+		<description>Peut receptionner des produits du fournisseur principal</description>
+	</privilege>
+	
+	<privilege>
+		<name>pharmacie dispensation</name>
+		<description>Peut dispenser des produits</description>
+	</privilege>
+	<privilege>
+		<name>pharmacie dispensation transforme</name>
+		<description>Peut dispenser des produits</description>
+	</privilege>
+	<privilege>
+		<name>pharmacie vente saisie</name>
+		<description>Peut dispenser des produits</description>
+	</privilege>
+	<privilege>
+		<name>pharmacie vente annule</name>
+		<description>Peut annuler une vente saisie</description>
+	</privilege>
+	
+	<privilege>
+		<name>pharmacie distribution saisies</name>
+		<description>Peut saisir le rapport mensuel des PPS/ESPC</description>
+	</privilege>
+	<privilege>
+		<name>pharmacie distribution traitement</name>
+		<description>Peut faire la compilation des rapports mensuels des  PPS/ESPC</description>
+	</privilege>
+	<privilege>
+		<name>pharmacie distribution</name>
+		<description>Peut faire la distribution</description>
+	</privilege>
+	<privilege>
+		<name>pharmacie mouvement</name>
+		<description>Peut effectuer des opérations sur le stock</description>
+	</privilege>
+	<privilege>
+		<name>pharmacie inventaire</name>
+		<description>Peut effectuer avoir acces au processus d'inventaire</description>
+	</privilege>
+	<privilege>
+		<name>pharmacie inventaire saisie</name>
+		<description>Peut saisir un inventaire</description>
+	</privilege>
+	<privilege>
+		<name>pharmacie inventaire modif</name>
+		<description>Peut modifier un inventaire saisi</description>
+	</privilege>
+	<privilege>
+		<name>pharmacie inventaire valide</name>
+		<description>Peut valider un inventaire saisi</description>
+	</privilege>
+	<privilege>
+		<name>pharmacie rapport</name>
+		<description>Peut voir les rapports</description>
+	</privilege>
+	<privilege>
+		<name>pharmacie rapport commande</name>
+		<description>Peut générer le rapport commande</description>
+	</privilege>
+	<privilege>
+		<name>pharmacie rapport mensuel</name>
+		<description>Peut générer le rapport mensuel</description>
+	</privilege>
+	<privilege>
+		<name>pharmacie rapport stock</name>
+		<description>Peut voir les rapport sur le stock</description>
+	</privilege>
+	<privilege>
+		<name>pharmacie parametres</name>
+		<description>Peut entrer les données de base</description>
+	</privilege>
+	<privilege>
+		<name>pharmacie interoperabilite</name>
+		<description>Peut  extraire et transferer un rapport commande</description>
+	</privilege>
+	<privilege>
+		<name>pharmacie interoperabilite ftp</name>
+		<description>Peut  configurer les parametres FTP du serveur pour la transmission du rapport commande</description>
+	</privilege>
 
 	<!-- Internationalization -->
 	<!-- All message codes should start with ${project.parent.artifactId}. -->

@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<!-- Generated 16 ao?t 2015 03:07:55 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="org.openmrs.module.pharmagest.PharmMedecin" table="pharm_medecin" >
+        <id name="medId" type="java.lang.Integer">
+            <column name="med_id" />
+            <generator class="identity" />
+        </id>
+        <property name="medCode" type="string">
+            <column name="med_code" length="250" />
+        </property>
+        <property name="medNom" type="string">
+            <column name="med_nom" length="250" />
+        </property>
+        <property name="medPrenom" type="string">
+            <column name="med_prenom" length="250" />
+        </property>
+        <property name="medAdresse" type="string">
+            <column name="med_adresse" length="250" />
+        </property>
+        <property name="medTel" type="string">
+            <column name="med_tel" length="250" />
+        </property>
+        <set name="pharmOrdonnances" table="pharm_ordonnance" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="med_id" />
+            </key>
+            <one-to-many class="org.openmrs.module.pharmagest.PharmOrdonnance" />
+        </set>
+    </class>
+</hibernate-mapping>

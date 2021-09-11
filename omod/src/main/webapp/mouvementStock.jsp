@@ -1,0 +1,76 @@
+<%@ include file="/WEB-INF/template/include.jsp"%>
+<%@ include file="/WEB-INF/template/header.jsp"%>
+<openmrs:require privilege="pharmacie mouvement" 
+        otherwise="/login.htm" redirect="/index.htm" />
+<!--<h2 align="center">
+	<spring:message code="pharmagest.title" />
+</h2>-->
+<% Boolean activeFour=false;Boolean activeDisp=false;Boolean activeDist=false;Boolean activeMvt=true ;
+Boolean activeInv=false;Boolean activeRap=false;Boolean activeParam=false; Boolean activeInter=false;
+ %>
+<%@ include file="template/localHeader.jsp"%>
+<!--<div class="box" style="margin:0px; width:1580px;background-color:#FCD7DB" >
+<ul id="menu">
+	
+	<li class=" first">
+		<a href="<c:url value="/module/pharmagest/stockFournisseur.form"/>">R&eacute;ception produits</a>
+	</li>
+	<li  ><a href="<c:url value="/module/pharmagest/dispensationChoix.form"/>"><spring:message
+			code="pharmagest.dispensation" /></a></li>
+	<li><a href="<c:url value="/module/pharmagest/distributionMenu.form"/>">Distribution</a></li>
+	
+	<li class="active ">
+		<a href="<c:url value="/module/pharmagest/mouvementStock.form"/>">Mouvement de stock</a>
+	</li>
+	
+	<li >
+		<a href="<c:url value="/module/pharmagest/inventaireMenu.form"/>"><spring:message
+			code="pharmagest.inventaire" /></a>
+	</li>
+	<li>
+		<a href="<c:url value="/module/pharmagest/rapportStock.form"/>">Rapports</a>
+	</li>
+    <li>
+		<a href="<c:url value="/module/pharmagest/parametrage.form"/>">Fichiers de base</a>
+	</li>
+	
+	
+</ul>
+</div>-->
+
+<table width="319" border="0" cellspacing="8">
+  <tbody>
+    <tr>
+      <td width="197"><b class="boxHeader"></b><div class="box adminMenuList">
+		<ul id="menu">
+			<openmrs:hasPrivilege privilege="pharmacie DISTRICT">
+			<li>
+				<a href="<c:url value="/module/pharmagest/stockEntree.form"/>">Entr&eacute;es de stock</a>
+			</li>
+            <br>
+            </openmrs:hasPrivilege>
+			<li>
+				<a href="<c:url value="/module/pharmagest/stockSortie.form"/>">Sortie de stock</a>
+			</li>
+		</ul>
+</div></td>
+      <td width="80">&nbsp;</td>
+      <td width="8">&nbsp;</td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+
+<%@ include file="/WEB-INF/template/footer.jsp"%>

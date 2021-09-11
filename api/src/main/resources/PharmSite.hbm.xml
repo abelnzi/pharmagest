@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 22 janv. 2016 09:05:48 by Hibernate Tools 3.5.0.Final -->
+<hibernate-mapping>
+    <class name="org.openmrs.module.pharmagest.PharmSite" table="pharm_site" >
+        <id name="sitId" type="java.lang.Integer">
+            <column name="sit_id" />
+            <generator class="identity" />
+        </id>
+        <property name="sitCode" type="string">
+            <column name="sit_code" length="50" />
+        </property>
+        <property name="sitLib" type="string">
+            <column name="sit_lib" length="500" />
+        </property>
+        <property name="sitFlag" type="string">
+            <column name="sit_flag" length="3" />
+        </property>
+        <set name="pharmCommandeSites" table="pharm_commande_site" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="sit_id" not-null="true" />
+            </key>
+            <one-to-many class="org.openmrs.module.pharmagest.PharmCommandeSite" />
+        </set>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<!-- Generated 16 ao?t 2015 03:07:55 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="org.openmrs.module.pharmagest.PharmInventaire" table="pharm_inventaire" >
+        <id name="invId" type="java.lang.Integer">
+            <column name="inv_id" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="pharmProgramme" class="org.openmrs.module.pharmagest.PharmProgramme" fetch="select">
+            <column name="program_id" not-null="true" />
+        </many-to-one>
+        <property name="invDateCrea" type="date">
+            <column name="inv_date_crea" length="0" />
+        </property>
+        <property name="invDeb" type="date">
+            <column name="inv_deb" length="0" />
+        </property>
+        <property name="invFin" type="date">
+            <column name="inv_fin" length="0" />
+        </property>
+        <property name="invFlag" type="string">
+            <column name="inv_flag" length="2" />
+        </property>
+        
+        <property name="invDateModif" type="date">
+            <column name="inv_date_modif" length="0" />
+        </property>
+        <many-to-one name="pharmGestionnaireSaisi" class="org.openmrs.module.pharmagest.PharmGestionnairePharma" fetch="select">
+            <column name="gest_id_saisi" not-null="true" />
+        </many-to-one>
+        <many-to-one name="pharmGestionnaireModif" class="org.openmrs.module.pharmagest.PharmGestionnairePharma" fetch="select">
+            <column name="gest_id_modif" not-null="false" />
+        </many-to-one>
+        
+        
+        <set name="pharmLigneInventaires" table="pharm_ligne_inventaire" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="inv_id" not-null="true" />
+            </key>
+            <one-to-many class="org.openmrs.module.pharmagest.PharmLigneInventaire" />
+        </set>
+    </class>
+</hibernate-mapping>

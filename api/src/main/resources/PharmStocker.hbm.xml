@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<!-- Generated 16 ao?t 2015 03:07:55 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="org.openmrs.module.pharmagest.PharmStocker" table="pharm_stocker" >
+        <composite-id name="id" class="org.openmrs.module.pharmagest.PharmStockerId">
+            <key-property name="prodAttriId" type="int">
+                <column name="prod_attri_id" />
+            </key-property>
+            <key-property name="programId" type="int">
+                <column name="program_id" />
+            </key-property>
+        </composite-id>
+        <many-to-one name="pharmProgramme" class="org.openmrs.module.pharmagest.PharmProgramme" update="false" insert="false" fetch="select">
+            <column name="program_id" not-null="true" />
+        </many-to-one>
+        <many-to-one name="pharmProduitAttribut" class="org.openmrs.module.pharmagest.PharmProduitAttribut" update="false" insert="false" fetch="select">
+            <column name="prod_attri_id" not-null="true" />
+        </many-to-one>
+        <property name="stockQte" type="java.lang.Integer">
+            <column name="stock_qte" precision="8" scale="0" />
+        </property>
+        <property name="stockQteMin" type="java.lang.Integer">
+            <column name="stock_qte_min" precision="8" scale="0" />
+        </property>
+        <property name="stockQteMax" type="java.lang.Integer">
+            <column name="stock_qte_max" precision="8" scale="0" />
+        </property>
+        <property name="stockDateStock" type="date">
+            <column name="stock_date_stock" length="0" />
+        </property>
+        <property name="stockDatePeremp" type="date">
+            <column name="stock_date_peremp" length="0" />
+        </property>
+        <property name="stockLot" type="string">
+            <column name="stock_lot" length="20" />
+        </property>
+        <property name="stockQteIni" type="java.lang.Integer">
+            <column name="stock_qte_ini" precision="8" scale="0" />
+        </property>
+    </class>
+</hibernate-mapping>

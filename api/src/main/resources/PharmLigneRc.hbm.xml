@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 22 janv. 2016 09:05:48 by Hibernate Tools 3.5.0.Final -->
+<hibernate-mapping>
+    <class name="org.openmrs.module.pharmagest.PharmLigneRc" table="pharm_ligne_rc" >
+        <composite-id name="id" class="org.openmrs.module.pharmagest.PharmLigneRcId">
+            <key-property name="prodId" type="int">
+                <column name="prod_id" />
+            </key-property>
+            <key-property name="rapComId" type="int">
+                <column name="rap_com_id" precision="8" scale="0" />
+            </key-property>
+        </composite-id>
+        <many-to-one name="pharmProduit" class="org.openmrs.module.pharmagest.PharmProduit" update="false" insert="false" fetch="select">
+            <column name="prod_id" not-null="true" />
+        </many-to-one>
+        <many-to-one name="pharmRapportCommande" class="org.openmrs.module.pharmagest.PharmRapportCommande" update="false" insert="false" fetch="select">
+            <column name="rap_com_id" precision="8" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="lgnRcStockIni" type="java.lang.Integer">
+            <column name="lgn_rc_stock_ini" precision="8" scale="0" />
+        </property>
+        <property name="lgnRcQteRecu" type="java.lang.Integer">
+            <column name="lgn_rc_qte_recu" precision="8" scale="0" />
+        </property>
+        <property name="lgnRcQteUtil" type="java.lang.Integer">
+            <column name="lgn_rc_qte_util" precision="8" scale="0" />
+        </property>
+        <property name="lgnRcPerte" type="java.lang.Integer">
+            <column name="lgn_rc_perte" precision="8" scale="0" />
+        </property>
+        <property name="lgnRcAjust" type="java.lang.Integer">
+            <column name="lgn_rc_ajust" precision="8" scale="0" />
+        </property>
+        <property name="lgnRcStockDispo" type="java.lang.Integer">
+            <column name="lgn_rc_stock_dispo" precision="8" scale="0" />
+        </property>
+        <property name="lgnRcJrsRup" type="java.lang.Integer">
+            <column name="lgn_rc_jrs_rup" precision="8" scale="0" />
+        </property>
+        <property name="lgnRcSiteRup" type="java.lang.Integer">
+            <column name="lgn_rc_site_rup" precision="8" scale="0" />
+        </property>
+        <property name="lgnRcConsoMoyenMens" type="java.lang.Integer">
+            <column name="lgn_rc_conso_moyen_mens" precision="8" scale="0" />
+        </property>
+        <property name="lgnRcMoisStockDispo" type="java.lang.Double">
+            <column name="lgn_rc__mois_stock_dispo" precision="8" scale="1" />
+        </property>
+        <property name="lgnRcQteCom" type="java.lang.Integer">
+            <column name="lgn_rc_qte_com" precision="8" scale="0" />
+        </property>
+        <property name="lgnRcQteAcc" type="java.lang.Integer">
+            <column name="lgn_rc_qte_acc" precision="8" scale="0" />
+        </property>
+    </class>
+</hibernate-mapping>

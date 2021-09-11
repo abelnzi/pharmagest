@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 22 janv. 2016 09:05:48 by Hibernate Tools 3.5.0.Final -->
+<hibernate-mapping>
+    <class name="org.openmrs.module.pharmagest.PharmCommandeSite" table="pharm_commande_site" >
+        <id name="comSiteId" type="java.lang.Integer">
+            <column name="com_site_id" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="pharmProgramme" class="org.openmrs.module.pharmagest.PharmProgramme" fetch="select">
+            <column name="program_id" not-null="true" />
+        </many-to-one>
+        <many-to-one name="pharmSite" class="org.openmrs.module.pharmagest.PharmSite" fetch="select">
+            <column name="sit_id" not-null="true" />
+        </many-to-one>
+        <property name="comSiteCode" type="string">
+            <column name="com_site_code" length="50" />
+        </property>
+        <property name="comSiteDateCom" type="date">
+            <column name="com_site_date_com" length="0" />
+        </property>
+        <property name="comSitePeriodLib" type="string">
+            <column name="com_site_period_lib" length="50" />
+        </property>
+        <property name="comSitePeriodDate" type="date">
+            <column name="com_site_period_date" length="0" />
+        </property>
+        <property name="comSiteFlag" type="java.lang.Integer">
+            <column name="com_site_flag" precision="2" scale="0">
+                <comment>indique le statut de la commande : valid&#233;-trait&#233;-non trait&#233; etc...</comment>
+            </column>
+        </property>
+        <property name="comStockMax" type="java.lang.Integer">
+            <column name="com_stock_max" precision="8" scale="0" />
+        </property>
+        <property name="comSiteDateSaisi" type="date">
+            <column name="com_site_date_saisi" length="0" />
+        </property>
+        <property name="comSiteDateModif" type="date">
+            <column name="com_site_date_modif" length="0" />
+        </property>
+        <set name="pharmLigneCommandeSites" table="pharm_ligne_commande_site" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="com_site_id" not-null="true" />
+            </key>
+            <one-to-many class="org.openmrs.module.pharmagest.PharmLigneCommandeSite" />
+        </set>
+    </class>
+</hibernate-mapping>

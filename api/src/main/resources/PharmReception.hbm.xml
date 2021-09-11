@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 16 mai 2017 05:51:28 by Hibernate Tools 3.5.0.Final -->
+<hibernate-mapping>
+    <class name="org.openmrs.module.pharmagest.PharmReception" table="pharm_reception" >
+        <id name="recptId" type="java.lang.Integer">
+            <column name="recpt_id" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="pharmTypeOperation" class="org.openmrs.module.pharmagest.PharmTypeOperation" fetch="select">
+            <column name="toper_id" />
+        </many-to-one>
+        <many-to-one name="pharmFournisseur" class="org.openmrs.module.pharmagest.PharmFournisseur" fetch="select">
+            <column name="four_id" not-null="true" />
+        </many-to-one>
+        <many-to-one name="pharmGestionnairePharma" class="org.openmrs.module.pharmagest.PharmGestionnairePharma" fetch="select">
+            <column name="gest_id" not-null="true" />
+        </many-to-one>
+        <many-to-one name="pharmGestionnaireModif" class="org.openmrs.module.pharmagest.PharmGestionnairePharma" fetch="select">
+            <column name="gest_modif" not-null="false" />
+        </many-to-one>
+        <many-to-one name="pharmProgramme" class="org.openmrs.module.pharmagest.PharmProgramme" fetch="select">
+            <column name="program_id" not-null="true" />
+        </many-to-one>
+        <property name="recptNum" type="string">
+            <column name="recpt_num" length="20" />
+        </property>
+        <property name="recptDateRecept" type="date">
+            <column name="recpt_date_recept" length="0" />
+        </property>
+        <property name="recptDateSaisi" type="date">
+            <column name="recpt_date_saisi" length="0" />
+        </property>
+        <property name="recptDateModif" type="date">
+            <column name="recpt_date_modif" length="0" />
+        </property>
+        <property name="recptFlag" type="string">
+            <column name="recpt_flag" length="4" />
+        </property>
+        <property name="recptRef" type="string">
+            <column name="recpt_ref" length="100" />
+        </property>
+        <property name="recptObserv" type="string">
+            <column name="recpt_observ" length="65535" />
+        </property>
+        <property name="typeReception" type="string">
+            <column name="type_reception" length="6" />
+        </property>
+        <set name="pharmLigneReceptions" table="pharm_ligne_reception" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="recpt_id" not-null="true" />
+            </key>
+            <one-to-many class="org.openmrs.module.pharmagest.PharmLigneReception" />
+        </set>
+    </class>
+</hibernate-mapping>

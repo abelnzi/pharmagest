@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<!-- Generated 16 ao?t 2015 03:07:55 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="org.openmrs.module.pharmagest.PharmLigneInventaire" table="pharm_ligne_inventaire" >
+        <composite-id name="id" class="org.openmrs.module.pharmagest.PharmLigneInventaireId">
+            <key-property name="invId" type="int">
+                <column name="inv_id" />
+            </key-property>
+            <key-property name="prodAttriId" type="int">
+                <column name="prod_attri_id" />
+            </key-property>
+        </composite-id>
+        <many-to-one name="pharmInventaire" class="org.openmrs.module.pharmagest.PharmInventaire" update="false" insert="false" fetch="select">
+            <column name="inv_id" not-null="true" />
+        </many-to-one>
+        <many-to-one name="pharmProduitAttribut" class="org.openmrs.module.pharmagest.PharmProduitAttribut" update="false" insert="false" fetch="select">
+            <column name="prod_attri_id" not-null="true" />
+        </many-to-one>
+        <property name="qtePhysique" type="java.lang.Integer">
+            <column name="qte_physique" precision="8" scale="0" />
+        </property>
+        <property name="qteLogique" type="java.lang.Integer">
+            <column name="qte_logique" precision="8" scale="0" />
+        </property>
+        <property name="observation" type="string">
+            <column name="observation" length="65535" />
+        </property>
+        <property name="ecart" type="java.lang.Integer">
+            <column name="ecart" precision="8" scale="0" />
+        </property>
+        <property name="qtePro" type="java.lang.Integer">
+            <column name="qte_pro" precision="8" scale="0" />
+        </property>
+         <property name="prixInv" type="java.lang.Integer">
+            <column name="prix_inv" />
+        </property>
+    </class>
+</hibernate-mapping>

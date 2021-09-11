@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<!-- Generated 24 mai 2017 16:53:10 by Hibernate Tools 3.5.0.Final -->
+<hibernate-mapping>
+    <class name="org.openmrs.module.pharmagest.PharmAssurance" table="pharm_assurance">
+        <id name="assurId" type="int">
+            <column name="assur_id" />
+            <generator class="assigned" />
+        </id>
+        <property name="assurLib" type="string">
+            <column name="assur_lib" length="250" />
+        </property>
+        <property name="assurDateSaisi" type="date">
+            <column name="assur_date_saisi" length="0" />
+        </property>
+        <property name="assurDateModi" type="date">
+            <column name="assur_date_modi" length="0" />
+        </property>
+        <property name="assurFlag" type="string">
+            <column name="assur_flag" length="5" />
+        </property>
+        <property name="assurObserv" type="string">
+            <column name="assur_observ" length="250" />
+        </property>
+        <property name="assurRef" type="string">
+            <column name="assur_ref" length="100" />
+        </property>
+        <property name="assurAttri" type="string">
+            <column name="assur_attri" length="100" />
+        </property>
+        <set name="pharmLigneAssurances" table="pharm_ligne_assurance" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="assur_id" not-null="true" />
+            </key>
+            <one-to-many class="org.openmrs.module.pharmagest.PharmLigneAssurance" />
+        </set>
+    </class>
+</hibernate-mapping>

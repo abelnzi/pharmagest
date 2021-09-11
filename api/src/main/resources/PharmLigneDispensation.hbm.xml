@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<!-- Generated 16 ao?t 2015 03:07:55 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="org.openmrs.module.pharmagest.PharmLigneDispensation" table="pharm_ligne_dispensation" >
+        <composite-id name="id" class="org.openmrs.module.pharmagest.PharmLigneDispensationId">
+            <key-property name="ordId" type="int">
+                <column name="ord_id" />
+            </key-property>
+            <key-property name="prodId" type="int">
+                <column name="prod_id" />
+            </key-property>
+        </composite-id>
+        <many-to-one name="pharmOrdonnance" class="org.openmrs.module.pharmagest.PharmOrdonnance" update="false" insert="false" fetch="select">
+            <column name="ord_id" not-null="true" />
+        </many-to-one>
+        <many-to-one name="pharmProduit" class="org.openmrs.module.pharmagest.PharmProduit" update="false" insert="false" fetch="select">
+            <column name="prod_id" not-null="true" />
+        </many-to-one>
+        <property name="ldQteDem" type="java.lang.Integer">
+            <column name="ld_qte_dem" precision="8" scale="0" />
+        </property>
+        <property name="ldQteServi" type="java.lang.Integer">
+            <column name="ld_qte_servi" precision="8" scale="0" />
+        </property>
+        <property name="ldPrixUnit" type="java.lang.Integer">
+            <column name="ld_prix_unit" precision="8" scale="0" />
+        </property>
+    </class>
+</hibernate-mapping>

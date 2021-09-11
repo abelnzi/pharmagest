@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<hibernate-mapping>
+    <class name="org.openmrs.module.pharmagest.PharmHistoMouvementStock" table="pharm_histo_mouvement_stock" >
+        <id name="mvtId" type="java.lang.Integer">
+            <column name="mvt_id" />
+            <generator class="increment" />
+        </id>
+        <many-to-one name="pharmProduit" class="org.openmrs.module.pharmagest.PharmProduit" fetch="select">
+            <column name="prod_id" not-null="true" />
+        </many-to-one>
+        <property name="mvtTypeMvt" type="java.lang.Integer">
+            <column name="mvt_type_mvt" precision="8" scale="0" />
+        </property>
+        <property name="mvtQte" type="java.lang.Integer">
+            <column name="mvt_qte" precision="8" scale="0" />
+        </property>
+        <property name="mvtProgramme" type="java.lang.Integer">
+            <column name="mvt_programme" precision="8" scale="0" />
+        </property>
+        <property name="mvtLot" type="string">
+            <column name="mvt_lot" length="50" />
+        </property>
+        <property name="mvtMotif" type="string">
+            <column name="mvt_motif" length="65535" />
+        </property>
+        <property name="mvtDate" type="date">
+            <column name="mvt_date" length="0" />
+        </property>
+        <property name="mvtQteStock" type="java.lang.Integer">
+            <column name="mvt_qte_stock" precision="8" scale="0" />
+        </property>
+        <many-to-one name="pharmOperation" class="org.openmrs.module.pharmagest.PharmOperation" fetch="select">
+            <column name="oper_id" />
+        </many-to-one>
+    </class>
+</hibernate-mapping>

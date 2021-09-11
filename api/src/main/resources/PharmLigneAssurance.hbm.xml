@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<!-- Generated 24 mai 2017 16:53:10 by Hibernate Tools 3.5.0.Final -->
+<hibernate-mapping>
+    <class name="org.openmrs.module.pharmagest.PharmLigneAssurance" table="pharm_ligne_assurance" >
+        <composite-id name="id" class="org.openmrs.module.pharmagest.PharmLigneAssuranceId">
+            <key-property name="assurId" type="int">
+                <column name="assur_id" />
+            </key-property>
+            <key-property name="cliId" type="int">
+                <column name="cli_id" />
+            </key-property>
+        </composite-id>
+        <many-to-one name="pharmAssurance" class="org.openmrs.module.pharmagest.PharmAssurance" update="false" insert="false" fetch="select">
+            <column name="assur_id" not-null="true" />
+        </many-to-one>
+        <many-to-one name="pharmClient" class="org.openmrs.module.pharmagest.PharmClient" update="false" insert="false" fetch="select">
+            <column name="cli_id" not-null="true" />
+        </many-to-one>
+        <property name="laNumAssur" type="string">
+            <column name="la_num_assur" length="100" />
+        </property>
+        <property name="laTaux" type="java.lang.Integer">
+            <column name="la_taux" precision="8" scale="0" />
+        </property>
+        <property name="laDateSaisi" type="date">
+            <column name="la_date_saisi" length="0" />
+        </property>
+        <property name="laDateModif" type="date">
+            <column name="la_date_modif" length="0" />
+        </property>
+    </class>
+</hibernate-mapping>

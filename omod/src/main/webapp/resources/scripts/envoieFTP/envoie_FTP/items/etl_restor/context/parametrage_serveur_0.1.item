@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:talendfile="platform:/resource/org.talend.model/model/TalendFile.xsd">
+  <talendfile:ContextType confirmationNeeded="false" name="Default">
+    <contextParameter comment="chemin des fichiers log" name="logFolder" prompt="logFolder?" promptNeeded="false" type="id_String" value="&quot;C:/Users/MEASURE PC/Documents/Espace Talend/Sigdep_serveur/log/&quot;"/>
+    <contextParameter comment="chemin des fichiers de paramétrage" name="fileRoot" prompt="fileRoot?" promptNeeded="false" type="id_String" value="&quot;C:/Users/MEASURE PC/Documents/Espace Talend/Sigdep_serveur/file/&quot;"/>
+    <contextParameter comment="chemin des RC générés par SIGDEP2" name="sigdepExtract" prompt="sigdepExtract?" promptNeeded="false" type="id_String" value="&quot;C:/Users/MEASURE PC/Documents/Espace Talend/Sigdep_serveur/extract/&quot;"/>
+    <contextParameter comment="chemin des fichiers temporaires de eSIGL" name="sigdepTemp" prompt="sigdepTemp?" promptNeeded="false" type="id_String" value="&quot;C:/Users/MEASURE PC/Documents/Espace Talend/Sigdep_serveur/temp/&quot;"/>
+    <contextParameter comment="chemin pour archiver les infos des sites" name="archives" prompt="archives?" promptNeeded="false" type="id_String" value="&quot;C:/Users/MEASURE PC/Documents/Espace Talend/Sigdep_serveur/archives/&quot;"/>
+  </talendfile:ContextType>
+  <talendfile:ContextType confirmationNeeded="false" name="prod">
+    <contextParameter comment="chemin des fichiers log" name="logFolder" prompt="logFolder?" promptNeeded="false" type="id_String" value="&quot;C:/Sigdep_serveur/log/&quot;"/>
+    <contextParameter comment="chemin des fichiers de paramétrage" name="fileRoot" prompt="fileRoot?" promptNeeded="false" type="id_String" value="&quot;C:/Sigdep_serveur/file/&quot;"/>
+    <contextParameter comment="chemin des RC générés par SIGDEP2" name="sigdepExtract" prompt="sigdepExtract?" promptNeeded="false" type="id_String" value="&quot;C:/Sigdep_serveur/extract/&quot;"/>
+    <contextParameter comment="chemin des fichiers temporaires de eSIGL" name="sigdepTemp" prompt="sigdepTemp?" promptNeeded="false" type="id_String" value="&quot;C:/Sigdep_serveur/temp/&quot;"/>
+    <contextParameter comment="chemin pour archiver les infos des sites" name="archives" prompt="archives?" promptNeeded="false" type="id_String" value="&quot;C:/Sigdep_serveur/archives/&quot;"/>
+  </talendfile:ContextType>
+</xmi:XMI>

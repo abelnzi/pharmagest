@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<!-- Generated 2 juil. 2015 23:11:24 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="org.openmrs.module.pharmagest.LingeOperation" table="linge_operation" >
+        <composite-id name="id" class="org.openmrs.module.pharmagest.LingeOperationId">
+            <key-property name="prodId" type="int">
+                <column name="prod_id" precision="8" scale="0" />
+            </key-property>
+            <key-property name="recptId" type="int">
+                <column name="recpt_id" precision="8" scale="0" />
+            </key-property>
+        </composite-id>
+        <many-to-one name="produit" class="org.openmrs.module.pharmagest.Produit" update="false" insert="false" fetch="select">
+            <column name="prod_id" precision="8" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="operation" class="org.openmrs.module.pharmagest.Operation" update="false" insert="false" fetch="select">
+            <column name="recpt_id" precision="8" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="lgnRecptQte" type="java.lang.Integer">
+            <column name="lgn_recpt_qte" precision="8" scale="0" />
+        </property>
+        <property name="lgnRecptPrixAchat" type="java.lang.Integer">
+            <column name="lgn_recpt_prix_achat" precision="8" scale="0" />
+        </property>
+        <property name="lgnDatePerem" type="date">
+            <column name="lgn_date_perem" length="0" />
+        </property>
+        <property name="lgnRecptLot" type="string">
+            <column name="lgn_recpt_lot" length="20" />
+        </property>
+    </class>
+</hibernate-mapping>
